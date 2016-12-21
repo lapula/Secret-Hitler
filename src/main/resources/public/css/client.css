@@ -1,0 +1,31 @@
+html {
+  font-family: 'Roboto', sans-serif;
+  height: calc(100% - 16px);
+}
+
+body {
+  font-size: 13px;
+  line-height: 20px;
+  height: 100%;
+  overflow: hidden;
+}
+
+#app {
+    height: 100%;
+}
+
+#footer{
+    position: absolute;
+    bottom: 12px;
+    width: calc(100% - 16px);
+}
+
+#container {
+    text-align: center;
+    height: 100%;
+}
+
+#footer-button {
+    height: 72px !important;
+    line-height: 72px !important;
+}
