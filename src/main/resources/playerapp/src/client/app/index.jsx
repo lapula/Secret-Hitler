@@ -25,7 +25,8 @@ class App extends React.Component {
 
   render() {
     return (
-      <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+      /* muiTheme={getMuiTheme(darkBaseTheme)}*/
+      <MuiThemeProvider>
           <Main />
       </MuiThemeProvider>
     );

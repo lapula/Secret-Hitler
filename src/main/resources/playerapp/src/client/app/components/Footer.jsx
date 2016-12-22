@@ -17,7 +17,6 @@ class Footer extends React.Component {
     this.handleTouchTap = this.handleTouchTap.bind(this);
 
     this.state = {
-      role: "Not assigned",
       open: false
     };
   }
@@ -52,11 +51,15 @@ class Footer extends React.Component {
           actions={roleDialog}
           onRequestClose={this.handleRequestClose}
         >
-          {this.state.role}
+          {this.props.role}
         </Dialog>
         <RaisedButton
-          id="footer-button"
-          label="Super Secret Password"
+          primary={true}
+          label="Your role"
+          labelStyle={{fontSize: '36px'}}
+          style={{height: "60px", lineHeight: "0px"}}
+          buttonStyle={{overflow: "hidden"}}
+          overlayStyle={{paddingTop: "8px"}}
           fullWidth={true}
           onTouchTap={this.handleTouchTap}
         />

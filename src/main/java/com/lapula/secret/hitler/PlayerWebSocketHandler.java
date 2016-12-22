@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -18,6 +19,9 @@ import org.json.JSONObject;
 
 @WebSocket
 public class PlayerWebSocketHandler {
+    
+    private static final String PLAYER_QUERY = "PLAYER_QUERY";
+    private static final String PLAYER_INIT = "PLAYER_INIT";
     
     @OnWebSocketConnect
     public void onConnect(Session user) throws Exception {
@@ -48,18 +52,36 @@ public class PlayerWebSocketHandler {
         }
     }
     
-    public static void sendChoiceMessage(List<Player> targets, String[] choices) {
+    public static void initPlayer(Player player, String role) {
         
-        JSONArray jsonChoices = new JSONArray(Arrays.asList(choices));
+        JSONObject mainObj = new JSONObject();
+        mainObj.put("type", PLAYER_INIT);
+        mainObj.put("role", role);
+        
+        try {
+            player.getSession().getRemote().sendString(mainObj.toString());
+        } catch (IOException ex) {
+            Logger.getLogger(PlayerWebSocketHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void sendChoiceMessage(List<Player> targets, Map<String, String> choices, String header, String subheader) {
+        
+        JSONObject jsonChoices = new JSONObject(choices);
+        JSONObject mainObj = new JSONObject();
+        mainObj.put("type", PLAYER_QUERY);
+        mainObj.put("header", header);
+        mainObj.put("subheader", subheader);
+        mainObj.put("choices", jsonChoices);
         
         targets.forEach(target -> {
             try {
-                target.getSession().getRemote().sendString(jsonChoices.toString());
+                target.getSession().getRemote().sendString(mainObj.toString());
             } catch (IOException ex) {
                 Logger.getLogger(PlayerWebSocketHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        
     }
+
 
 }
