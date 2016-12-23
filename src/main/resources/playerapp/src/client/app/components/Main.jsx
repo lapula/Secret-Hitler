@@ -10,7 +10,8 @@ class Main extends React.Component {
     super(props, context);
     this.state = {
       phase: "Game is starting...",
-      playerRole: "Not assigned yet."
+      playerRole: "Not assigned yet.",
+      queryData: null
     };
   }
 
@@ -23,7 +24,7 @@ class Main extends React.Component {
       <div id="container">
 
           <h1>{this.state.phase}</h1>
-          <OptionList />
+          <OptionList queryData={this.state.queryData} />
           <Footer role={this.state.playerRole}/>
       </div>
     );
@@ -49,9 +50,12 @@ class Main extends React.Component {
         let data = JSON.parse(msg.data)
 
         if (data.type == "PLAYER_INIT") {
-          component.setState({playerRole: data.role});
+            component.setState({playerRole: data.role});
         } else if (data.type == "PLAYER_QUERY") {
-
+            component.setState({
+              queryData: data,
+              phase: data.header
+            });
         }
     };
 

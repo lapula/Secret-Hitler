@@ -31,16 +31,20 @@ class OptionList extends React.Component {
     }
 
     render() {
+      
+        if (this.props.queryData == null) {
+          return null;
+        }
 
         let list = new Array();
-
-        list.push(this.createListItem("asdf", "1"))
-        list.push(this.createListItem("asdfa", "12"))
+        for (let i in this.props.queryData.choices) {
+          list.push(this.createListItem(this.props.queryData.choices[i], i))
+        }
 
         return(
             <div style={listStyle.root}>
                 <List>
-                    <Subheader>General</Subheader>
+                    <Subheader>{this.props.queryData.subheader}</Subheader>
                     {list}
                 </List>
             </div>
