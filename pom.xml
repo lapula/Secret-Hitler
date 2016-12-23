@@ -65,7 +65,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>Main</mainClass>
+                            <mainClass>com.lapula.secret.hitler.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -73,12 +73,12 @@
             <plugin>
                 <groupId>com.heroku.sdk</groupId>
                 <artifactId>heroku-maven-plugin</artifactId>
-                <version>0.4.4</version>
+                <version>1.1.2</version>
                 <configuration>
                     <jdkVersion>1.8</jdkVersion>
                     <appName>secreth</appName> 
                     <processTypes>
-                        <web>java -jar ./target/Secret-Hitler-1.0-jar-with-dependencies.jar</web>
+                        <web>java -jar /target/Secret-Hitler-1.0-jar-with-dependencies.jar</web>
                     </processTypes>
                 </configuration>
             </plugin>
