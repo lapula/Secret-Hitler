@@ -2,10 +2,23 @@ import React, {Component} from 'react';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 
-const listStyle = {
+const style = {
   root: {
-    width: "100%"
+      width: "100%"
   },
+  subheader: {
+      fontSize: "24px"
+  },
+  listItemLarge: {
+      fontSize: "32px",
+      height: "64px",
+      lineHeight: "32px"
+  },
+  listItemSmall: {
+      fontSize: "24px",
+      height: "48px",
+      lineHeight: "16px"
+  }
 };
 
 class OptionList extends React.Component {
@@ -13,14 +26,16 @@ class OptionList extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        listData: null
+        listData: null,
+        previousChoice: null
       };
     }
 
-    createListItem(text, key) {
-        let listClickEvent = this.handleClick.bind(this, key);
+    createListItem(text, key, itemStyle) {
+        let listClickEvent = this.handleClick.bind(this, key, text);
         return (
           <ListItem
+            style={itemStyle}
             primaryText={text}
             key={key}
             onClick={listClickEvent}
@@ -28,33 +43,50 @@ class OptionList extends React.Component {
         )
     }
 
-    handleClick(key, elem) {
+    handleClick(key, text, elem) {
+        console.log(key)
+        console.log(text)
+        console.log(elem)
         this.props.webSocket.send(JSON.stringify({
           "type": "QUERY_RESPONSE",
           "response": key
         }));
-        this.setState({listData: null});
+        this.setState({
+          listData: null,
+          previousChoice: text
+        });
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({listData: nextProps.queryData});
+        this.setState({
+          listData: nextProps.queryData,
+          previousChoice: null
+        });
     }
 
     render() {
 
         if (this.state.listData == null) {
+          if (this.state.previousChoice != null) {
+            return (<h2>You chose: <b>{this.state.previousChoice}</b></h2>);
+          }
           return null;
+        }
+        let listStyle = style.listItemLarge;
+
+        if (this.state.listData.choices.length > 2) {
+            listStyle = style.listItemSmall
         }
 
         let list = new Array();
         for (let i in this.state.listData.choices) {
-          list.push(this.createListItem(this.state.listData.choices[i], i))
+          list.push(this.createListItem(this.state.listData.choices[i], i, listStyle))
         }
 
         return(
-            <div style={listStyle.root}>
+            <div style={style.root}>
                 <List>
-                    <Subheader>{this.state.listData.subheader}</Subheader>
+                    <Subheader style={style.subheader}>{this.state.listData.subheader}</Subheader>
                     {list}
                 </List>
             </div>

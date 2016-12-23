@@ -17,21 +17,18 @@ public class Main {
         init();
         
         get("/", (request, response) -> {
-            return "hello world";
+            Game game = new Game(2);
+            games.put("jammailu", game);
+            return "test game created";
         });
         
         get("/game/:name", (request, response) -> {
-            Game game = new Game(1);
+            Game game = new Game(2);
             games.put(request.params(":name"), game);
             System.out.println(request.params(":name"));
             response.redirect("/game");
             return null;
         });
-        
-        get("/game", (request, response) -> {
-            Map<String, Object> model = new HashMap<>();
-            return new ModelAndView(model, "game");
-        }, new ThymeleafTemplateEngine());
         
         get("/game", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
