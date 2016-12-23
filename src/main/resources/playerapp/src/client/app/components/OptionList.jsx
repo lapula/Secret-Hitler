@@ -4,8 +4,7 @@ import Subheader from 'material-ui/Subheader';
 
 const listStyle = {
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    width: "100%"
   },
 };
 
@@ -13,6 +12,9 @@ class OptionList extends React.Component {
 
     constructor(props) {
       super(props);
+      this.state = {
+        listData: null
+      };
     }
 
     createListItem(text, key) {
@@ -27,24 +29,32 @@ class OptionList extends React.Component {
     }
 
     handleClick(key, elem) {
-      alert(key)
+        this.props.webSocket.send(JSON.stringify({
+          "type": "QUERY_RESPONSE",
+          "response": key
+        }));
+        this.setState({listData: null});
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({listData: nextProps.queryData});
     }
 
     render() {
-      
-        if (this.props.queryData == null) {
+
+        if (this.state.listData == null) {
           return null;
         }
 
         let list = new Array();
-        for (let i in this.props.queryData.choices) {
-          list.push(this.createListItem(this.props.queryData.choices[i], i))
+        for (let i in this.state.listData.choices) {
+          list.push(this.createListItem(this.state.listData.choices[i], i))
         }
 
         return(
             <div style={listStyle.root}>
                 <List>
-                    <Subheader>{this.props.queryData.subheader}</Subheader>
+                    <Subheader>{this.state.listData.subheader}</Subheader>
                     {list}
                 </List>
             </div>

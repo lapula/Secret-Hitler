@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import $ from 'jquery';
 import AppBar from 'material-ui/AppBar';
 
 import Footer from './Footer.jsx';
@@ -24,7 +23,7 @@ class Main extends React.Component {
       <div id="container">
 
           <h1>{this.state.phase}</h1>
-          <OptionList queryData={this.state.queryData} />
+          <OptionList queryData={this.state.queryData} webSocket={this.state.webSocket} />
           <Footer role={this.state.playerRole}/>
       </div>
     );
@@ -34,6 +33,7 @@ class Main extends React.Component {
   initSocketConnection(elem, playerName, gameName) {
     var component = elem;
     var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/players");
+    component.setState({webSocket: webSocket});
 
     webSocket.onopen = function() {
         var message =  {
@@ -60,7 +60,9 @@ class Main extends React.Component {
     };
 
     webSocket.onclose = function () {
-        alert("WebSocket connection closed")
+      var time = new Date();
+      var closeTime = time.getHours() + ":" + time.getMinutes();
+      alert("WebSocket connection closed at: " + closeTime);
     };
   }
 

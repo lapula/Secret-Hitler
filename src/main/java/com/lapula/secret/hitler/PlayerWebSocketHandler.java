@@ -25,6 +25,8 @@ public class PlayerWebSocketHandler {
     
     @OnWebSocketConnect
     public void onConnect(Session user) throws Exception {
+        Long dayInMilliseconds = 60000l * 60l * 24l;
+        user.setIdleTimeout(dayInMilliseconds);
         System.out.println("Player connected to server");
     }
 
@@ -47,8 +49,9 @@ public class PlayerWebSocketHandler {
             Main.games.get(gameName).addPlayer(playerName, new Player(playerName, user));
             System.out.println(gameName);
             
-        } else {
-            
+        } else if (type.equals("QUERY_RESPONSE")) {
+            String response = obj.getString("response");
+            System.out.println(response);
         }
     }
     

@@ -33,6 +33,11 @@ public class Main {
             return new ModelAndView(model, "game");
         }, new ThymeleafTemplateEngine());
         
+        get("/game", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "game");
+        }, new ThymeleafTemplateEngine());
+        
         get("/client", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
             return new ModelAndView(model, "client");
