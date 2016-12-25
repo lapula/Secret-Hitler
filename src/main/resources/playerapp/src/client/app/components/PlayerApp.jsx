@@ -12,7 +12,7 @@ const style = {
   }
 }
 
-class Main extends React.Component {
+class PlayerApp extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -86,7 +86,7 @@ class Main extends React.Component {
         webSocket.send(JSON.stringify(message));
 
         setInterval(function(){
-            webSocket.send(JSON.stringify({"type":"REGISTER_PLAYER"}));
+            webSocket.send(JSON.stringify({"type":"PING"}));
         }, 10000);
     };
 
@@ -112,4 +112,4 @@ class Main extends React.Component {
 
 }
 
-export default Main;
+export default PlayerApp;

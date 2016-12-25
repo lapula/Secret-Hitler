@@ -10,7 +10,11 @@ public class Main {
     
     static Map<String, Game> games = new ConcurrentHashMap<>();
     
+    
     public static void main(String[] args) {
+        
+        Game initialGame = new Game(2);
+        games.put("gg", initialGame);
         
         port(getHerokuAssignedPort());
         staticFiles.location("/public");
@@ -18,10 +22,9 @@ public class Main {
         init();
         
         get("/", (request, response) -> {
-            Game game = new Game(2);
-            games.put("jammailu", game);
-            return "test game created";
-        });
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "client");
+        }, new ThymeleafTemplateEngine());
         
         get("/game/:name", (request, response) -> {
             Game game = new Game(2);
@@ -31,8 +34,10 @@ public class Main {
             return null;
         });
         
-        get("/game", (request, response) -> {
+        get("/refresh", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
+            Game game = new Game(2);
+            games.put("gg", game);
             return new ModelAndView(model, "game");
         }, new ThymeleafTemplateEngine());
         

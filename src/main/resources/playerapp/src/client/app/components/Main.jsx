@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
-import AppBar from 'material-ui/AppBar';
-import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import Footer from './Footer.jsx';
-import OptionList from './OptionList.jsx';
+import PlayerApp from './PlayerApp.jsx';
 
 const style = {
   button: {
@@ -16,98 +13,42 @@ class Main extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      phase: "Game is starting...",
-      playerRole: "Not assigned yet.",
-      queryData: null,
-      playerName: null,
-      gameName: null
+      renderComponent: null
     };
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this, event);
+    this.showPlayerScreen = this.showPlayerScreen.bind(this);
+    this.showGameCreationScreen = this.showGameCreationScreen.bind(this);
+    this.showGameScreen = this.showGameScreen.bind(this);
   }
 
-  handleSubmit() {
-    this.setState({
-      playerName: this.refs.playerName.input.value,
-      gameName: this.refs.gameName.input.value
-    });
-    this.initSocketConnection(this, this.refs.playerName.input.value, this.refs.gameName.input.value);
+  showPlayerScreen() {
+    this.setState({renderComponent: "PLAYER_APP"});
   }
 
-  handleKeyPress(component, event) {
-    if(event.key == 'Enter'){
-      this.handleSubmit();
-    }
+  showGameCreationScreen() {
+    this.setState({renderComponent: "PLAYER_APP"});
+  }
+
+  showGameScreen() {
+    this.setState({renderComponent: "PLAYER_APP"});
   }
 
   render() {
 
-    if (this.state.playerName == null) {
+    if (this.state.renderComponent == "PLAYER_APP") {
+      return (<PlayerApp />)
+    } else {
       return (
         <div id="container">
-          <h1>Join game</h1>
-          <TextField
-              floatingLabelText="Player name"
-              ref="playerName"
-            /><br />
-          <TextField
-                floatingLabelText="Game name"
-                ref="gameName"
-                onKeyPress={this.handleKeyPress}
-          /><br />
-        <RaisedButton label="Enter game!" primary={true} style={style.button} onTouchTap={this.handleSubmit} />
+          <RaisedButton label="Join a game" primary={true} style={style.button}
+            onTouchTap={this.showPlayerScreen} /><br />
+          <RaisedButton label="Create a game" primary={true} style={style.button}
+            onTouchTap={this.showGameCreationScreen} /><br />
+          <RaisedButton label="Register game screen" primary={true} style={style.button}
+            onTouchTap={this.showGameScreen} /><br />
         </div>
       )
     }
-
-    return (
-      <div id="container">
-          <h1>{this.state.phase}</h1>
-          <OptionList queryData={this.state.queryData} webSocket={this.state.webSocket} />
-          <Footer role={this.state.playerRole}/>
-      </div>
-    );
-  }
-
-  initSocketConnection(elem, playerName, gameName) {
-    var component = elem;
-    var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/players");
-    component.setState({webSocket: webSocket});
-
-    webSocket.onopen = function() {
-        var message =  {
-          "type":"REGISTER_PLAYER",
-          "content":{
-              "playerName": playerName,
-              "gameName": gameName
-            }
-        }
-        webSocket.send(JSON.stringify(message));
-
-        setInterval(function(){
-            webSocket.send(JSON.stringify({"type":"PING"}));
-        }, 10000);
-    };
-
-    webSocket.onmessage = function (msg) {
-        let data = JSON.parse(msg.data)
-
-        if (data.type == "PLAYER_INIT") {
-            component.setState({playerRole: data.role});
-        } else if (data.type == "PLAYER_QUERY") {
-            component.setState({
-              queryData: data,
-              phase: data.header
-            });
-        }
-    };
-
-    webSocket.onclose = function () {
-      var time = new Date();
-      var closeTime = time.getHours() + ":" + time.getMinutes();
-      alert("WebSocket connection closed at: " + closeTime);
-    };
   }
 
 }
