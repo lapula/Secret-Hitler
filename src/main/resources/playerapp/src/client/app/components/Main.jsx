@@ -70,7 +70,6 @@ class Main extends React.Component {
     );
   }
 
-
   initSocketConnection(elem, playerName, gameName) {
     var component = elem;
     var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/players");
@@ -85,6 +84,10 @@ class Main extends React.Component {
             }
         }
         webSocket.send(JSON.stringify(message));
+
+        setInterval(function(){
+            webSocket.send(JSON.stringify({"type":"REGISTER_PLAYER"}));
+        }, 10000);
     };
 
     webSocket.onmessage = function (msg) {
