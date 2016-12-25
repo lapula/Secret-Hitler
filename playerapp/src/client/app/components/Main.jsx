@@ -44,7 +44,7 @@ class Main extends React.Component {
             onTouchTap={this.showPlayerScreen} /><br />
           <RaisedButton label="Create a game" primary={true} style={style.button}
             onTouchTap={this.showGameCreationScreen} /><br />
-          <RaisedButton label="Register game screen" primary={true} style={style.button}
+          <RaisedButton label="Open game screen" primary={true} style={style.button}
             onTouchTap={this.showGameScreen} /><br />
         </div>
       )

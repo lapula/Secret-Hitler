@@ -26,24 +26,11 @@ public class Main {
             return new ModelAndView(model, "client");
         }, new ThymeleafTemplateEngine());
         
-        get("/game/:name", (request, response) -> {
-            Game game = new Game(2);
-            games.put(request.params(":name"), game);
-            System.out.println(request.params(":name"));
-            response.redirect("/game");
-            return null;
-        });
-        
         get("/refresh", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
             Game game = new Game(2);
             games.put("gg", game);
             return new ModelAndView(model, "game");
-        }, new ThymeleafTemplateEngine());
-        
-        get("/client", (request, response) -> {
-            Map<String, Object> model = new HashMap<>();
-            return new ModelAndView(model, "client");
         }, new ThymeleafTemplateEngine());
     }
     

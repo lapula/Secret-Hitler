@@ -40791,7 +40791,7 @@
 	          _react2.default.createElement(_RaisedButton2.default, { label: 'Create a game', primary: true, style: style.button,
 	            onTouchTap: this.showGameCreationScreen }),
 	          _react2.default.createElement('br', null),
-	          _react2.default.createElement(_RaisedButton2.default, { label: 'Register game screen', primary: true, style: style.button,
+	          _react2.default.createElement(_RaisedButton2.default, { label: 'Open game screen', primary: true, style: style.button,
 	            onTouchTap: this.showGameScreen }),
 	          _react2.default.createElement('br', null)
 	        );
