@@ -52,6 +52,14 @@ public class PlayerWebSocketHandler {
         } else if (type.equals("QUERY_RESPONSE")) {
             String response = obj.getString("response");
             System.out.println(response);
+        } else if (type.equals("PING")) {
+            JSONObject mainObj = new JSONObject();
+            mainObj.put("type", "PONG");
+            try {
+                user.getRemote().sendString(mainObj.toString());
+            } catch (IOException ex) {
+                Logger.getLogger(PlayerWebSocketHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     

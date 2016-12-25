@@ -40849,7 +40849,7 @@
 	        webSocket.send(JSON.stringify(message));
 	
 	        setInterval(function () {
-	          webSocket.send(JSON.stringify({ "type": "REGISTER_PLAYER" }));
+	          webSocket.send(JSON.stringify({ "type": "PING" }));
 	        }, 10000);
 	      };
 	

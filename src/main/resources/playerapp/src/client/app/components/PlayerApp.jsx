@@ -86,7 +86,7 @@ class Main extends React.Component {
         webSocket.send(JSON.stringify(message));
 
         setInterval(function(){
-            webSocket.send(JSON.stringify({"type":"PING"}));
+            webSocket.send(JSON.stringify({"type":"REGISTER_PLAYER"}));
         }, 10000);
     };
 
