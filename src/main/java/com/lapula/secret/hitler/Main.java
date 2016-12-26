@@ -1,5 +1,6 @@
 package com.lapula.secret.hitler;
 
+import GameLogic.Game;
 import org.eclipse.jetty.websocket.api.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

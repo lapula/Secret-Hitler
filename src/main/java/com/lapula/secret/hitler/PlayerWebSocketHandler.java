@@ -1,6 +1,7 @@
 
 package com.lapula.secret.hitler;
 
+import GameLogic.Player;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,7 +47,7 @@ public class PlayerWebSocketHandler {
             String gameName = content.getString("gameName");
             String playerName = content.getString("playerName");
             System.out.println(playerName + gameName);
-            Main.games.get(gameName).addPlayer(playerName, new Player(playerName, user));
+            Main.games.get(gameName).getPlayerManager().addPlayer(new Player(playerName, user));
             System.out.println(gameName);
             
         } else if (type.equals("QUERY_RESPONSE")) {

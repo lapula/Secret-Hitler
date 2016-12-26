@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.lapula.secret.hitler;
+package GameLogic;
 
 import org.eclipse.jetty.websocket.api.Session;
 
