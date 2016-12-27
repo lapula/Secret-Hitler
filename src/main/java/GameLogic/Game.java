@@ -5,7 +5,7 @@
  */
 package GameLogic;
 
-import GameLogic.State;
+import GameStates.State;
 import GameStates.NominateChancellor;
 import GameStates.GameState;
 import GameStates.StateFactory;
@@ -22,16 +22,17 @@ public class Game {
     private StateFactory stateFactory;
     private PlayerManager playerManager;
     private GameState gameState;
-    private Map<String, String> stateVariables;
-    private Map<String, String> electionResults;
+    private GameVariables gameVariables;
+    private PolicyDeck policyDeck;
     
     public Game(Integer numberOfPlayers) {
         
         this.stateFactory = new StateFactory();
         this.gameState = null;
-        this.stateVariables = new HashMap<>();
-        this.electionResults = new HashMap<>();
-        initVariables(numberOfPlayers);
+        this.gameVariables = new GameVariables();
+        this.policyDeck = new PolicyDeck();
+        
+        this.gameVariables.setGamePlayers(numberOfPlayers);
         playerManager = new PlayerManager(this);
     }
     
@@ -39,8 +40,12 @@ public class Game {
         return this.playerManager;
     }
     
-    public Map<String, String> getVariables() {
-        return this.stateVariables;
+    public GameVariables getVariables() {
+        return this.gameVariables;
+    }
+    
+    public PolicyDeck getPolicyDeck() {
+        return this.policyDeck;
     }
     
     public void changeState(State state) {
@@ -50,23 +55,5 @@ public class Game {
     
     public void receiveData(String player, String data) {
         this.gameState.receiveData(player, data);
-    }
-    
-    public void initVariables(Integer numberOfPlayers) {
-        this.stateVariables.put("numberOfPlayers", numberOfPlayers.toString());
-        this.stateVariables.put("president", null);
-        this.stateVariables.put("chancellor", null);
-    }
-    
-    public Map<String, String> getElectionResults() {
-        return this.electionResults;
-    }
-    
-    public void addVote(String player, String vote) {
-        this.electionResults.put(player, vote);
-    }
-    
-    public void setElectionResults(Map<String, String> electionResults) {
-        this.electionResults = electionResults;
     }
 }

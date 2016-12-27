@@ -5,6 +5,7 @@
  */
 package GameLogic;
 
+import GameStates.State;
 import com.lapula.secret.hitler.PlayerWebSocketHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public class PlayerManager {
     public PlayerManager(Game game) {
         players = new ArrayList<>();
         this.game = game;
-        this.gamePlayers = Integer.parseInt(game.getVariables().get("numberOfPlayers"));
+        this.gamePlayers = game.getVariables().getGamePlayers();
         this.roleList = initRoles(gamePlayers);
     }
     
@@ -34,11 +35,23 @@ public class PlayerManager {
         player.setRole(this.getRole());
         players.add(player);
         PlayerWebSocketHandler.initPlayer(player, player.getRole());
-       
+        System.out.println(players.size());
+        System.out.println(this.gamePlayers);
         if (players.size() == this.gamePlayers) {
-            game.getVariables().put("president", getRandomPlayer().getName());
+            game.getVariables().setPresident(getRandomPlayer());
             game.changeState(State.NOMINATE_CHANCELLOR);
         }
+    }
+    
+    public Player getNextPlayer(Player player) {
+        System.out.println(player.getName());
+        int oldIndex = players.indexOf(player);
+        if (oldIndex == players.size() - 1) {
+            oldIndex = -1;
+        }
+        System.out.println(oldIndex);
+        System.out.println(players.get(oldIndex + 1).getName());
+        return players.get(oldIndex + 1);
     }
     
     public List<Player> getPlayers() {

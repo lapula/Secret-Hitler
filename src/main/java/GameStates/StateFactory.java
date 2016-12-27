@@ -6,7 +6,6 @@
 package GameStates;
 
 import GameLogic.Game;
-import GameLogic.State;
 
 /**
  *
@@ -23,6 +22,12 @@ public class StateFactory {
             return new NominateChancellor(game);
         } else if (state.equals(State.VOTE_ON_GOVERNMENT)) {
             return new VoteOnGovernmentState(game);
+        } else if (state.equals(State.ROUND_START)) {
+            return new RoundStartState(game);
+        } else if (state.equals(State.LEGISTLATIVE_SESSION)) {
+            return new LegistlativeSessionState(game);
+        } else if (state.equals(State.VETO)) {
+            return new VetoState(game);
         }
         
         return null;

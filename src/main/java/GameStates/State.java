@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package GameLogic;
+package GameStates;
 
 /**
  *
@@ -11,8 +11,11 @@ package GameLogic;
  */
 public enum State {
     STARTING_GAME,
+    ROUND_START,
     NOMINATE_CHANCELLOR,
     VOTE_ON_GOVERNMENT,
     LEGISTLATIVE_SESSION,
-    EXECUTIVE_ACTION;
+    VETO,
+    EXECUTIVE_ACTION,
+    END_GAME;
 }

@@ -7,7 +7,6 @@ package GameStates;
 
 import GameLogic.Game;
 import GameLogic.Player;
-import GameLogic.State;
 import com.lapula.secret.hitler.PlayerWebSocketHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +20,8 @@ public class NominateChancellor implements GameState {
     
     private Game game;
     
-    private final String HEADER = "Nominate your chancellor!";
-    private final String SUB_HEADER = "Who do you wish to nominate?";
+    private final String HEADER = "The president is nominating his chancellor!";
+    private final String SUB_HEADER = "President, who do you wish to nominate?";
     
     public NominateChancellor(Game game) {
         this.game = game;
@@ -30,13 +29,15 @@ public class NominateChancellor implements GameState {
     
     @Override
     public void doAction() {
-        String presidentName = game.getVariables().get("president");
-        Player president = game.getPlayerManager().getPlayerByName(presidentName);
+        
+        Player president = game.getVariables().getPresident();
+        
+        System.out.println(president.getName());
         
         Map<String, String> choices = new HashMap<>();
         
         game.getPlayerManager().getPlayers().forEach(player -> {
-            if (!player.getName().equals(presidentName)) {
+            if (!player.getName().equals(president.getName())) {
                 choices.put(player.getName(), player.getName());
             }
         });
@@ -50,7 +51,7 @@ public class NominateChancellor implements GameState {
     @Override
     public void receiveData(String player, String data) {
         if (game.getPlayerManager().getPlayerByName(data) != null) {
-            game.getVariables().put("chancellor", data);
+            game.getVariables().setChancellor(game.getPlayerManager().getPlayerByName(data));
             game.changeState(State.VOTE_ON_GOVERNMENT);
         }
     }
