@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package StateObservers;
+package GameStates;
 
 import GameLogic.Game;
 
@@ -11,8 +11,9 @@ import GameLogic.Game;
  *
  * @author pulli
  */
-public interface StateObserver {
+public interface GameState {
     
-    public void informObserver(Game game);
+    public void doAction();
+    public void receiveData(String player, String data);
     
 }

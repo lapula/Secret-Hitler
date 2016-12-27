@@ -46,6 +46,8 @@ class OptionList extends React.Component {
     handleClick(key, text, elem) {
         this.props.webSocket.send(JSON.stringify({
           "type": "QUERY_RESPONSE",
+          "playerName": this.props.playerName,
+          "gameName": this.props.gameName,
           "response": key
         }));
         this.setState({

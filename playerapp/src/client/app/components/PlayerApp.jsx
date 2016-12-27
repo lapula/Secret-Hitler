@@ -64,7 +64,11 @@ class PlayerApp extends React.Component {
     return (
       <div id="container">
           <h1>{this.state.phase}</h1>
-          <OptionList queryData={this.state.queryData} webSocket={this.state.webSocket} />
+          <OptionList
+            gameName={this.state.gameName}
+            playerName={this.state.playerName}
+            queryData={this.state.queryData}
+            webSocket={this.state.webSocket} />
           <Footer role={this.state.playerRole}/>
       </div>
     );
@@ -78,15 +82,17 @@ class PlayerApp extends React.Component {
     webSocket.onopen = function() {
         var message =  {
           "type":"REGISTER_PLAYER",
-          "content":{
-              "playerName": playerName,
-              "gameName": gameName
-            }
+          "playerName": playerName,
+          "gameName": gameName
         }
         webSocket.send(JSON.stringify(message));
 
         setInterval(function(){
-            webSocket.send(JSON.stringify({"type":"PING"}));
+            webSocket.send(JSON.stringify({
+              "type":"PING",
+              "playerName": playerName,
+              "gameName": gameName
+            }));
         }, 10000);
     };
 

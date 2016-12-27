@@ -41,18 +41,14 @@ public class PlayerWebSocketHandler {
         System.out.println(message);
         JSONObject obj = new JSONObject(message);
         String type = obj.getString("type");
+        String gameName = obj.getString("gameName");
+        String playerName = obj.getString("playerName");
         
         if (type.equals("REGISTER_PLAYER")) {
-            JSONObject content = obj.getJSONObject("content");
-            String gameName = content.getString("gameName");
-            String playerName = content.getString("playerName");
-            System.out.println(playerName + gameName);
-            Main.games.get(gameName).getPlayerManager().addPlayer(new Player(playerName, user));
-            System.out.println(gameName);
-            
+            Main.games.get(gameName).getPlayerManager().addPlayer(new Player(playerName, gameName, user));
         } else if (type.equals("QUERY_RESPONSE")) {
             String response = obj.getString("response");
-            System.out.println(response);
+            Main.games.get(gameName).receiveData(playerName, response);
         } else if (type.equals("PING")) {
             JSONObject mainObj = new JSONObject();
             mainObj.put("type", "PONG");
@@ -77,7 +73,7 @@ public class PlayerWebSocketHandler {
         }
     }
     
-    public static void sendChoiceMessage(List<Player> targets, Map<String, String> choices, String header, String subheader) {
+    public static void sendChoiceMessage(List<Player> players, List<Player> targets, Map<String, String> choices, String header, String subheader) {
         
         JSONObject jsonChoices = new JSONObject(choices);
         JSONObject mainObj = new JSONObject();
@@ -89,6 +85,19 @@ public class PlayerWebSocketHandler {
         targets.forEach(target -> {
             try {
                 target.getSession().getRemote().sendString(mainObj.toString());
+            } catch (IOException ex) {
+                Logger.getLogger(PlayerWebSocketHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        mainObj.put("choices", new JSONObject());
+        mainObj.put("subheader", "");
+                
+        players.forEach(player -> {
+            try {
+                if (!targets.contains(player)) {
+                    player.getSession().getRemote().sendString(mainObj.toString());
+                }
             } catch (IOException ex) {
                 Logger.getLogger(PlayerWebSocketHandler.class.getName()).log(Level.SEVERE, null, ex);
             }

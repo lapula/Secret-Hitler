@@ -6,8 +6,9 @@
 package GameLogic;
 
 import GameLogic.State;
-import StateObservers.ElectionObserver;
-import StateObservers.StateObserver;
+import GameStates.NominateChancellor;
+import GameStates.GameState;
+import GameStates.StateFactory;
 import com.lapula.secret.hitler.PlayerWebSocketHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,53 +16,57 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- * @author pulli
- */
+
 public class Game {
     
+    private StateFactory stateFactory;
     private PlayerManager playerManager;
-    private State state;
+    private GameState gameState;
     private Map<String, String> stateVariables;
-    private List<StateObserver> stateObservers;
+    private Map<String, String> electionResults;
     
     public Game(Integer numberOfPlayers) {
-        this.state = State.STARTING_GAME;
+        
+        this.stateFactory = new StateFactory();
+        this.gameState = null;
         this.stateVariables = new HashMap<>();
-        this.stateVariables.put("numberOfPlayers", numberOfPlayers.toString());
+        this.electionResults = new HashMap<>();
+        initVariables(numberOfPlayers);
         playerManager = new PlayerManager(this);
-        stateObservers = new LinkedList<>();
-        initObservers();
     }
     
     public PlayerManager getPlayerManager() {
         return this.playerManager;
     }
     
-    public State getState() {
-        return this.state;
-    }
-    
     public Map<String, String> getVariables() {
         return this.stateVariables;
     }
     
-    public void changeState(State state, Map<String, String> variables) {
-        this.state = state;
-        if (variables != null) {
-            stateVariables.putAll(variables);
-        }
-        notifyAllObservers();
+    public void changeState(State state) {
+        this.gameState =  this.stateFactory.getGameState(this, state);
+        this.gameState.doAction();
+   }
+    
+    public void receiveData(String player, String data) {
+        this.gameState.receiveData(player, data);
     }
     
-    public void notifyAllObservers() {
-        stateObservers.forEach(observer -> {
-            observer.informObserver(this);
-        });
+    public void initVariables(Integer numberOfPlayers) {
+        this.stateVariables.put("numberOfPlayers", numberOfPlayers.toString());
+        this.stateVariables.put("president", null);
+        this.stateVariables.put("chancellor", null);
     }
     
-    public void initObservers() {
-        stateObservers.add(new ElectionObserver());
+    public Map<String, String> getElectionResults() {
+        return this.electionResults;
+    }
+    
+    public void addVote(String player, String vote) {
+        this.electionResults.put(player, vote);
+    }
+    
+    public void setElectionResults(Map<String, String> electionResults) {
+        this.electionResults = electionResults;
     }
 }

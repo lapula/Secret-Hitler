@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  *
@@ -19,25 +20,24 @@ public class PlayerManager {
     
     private List<Player> players;
     private Game game;
+    private int gamePlayers;
+    private List<String> roleList;
     
     public PlayerManager(Game game) {
         players = new ArrayList<>();
         this.game = game;
+        this.gamePlayers = Integer.parseInt(game.getVariables().get("numberOfPlayers"));
+        this.roleList = initRoles(gamePlayers);
     }
     
     public void addPlayer(Player player) {
+        player.setRole(this.getRole());
         players.add(player);
-        PlayerWebSocketHandler.initPlayer(player, "Fascist");
-        
-        int numberOfPlayers = Integer.parseInt(game.getVariables().get("numberOfPlayers"));
-        if (players.size() == numberOfPlayers) {
-            game.changeState(State.VOTE_ON_GOVERNMENT, null);
-            
-            
-            Map<String, String> choices = new HashMap<>();
-            choices.put("JA", "Ja!");
-            choices.put("NEIN", "Nein!");
-            PlayerWebSocketHandler.sendChoiceMessage(players, choices, "Vote!", "Do you approve this government?");
+        PlayerWebSocketHandler.initPlayer(player, player.getRole());
+       
+        if (players.size() == this.gamePlayers) {
+            game.getVariables().put("president", getRandomPlayer().getName());
+            game.changeState(State.NOMINATE_CHANCELLOR);
         }
     }
     
@@ -52,6 +52,61 @@ public class PlayerManager {
             }
         }
         return null;
+    }
+    
+    public Player getRandomPlayer() {
+        Random random = new Random();
+        int index = random.nextInt(gamePlayers - 1);
+        return players.get(index);
+    }
+    
+    private String getRole() {
+        Random random = new Random();
+        int index = random.nextInt(this.roleList.size());
+        String role = this.roleList.get(index);
+        this.roleList.remove(index);
+        return role;
+    }
+    
+    private List<String> initRoles(int gamePlayers) {
+        
+        String liberal = "LIBERAL";
+        String fascist = "FASCIST";
+        String hitler = "HITLER";
+        
+        int liberals;
+        
+        switch(gamePlayers) {
+        case 5 :
+            liberals = 3;
+        case 6 :
+            liberals = 4;
+        case 7 :
+            liberals = 4;
+        case 8 :
+            liberals = 4;
+        case 9 :
+            liberals = 4;
+        case 10 :
+            liberals = 4;
+        default :
+            liberals = 1;
+     }
+        
+     int fascists = gamePlayers - liberals - 1;
+     
+     List<String> roles = new ArrayList<>();
+     roles.add(hitler);
+     
+     for (int i = 0; i < fascists; i++) {
+         roles.add(fascist);
+     }
+     
+     for (int i = 0; i < liberals; i++) {
+         roles.add(liberal);
+     }
+        
+     return roles;
     }
     
 }
