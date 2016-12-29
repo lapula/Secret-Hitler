@@ -49,7 +49,7 @@ class ListenGame extends React.Component {
 
   render() {
     if (this.state.gameName != "") {
-      return (<GameScreen createGame={false} gamePlayers={null} gameName={this.state.gameName} />)
+      return (<GameScreen createGame={false} gamePlayers={""} gameName={this.state.gameName} />)
     }
 
     return (
@@ -60,6 +60,7 @@ class ListenGame extends React.Component {
             <TextField
                 floatingLabelText="Game name"
                 ref="gameName"
+                onKeyPress={this.handleKeyPress}
               /><br />
             <RaisedButton label="Register screen!" primary={true} style={style.button} onTouchTap={this.handleSubmit} />
         </Paper>

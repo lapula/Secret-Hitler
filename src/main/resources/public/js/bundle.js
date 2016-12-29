@@ -40823,7 +40823,7 @@
 	          _react2.default.createElement(_PlayerApp2.default, null)
 	        );
 	      } else if (this.state.renderComponent == "CREATE_GAME") {
-	        _react2.default.createElement(
+	        return _react2.default.createElement(
 	          'div',
 	          { style: style.container },
 	          _react2.default.createElement(_AppBar2.default, { title: 'Secret Hitler',
@@ -40832,7 +40832,7 @@
 	          _react2.default.createElement(_CreateGame2.default, null)
 	        );
 	      } else if (this.state.renderComponent == "LISTEN_GAME") {
-	        _react2.default.createElement(
+	        return _react2.default.createElement(
 	          'div',
 	          { style: style.container },
 	          _react2.default.createElement(_AppBar2.default, { title: 'Secret Hitler',
@@ -52098,9 +52098,6 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var style = {
-	  button: {
-	    margin: "22px"
-	  },
 	  container: {
 	    display: "flex",
 	    flexGrow: "inherit",
@@ -52108,21 +52105,6 @@
 	    alignItems: "center",
 	    flexDirection: "column",
 	    flex: 1
-	  },
-	  paper: {
-	    height: "100%",
-	    width: "100%",
-	    padding: "8px 25px"
-	  },
-	  header: {
-	    color: "white",
-	    textShadow: "1px 1px 5px black"
-	  },
-	  specialRole: {
-	    width: "100%",
-	    backgroundColor: "#ff4081",
-	    color: "white",
-	    fontSize: "18px"
 	  }
 	};
 	
@@ -52135,157 +52117,54 @@
 	    var _this = _possibleConstructorReturn(this, (GameScreen.__proto__ || Object.getPrototypeOf(GameScreen)).call(this, props, context));
 	
 	    _this.state = {
-	      phase: "Game is starting...",
-	      playerRole: "Not assigned yet.",
-	      queryData: null,
-	      playerName: null,
-	      gameName: null,
-	      specialRole: "",
-	      dialogOpen: false,
-	      dialogHeader: "",
-	      dialogText: ""
+	      data: ""
 	    };
-	
-	    _this.handleSubmit = _this.handleSubmit.bind(_this);
-	    _this.handleKeyPress = _this.handleKeyPress.bind(_this, event);
-	    _this.handleDialogClose = _this.handleDialogClose.bind(_this);
 	    return _this;
 	  }
 	
 	  _createClass(GameScreen, [{
-	    key: 'handleSubmit',
-	    value: function handleSubmit() {
-	      this.setState({
-	        playerName: this.refs.playerName.input.value,
-	        gameName: this.refs.gameName.input.value
-	      });
-	      this.initSocketConnection(this, this.refs.playerName.input.value, this.refs.gameName.input.value);
-	    }
-	  }, {
-	    key: 'handleKeyPress',
-	    value: function handleKeyPress(component, event) {
-	      if (event.key == 'Enter') {
-	        this.handleSubmit();
-	      }
-	    }
-	  }, {
-	    key: 'handleDialogClose',
-	    value: function handleDialogClose() {
-	      this.setState({
-	        dialogOpen: false
-	      });
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
-	
-	      if (this.state.playerName == null) {
-	        return _react2.default.createElement(
-	          'div',
-	          { style: style.container },
-	          _react2.default.createElement(
-	            'div',
-	            null,
-	            _react2.default.createElement(
-	              _Paper2.default,
-	              { style: style.paper, zDepth: 2 },
-	              _react2.default.createElement(
-	                'h1',
-	                null,
-	                'Join game'
-	              ),
-	              _react2.default.createElement(_TextField2.default, {
-	                floatingLabelText: 'Player name',
-	                ref: 'playerName'
-	              }),
-	              _react2.default.createElement('br', null),
-	              _react2.default.createElement(_TextField2.default, {
-	                floatingLabelText: 'Game name',
-	                ref: 'gameName',
-	                onKeyPress: this.handleKeyPress
-	              }),
-	              _react2.default.createElement('br', null),
-	              _react2.default.createElement(_RaisedButton2.default, { label: 'Enter game!', primary: true, style: style.button, onTouchTap: this.handleSubmit })
-	            )
-	          )
-	        );
-	      }
-	
 	      return _react2.default.createElement(
 	        'div',
 	        { style: style.container },
-	        _react2.default.createElement(
-	          'div',
-	          { style: style.specialRole },
-	          this.state.specialRole
-	        ),
-	        _react2.default.createElement(
-	          'h1',
-	          { style: style.header },
-	          this.state.phase
-	        ),
-	        _react2.default.createElement(_OptionList2.default, {
-	          gameName: this.state.gameName,
-	          playerName: this.state.playerName,
-	          queryData: this.state.queryData,
-	          webSocket: this.state.webSocket }),
-	        _react2.default.createElement(_Footer2.default, { role: this.state.playerRole }),
-	        _react2.default.createElement(
-	          _Dialog2.default,
-	          {
-	            title: this.state.dialogHeader,
-	            actions: _react2.default.createElement(_FlatButton2.default, { label: 'I see.', primary: true, onTouchTap: this.handleDialogClose }),
-	            modal: true,
-	            open: this.state.dialogOpen
-	          },
-	          this.state.dialogText
-	        )
+	        this.state.data
 	      );
 	    }
 	  }, {
-	    key: 'initSocketConnection',
-	    value: function initSocketConnection(elem, playerName, gameName) {
-	      var component = elem;
-	      var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/players");
-	      component.setState({ webSocket: webSocket });
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      var component = this;
+	      var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/games");
+	
+	      var type = void 0;
+	      if (component.props.createGame) {
+	        type = "CREATE_GAME";
+	      } else {
+	        type = "LISTEN_GAME";
+	      }
 	
 	      webSocket.onopen = function () {
 	        var message = {
-	          "type": "REGISTER_PLAYER",
-	          "playerName": playerName,
-	          "gameName": gameName
+	          "type": type,
+	          "gameName": component.props.gameName,
+	          "gamePlayers": component.props.gamePlayers
 	        };
 	        webSocket.send(JSON.stringify(message));
 	
 	        setInterval(function () {
 	          webSocket.send(JSON.stringify({
 	            "type": "PING",
-	            "playerName": playerName,
-	            "gameName": gameName
+	            "gameName": component.props.gameName
 	          }));
-	        }, 10000);
+	        }, 5000);
 	      };
 	
 	      webSocket.onmessage = function (msg) {
 	        var data = JSON.parse(msg.data);
-	
-	        if (data.type == "PLAYER_INIT") {
-	          component.setState({ playerRole: data.role });
-	        } else if (data.type == "PLAYER_QUERY") {
-	          component.setState({
-	            queryData: data,
-	            phase: data.header
-	          });
-	        } else if (data.type == "SET_SPECIAL_ROLE") {
-	          component.setState({
-	            specialRole: data.role
-	          });
-	        } else if (data.type == "ALERT_PLAYER") {
-	          component.setState({
-	            dialogOpen: true,
-	            dialogHeader: data.header,
-	            dialogText: data.text
-	          });
+	        console.log(data);
+	        if (data.type == "STATUS_UPDATE") {
+	          component.setState({ data: data });
 	        }
 	      };
 	
@@ -52399,7 +52278,7 @@
 	    key: 'render',
 	    value: function render() {
 	      if (this.state.gameName != "") {
-	        return _react2.default.createElement(_GameScreen2.default, { createGame: false, gamePlayers: null, gameName: this.state.gameName });
+	        return _react2.default.createElement(_GameScreen2.default, { createGame: false, gamePlayers: "", gameName: this.state.gameName });
 	      }
 	
 	      return _react2.default.createElement(
@@ -52418,7 +52297,8 @@
 	            ),
 	            _react2.default.createElement(_TextField2.default, {
 	              floatingLabelText: 'Game name',
-	              ref: 'gameName'
+	              ref: 'gameName',
+	              onKeyPress: this.handleKeyPress
 	            }),
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement(_RaisedButton2.default, { label: 'Register screen!', primary: true, style: style.button, onTouchTap: this.handleSubmit })

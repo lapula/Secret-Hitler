@@ -64,19 +64,23 @@ class Main extends React.Component {
         </div>
         )
     } else if (this.state.renderComponent == "CREATE_GAME") {
-      <div style={style.container}>
-        <AppBar title="Secret Hitler"
-            iconElementLeft={<div></div>}
-         />
-       <CreateGame />
-      </div>
+      return(
+        <div style={style.container}>
+          <AppBar title="Secret Hitler"
+              iconElementLeft={<div></div>}
+           />
+         <CreateGame />
+        </div>
+      )
     } else if (this.state.renderComponent == "LISTEN_GAME") {
-      <div style={style.container}>
-        <AppBar title="Secret Hitler"
-            iconElementLeft={<div></div>}
-         />
-       <ListenGame />
-      </div>
+      return(
+        <div style={style.container}>
+          <AppBar title="Secret Hitler"
+              iconElementLeft={<div></div>}
+           />
+         <ListenGame />
+        </div>
+      )
     } else {
       return (
         <div style={style.container}>

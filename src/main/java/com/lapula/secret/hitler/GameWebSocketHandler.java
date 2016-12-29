@@ -22,9 +22,10 @@ import org.json.JSONObject;
 @WebSocket
 public class GameWebSocketHandler {
     
-    private static final String INIT_LISTENER = "INIT_LISTENER";
+    private static final String LISTEN_GAME = "LISTEN_GAME";
     private static final String CREATE_GAME = "CREATE_GAME";
     private static final String STATUS_UPDATE = "STATUS_UPDATE";
+    private static final String PING = "PING";
     
     @OnWebSocketConnect
     public void onConnect(Session user) throws Exception {
@@ -40,17 +41,22 @@ public class GameWebSocketHandler {
 
     @OnWebSocketMessage
     public void onMessage(Session user, String message) {
+        System.out.println(message);
         JSONObject obj = new JSONObject(message);
         String type = obj.getString("type");
         String gameName = obj.getString("gameName");
         
-        if (type.equals(INIT_LISTENER)) {
+        if (type.equals(LISTEN_GAME)) {
             Main.games.get(gameName).addGameListener(user);
         } else if (type.equals(CREATE_GAME)) {
             String gamePlayers = obj.getString("gamePlayers");
             Game game = new Game(Integer.parseInt(gamePlayers));
             Main.games.put(gameName, game);
             game.getGameListeners().add(user);
+        } else if (type.equals(PING)) {
+            JSONObject mainObj = new JSONObject();
+            mainObj.put("hey", "world");
+            sendStatusUpdate(Main.games.get(gameName).getGameListeners(), mainObj);
         }
     }
     
