@@ -90,7 +90,7 @@ public class PlayerWebSocketHandler {
             }
         });
         
-        mainObj.put("choices", new JSONObject());
+        mainObj.put("choices", "");
         mainObj.put("subheader", "");
                 
         players.forEach(player -> {

@@ -1,25 +1,18 @@
 html {
   font-family: 'Roboto', sans-serif;
-  height: calc(100% - 16px);
+  height: 100%;
 }
 
 body {
-  height: 100%;
-  overflow: hidden;
+    height: 100%;
+    margin: 0 !important;
+    background-image: url("../images/sh_bg.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center; 
 }
 
 #app {
-    height: 100%;
-}
-
-#footer{
-    position: absolute;
-    bottom: 12px;
-    width: calc(100% - 16px);
-}
-
-#container {
-    text-align: center;
     height: 100%;
 }
 

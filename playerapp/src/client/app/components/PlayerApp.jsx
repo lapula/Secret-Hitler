@@ -1,14 +1,37 @@
 import React, {Component} from 'react';
-import AppBar from 'material-ui/AppBar';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import Paper from 'material-ui/Paper';
 
 import Footer from './Footer.jsx';
 import OptionList from './OptionList.jsx';
 
 const style = {
   button: {
-    margin: "12px"
+    margin: "22px"
+  },
+  container: {
+    display: "flex",
+    flexGrow: "inherit",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    flex: 1
+  },
+  paper: {
+    height: "100%",
+    width: "100%",
+    padding: "8px 25px"
+  },
+  header: {
+    color: "white",
+    textShadow: "1px 1px 5px black"
+  },
+  specialRole: {
+    width: "100%",
+    backgroundColor: "#ff4081",
+    color: "white",
+    fontSize: "18px"
   }
 }
 
@@ -20,7 +43,8 @@ class PlayerApp extends React.Component {
       playerRole: "Not assigned yet.",
       queryData: null,
       playerName: null,
-      gameName: null
+      gameName: null,
+      specialRole: ""
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -45,25 +69,30 @@ class PlayerApp extends React.Component {
 
     if (this.state.playerName == null) {
       return (
-        <div id="container">
-          <h1>Join game</h1>
-          <TextField
-              floatingLabelText="Player name"
-              ref="playerName"
-            /><br />
-          <TextField
-                floatingLabelText="Game name"
-                ref="gameName"
-                onKeyPress={this.handleKeyPress}
-          /><br />
-        <RaisedButton label="Enter game!" primary={true} style={style.button} onTouchTap={this.handleSubmit} />
+        <div style={style.container}>
+          <div>
+            <Paper style={style.paper} zDepth={2}>
+              <h1>Join game</h1>
+              <TextField
+                  floatingLabelText="Player name"
+                  ref="playerName"
+                /><br />
+              <TextField
+                    floatingLabelText="Game name"
+                    ref="gameName"
+                    onKeyPress={this.handleKeyPress}
+              /><br />
+            <RaisedButton label="Enter game!" primary={true} style={style.button} onTouchTap={this.handleSubmit} />
+          </Paper>
+          </div>
         </div>
       )
     }
 
     return (
-      <div id="container">
-          <h1>{this.state.phase}</h1>
+      <div style={style.container}>
+          <div style={style.specialRole}>{this.state.specialRole}</div>
+          <h1 style={style.header}>{this.state.phase}</h1>
           <OptionList
             gameName={this.state.gameName}
             playerName={this.state.playerName}
@@ -106,6 +135,10 @@ class PlayerApp extends React.Component {
               queryData: data,
               phase: data.header
             });
+        } else if (data.type == "SET_SPECIAL_ROLE") {
+          component.setState({
+            specialRole: data.role
+          });
         }
     };
 

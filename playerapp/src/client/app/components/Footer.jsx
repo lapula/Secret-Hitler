@@ -7,6 +7,12 @@ const customButtonStyle = {
     lineHeight: 72,
     height: 72
 }
+const style = {
+  container: {
+    width: "90%",
+    margin: "10px"
+  }
+}
 
 class Footer extends React.Component {
 
@@ -44,7 +50,7 @@ class Footer extends React.Component {
     );
 
     return (
-      <footer id="footer">
+      <footer style={style.container}>
         <Dialog
           open={this.state.open}
           title="Your role is:"

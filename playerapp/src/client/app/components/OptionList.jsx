@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
+import Paper from 'material-ui/Paper';
 
 const style = {
-  root: {
-      width: "100%"
-  },
   subheader: {
-      fontSize: "24px"
+      fontSize: "14px",
+      padding: "0px"
   },
   listItemLarge: {
       fontSize: "32px",
@@ -17,7 +16,22 @@ const style = {
   listItemSmall: {
       fontSize: "24px",
       height: "48px",
-      lineHeight: "16px"
+      lineHeight: "20px",
+      fontWeight: "bold"
+
+  },
+  listContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    flexGrow: "inherit",
+    width: "70%"
+  },
+  paper: {
+    height: "100%",
+    width: "100%",
+    padding: "10px"
   }
 };
 
@@ -67,15 +81,16 @@ class OptionList extends React.Component {
 
         if (this.state.listData == null) {
           if (this.state.previousChoice != null) {
-            return (<h2>You chose: <b>{this.state.previousChoice}</b></h2>);
+            return (<div style={style.listContainer}>
+                      <h2>You chose: <b>{this.state.previousChoice}</b></h2>
+                    </div>);
           }
-          return null;
+          return (<div style={style.listContainer}></div>);
+        } else if (this.state.listData.choices.length == 0) {
+          return (<div style={style.listContainer}></div>);
         }
-        let listStyle = style.listItemLarge;
 
-        if (this.state.listData.choices.length > 2) {
-            listStyle = style.listItemSmall
-        }
+        let listStyle = style.listItemSmall;
 
         let list = new Array();
         for (let i in this.state.listData.choices) {
@@ -83,10 +98,12 @@ class OptionList extends React.Component {
         }
 
         return(
-            <div style={style.root}>
+            <div style={style.listContainer}>
                 <List>
+                  <Paper style={style.paper} zDepth={4}>
                     <Subheader style={style.subheader}>{this.state.listData.subheader}</Subheader>
                     {list}
+                  </Paper>
                 </List>
             </div>
         )

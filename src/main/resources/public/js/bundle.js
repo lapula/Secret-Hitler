@@ -40724,7 +40724,19 @@
 	
 	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
 	
-	var _PlayerApp = __webpack_require__(/*! ./PlayerApp.jsx */ 372);
+	var _AppBar = __webpack_require__(/*! material-ui/AppBar */ 372);
+	
+	var _AppBar2 = _interopRequireDefault(_AppBar);
+	
+	var _IconButton = __webpack_require__(/*! material-ui/IconButton */ 374);
+	
+	var _IconButton2 = _interopRequireDefault(_IconButton);
+	
+	var _close = __webpack_require__(/*! material-ui/svg-icons/navigation/close */ 391);
+	
+	var _close2 = _interopRequireDefault(_close);
+	
+	var _PlayerApp = __webpack_require__(/*! ./PlayerApp.jsx */ 392);
 	
 	var _PlayerApp2 = _interopRequireDefault(_PlayerApp);
 	
@@ -40737,8 +40749,22 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var style = {
+	  container: {
+	    display: "flex",
+	    textAlign: "center",
+	    height: "100%",
+	    flexDirection: "column",
+	    justifyContent: "center"
+	  },
 	  button: {
 	    margin: "12px"
+	  },
+	  buttonContainer: {
+	    display: "flex",
+	    justifyContent: "center",
+	    alignItems: "center",
+	    flexDirection: "column",
+	    flex: 1
 	  }
 	};
 	
@@ -40780,20 +40806,34 @@
 	    value: function render() {
 	
 	      if (this.state.renderComponent == "PLAYER_APP") {
-	        return _react2.default.createElement(_PlayerApp2.default, null);
+	        return _react2.default.createElement(
+	          'div',
+	          { style: style.container },
+	          _react2.default.createElement(_AppBar2.default, { title: 'Secret Hitler',
+	            iconElementLeft: _react2.default.createElement('div', null)
+	          }),
+	          _react2.default.createElement(_PlayerApp2.default, null)
+	        );
 	      } else {
 	        return _react2.default.createElement(
 	          'div',
-	          { id: 'container' },
-	          _react2.default.createElement(_RaisedButton2.default, { label: 'Join a game', primary: true, style: style.button,
-	            onTouchTap: this.showPlayerScreen }),
-	          _react2.default.createElement('br', null),
-	          _react2.default.createElement(_RaisedButton2.default, { label: 'Create a game', primary: true, style: style.button,
-	            onTouchTap: this.showGameCreationScreen }),
-	          _react2.default.createElement('br', null),
-	          _react2.default.createElement(_RaisedButton2.default, { label: 'Open game screen', primary: true, style: style.button,
-	            onTouchTap: this.showGameScreen }),
-	          _react2.default.createElement('br', null)
+	          { style: style.container },
+	          _react2.default.createElement(_AppBar2.default, { title: 'Secret Hitler',
+	            iconElementLeft: _react2.default.createElement('div', null)
+	          }),
+	          _react2.default.createElement(
+	            'div',
+	            { style: style.buttonContainer },
+	            _react2.default.createElement(_RaisedButton2.default, { label: 'Join a game', primary: true, style: style.button,
+	              onTouchTap: this.showPlayerScreen }),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement(_RaisedButton2.default, { label: 'Create a game', primary: true, style: style.button,
+	              onTouchTap: this.showGameCreationScreen }),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement(_RaisedButton2.default, { label: 'Open game screen', primary: true, style: style.button,
+	              onTouchTap: this.showGameScreen }),
+	            _react2.default.createElement('br', null)
+	          )
 	        );
 	      }
 	    }
@@ -45157,190 +45197,6 @@
 
 /***/ },
 /* 372 */
-/*!*************************************************!*\
-  !*** ./src/client/app/components/PlayerApp.jsx ***!
-  \*************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _AppBar = __webpack_require__(/*! material-ui/AppBar */ 373);
-	
-	var _AppBar2 = _interopRequireDefault(_AppBar);
-	
-	var _TextField = __webpack_require__(/*! material-ui/TextField */ 392);
-	
-	var _TextField2 = _interopRequireDefault(_TextField);
-	
-	var _RaisedButton = __webpack_require__(/*! material-ui/RaisedButton */ 336);
-	
-	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
-	
-	var _Footer = __webpack_require__(/*! ./Footer.jsx */ 403);
-	
-	var _Footer2 = _interopRequireDefault(_Footer);
-	
-	var _OptionList = __webpack_require__(/*! ./OptionList.jsx */ 412);
-	
-	var _OptionList2 = _interopRequireDefault(_OptionList);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var style = {
-	  button: {
-	    margin: "12px"
-	  }
-	};
-	
-	var PlayerApp = function (_React$Component) {
-	  _inherits(PlayerApp, _React$Component);
-	
-	  function PlayerApp(props, context) {
-	    _classCallCheck(this, PlayerApp);
-	
-	    var _this = _possibleConstructorReturn(this, (PlayerApp.__proto__ || Object.getPrototypeOf(PlayerApp)).call(this, props, context));
-	
-	    _this.state = {
-	      phase: "Game is starting...",
-	      playerRole: "Not assigned yet.",
-	      queryData: null,
-	      playerName: null,
-	      gameName: null
-	    };
-	
-	    _this.handleSubmit = _this.handleSubmit.bind(_this);
-	    _this.handleKeyPress = _this.handleKeyPress.bind(_this, event);
-	    return _this;
-	  }
-	
-	  _createClass(PlayerApp, [{
-	    key: 'handleSubmit',
-	    value: function handleSubmit() {
-	      this.setState({
-	        playerName: this.refs.playerName.input.value,
-	        gameName: this.refs.gameName.input.value
-	      });
-	      this.initSocketConnection(this, this.refs.playerName.input.value, this.refs.gameName.input.value);
-	    }
-	  }, {
-	    key: 'handleKeyPress',
-	    value: function handleKeyPress(component, event) {
-	      if (event.key == 'Enter') {
-	        this.handleSubmit();
-	      }
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	
-	      if (this.state.playerName == null) {
-	        return _react2.default.createElement(
-	          'div',
-	          { id: 'container' },
-	          _react2.default.createElement(
-	            'h1',
-	            null,
-	            'Join game'
-	          ),
-	          _react2.default.createElement(_TextField2.default, {
-	            floatingLabelText: 'Player name',
-	            ref: 'playerName'
-	          }),
-	          _react2.default.createElement('br', null),
-	          _react2.default.createElement(_TextField2.default, {
-	            floatingLabelText: 'Game name',
-	            ref: 'gameName',
-	            onKeyPress: this.handleKeyPress
-	          }),
-	          _react2.default.createElement('br', null),
-	          _react2.default.createElement(_RaisedButton2.default, { label: 'Enter game!', primary: true, style: style.button, onTouchTap: this.handleSubmit })
-	        );
-	      }
-	
-	      return _react2.default.createElement(
-	        'div',
-	        { id: 'container' },
-	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          this.state.phase
-	        ),
-	        _react2.default.createElement(_OptionList2.default, {
-	          gameName: this.state.gameName,
-	          playerName: this.state.playerName,
-	          queryData: this.state.queryData,
-	          webSocket: this.state.webSocket }),
-	        _react2.default.createElement(_Footer2.default, { role: this.state.playerRole })
-	      );
-	    }
-	  }, {
-	    key: 'initSocketConnection',
-	    value: function initSocketConnection(elem, playerName, gameName) {
-	      var component = elem;
-	      var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/players");
-	      component.setState({ webSocket: webSocket });
-	
-	      webSocket.onopen = function () {
-	        var message = {
-	          "type": "REGISTER_PLAYER",
-	          "playerName": playerName,
-	          "gameName": gameName
-	        };
-	        webSocket.send(JSON.stringify(message));
-	
-	        setInterval(function () {
-	          webSocket.send(JSON.stringify({
-	            "type": "PING",
-	            "playerName": playerName,
-	            "gameName": gameName
-	          }));
-	        }, 10000);
-	      };
-	
-	      webSocket.onmessage = function (msg) {
-	        var data = JSON.parse(msg.data);
-	
-	        if (data.type == "PLAYER_INIT") {
-	          component.setState({ playerRole: data.role });
-	        } else if (data.type == "PLAYER_QUERY") {
-	          component.setState({
-	            queryData: data,
-	            phase: data.header
-	          });
-	        }
-	      };
-	
-	      webSocket.onclose = function () {
-	        var time = new Date();
-	        var closeTime = time.getHours() + ":" + time.getMinutes();
-	        alert("WebSocket connection closed at: " + closeTime);
-	      };
-	    }
-	  }]);
-	
-	  return PlayerApp;
-	}(_react2.default.Component);
-	
-	exports.default = PlayerApp;
-
-/***/ },
-/* 373 */
 /*!***************************************!*\
   !*** ./~/material-ui/AppBar/index.js ***!
   \***************************************/
@@ -45353,7 +45209,7 @@
 	});
 	exports.default = undefined;
 	
-	var _AppBar = __webpack_require__(/*! ./AppBar */ 374);
+	var _AppBar = __webpack_require__(/*! ./AppBar */ 373);
 	
 	var _AppBar2 = _interopRequireDefault(_AppBar);
 	
@@ -45362,7 +45218,7 @@
 	exports.default = _AppBar2.default;
 
 /***/ },
-/* 374 */
+/* 373 */
 /*!****************************************!*\
   !*** ./~/material-ui/AppBar/AppBar.js ***!
   \****************************************/
@@ -45416,11 +45272,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _IconButton = __webpack_require__(/*! ../IconButton */ 375);
+	var _IconButton = __webpack_require__(/*! ../IconButton */ 374);
 	
 	var _IconButton2 = _interopRequireDefault(_IconButton);
 	
-	var _menu = __webpack_require__(/*! ../svg-icons/navigation/menu */ 380);
+	var _menu = __webpack_require__(/*! ../svg-icons/navigation/menu */ 379);
 	
 	var _menu2 = _interopRequireDefault(_menu);
 	
@@ -45751,7 +45607,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 375 */
+/* 374 */
 /*!*******************************************!*\
   !*** ./~/material-ui/IconButton/index.js ***!
   \*******************************************/
@@ -45764,7 +45620,7 @@
 	});
 	exports.default = undefined;
 	
-	var _IconButton = __webpack_require__(/*! ./IconButton */ 376);
+	var _IconButton = __webpack_require__(/*! ./IconButton */ 375);
 	
 	var _IconButton2 = _interopRequireDefault(_IconButton);
 	
@@ -45773,7 +45629,7 @@
 	exports.default = _IconButton2.default;
 
 /***/ },
-/* 376 */
+/* 375 */
 /*!************************************************!*\
   !*** ./~/material-ui/IconButton/IconButton.js ***!
   \************************************************/
@@ -45833,11 +45689,11 @@
 	
 	var _EnhancedButton2 = _interopRequireDefault(_EnhancedButton);
 	
-	var _FontIcon = __webpack_require__(/*! ../FontIcon */ 377);
+	var _FontIcon = __webpack_require__(/*! ../FontIcon */ 376);
 	
 	var _FontIcon2 = _interopRequireDefault(_FontIcon);
 	
-	var _Tooltip = __webpack_require__(/*! ../internal/Tooltip */ 379);
+	var _Tooltip = __webpack_require__(/*! ../internal/Tooltip */ 378);
 	
 	var _Tooltip2 = _interopRequireDefault(_Tooltip);
 	
@@ -46102,7 +45958,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 377 */
+/* 376 */
 /*!*****************************************!*\
   !*** ./~/material-ui/FontIcon/index.js ***!
   \*****************************************/
@@ -46115,7 +45971,7 @@
 	});
 	exports.default = undefined;
 	
-	var _FontIcon = __webpack_require__(/*! ./FontIcon */ 378);
+	var _FontIcon = __webpack_require__(/*! ./FontIcon */ 377);
 	
 	var _FontIcon2 = _interopRequireDefault(_FontIcon);
 	
@@ -46124,7 +45980,7 @@
 	exports.default = _FontIcon2.default;
 
 /***/ },
-/* 378 */
+/* 377 */
 /*!********************************************!*\
   !*** ./~/material-ui/FontIcon/FontIcon.js ***!
   \********************************************/
@@ -46287,7 +46143,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 379 */
+/* 378 */
 /*!*******************************************!*\
   !*** ./~/material-ui/internal/Tooltip.js ***!
   \*******************************************/
@@ -46519,7 +46375,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 380 */
+/* 379 */
 /*!****************************************************!*\
   !*** ./~/material-ui/svg-icons/navigation/menu.js ***!
   \****************************************************/
@@ -46535,11 +46391,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _pure = __webpack_require__(/*! recompose/pure */ 381);
+	var _pure = __webpack_require__(/*! recompose/pure */ 380);
 	
 	var _pure2 = _interopRequireDefault(_pure);
 	
-	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 390);
+	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 389);
 	
 	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
 	
@@ -46559,7 +46415,7 @@
 	exports.default = NavigationMenu;
 
 /***/ },
-/* 381 */
+/* 380 */
 /*!*****************************!*\
   !*** ./~/recompose/pure.js ***!
   \*****************************/
@@ -46569,7 +46425,7 @@
 	
 	exports.__esModule = true;
 	
-	var _shouldUpdate = __webpack_require__(/*! ./shouldUpdate */ 382);
+	var _shouldUpdate = __webpack_require__(/*! ./shouldUpdate */ 381);
 	
 	var _shouldUpdate2 = _interopRequireDefault(_shouldUpdate);
 	
@@ -46577,7 +46433,7 @@
 	
 	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 	
-	var _createHelper = __webpack_require__(/*! ./createHelper */ 383);
+	var _createHelper = __webpack_require__(/*! ./createHelper */ 382);
 	
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 	
@@ -46590,7 +46446,7 @@
 	exports.default = (0, _createHelper2.default)(pure, 'pure', true, true);
 
 /***/ },
-/* 382 */
+/* 381 */
 /*!*************************************!*\
   !*** ./~/recompose/shouldUpdate.js ***!
   \*************************************/
@@ -46602,11 +46458,11 @@
 	
 	var _react = __webpack_require__(/*! react */ 1);
 	
-	var _createHelper = __webpack_require__(/*! ./createHelper */ 383);
+	var _createHelper = __webpack_require__(/*! ./createHelper */ 382);
 	
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 	
-	var _createEagerFactory = __webpack_require__(/*! ./createEagerFactory */ 386);
+	var _createEagerFactory = __webpack_require__(/*! ./createEagerFactory */ 385);
 	
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 	
@@ -46646,7 +46502,7 @@
 	exports.default = (0, _createHelper2.default)(shouldUpdate, 'shouldUpdate');
 
 /***/ },
-/* 383 */
+/* 382 */
 /*!*************************************!*\
   !*** ./~/recompose/createHelper.js ***!
   \*************************************/
@@ -46662,7 +46518,7 @@
 	  if (process.env.NODE_ENV !== 'production' && setDisplayName) {
 	    var _ret = function () {
 	      /* eslint-disable global-require */
-	      var wrapDisplayName = __webpack_require__(/*! ./wrapDisplayName */ 384).default;
+	      var wrapDisplayName = __webpack_require__(/*! ./wrapDisplayName */ 383).default;
 	      /* eslint-enable global-require */
 	
 	      if (noArgs) {
@@ -46707,7 +46563,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../process/browser.js */ 3)))
 
 /***/ },
-/* 384 */
+/* 383 */
 /*!****************************************!*\
   !*** ./~/recompose/wrapDisplayName.js ***!
   \****************************************/
@@ -46717,7 +46573,7 @@
 	
 	exports.__esModule = true;
 	
-	var _getDisplayName = __webpack_require__(/*! ./getDisplayName */ 385);
+	var _getDisplayName = __webpack_require__(/*! ./getDisplayName */ 384);
 	
 	var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
 	
@@ -46730,7 +46586,7 @@
 	exports.default = wrapDisplayName;
 
 /***/ },
-/* 385 */
+/* 384 */
 /*!***************************************!*\
   !*** ./~/recompose/getDisplayName.js ***!
   \***************************************/
@@ -46754,7 +46610,7 @@
 	exports.default = getDisplayName;
 
 /***/ },
-/* 386 */
+/* 385 */
 /*!*******************************************!*\
   !*** ./~/recompose/createEagerFactory.js ***!
   \*******************************************/
@@ -46764,11 +46620,11 @@
 	
 	exports.__esModule = true;
 	
-	var _createEagerElementUtil = __webpack_require__(/*! ./utils/createEagerElementUtil */ 387);
+	var _createEagerElementUtil = __webpack_require__(/*! ./utils/createEagerElementUtil */ 386);
 	
 	var _createEagerElementUtil2 = _interopRequireDefault(_createEagerElementUtil);
 	
-	var _isReferentiallyTransparentFunctionComponent = __webpack_require__(/*! ./isReferentiallyTransparentFunctionComponent */ 388);
+	var _isReferentiallyTransparentFunctionComponent = __webpack_require__(/*! ./isReferentiallyTransparentFunctionComponent */ 387);
 	
 	var _isReferentiallyTransparentFunctionComponent2 = _interopRequireDefault(_isReferentiallyTransparentFunctionComponent);
 	
@@ -46784,7 +46640,7 @@
 	exports.default = createFactory;
 
 /***/ },
-/* 387 */
+/* 386 */
 /*!*****************************************************!*\
   !*** ./~/recompose/utils/createEagerElementUtil.js ***!
   \*****************************************************/
@@ -46826,7 +46682,7 @@
 	exports.default = createEagerElementUtil;
 
 /***/ },
-/* 388 */
+/* 387 */
 /*!********************************************************************!*\
   !*** ./~/recompose/isReferentiallyTransparentFunctionComponent.js ***!
   \********************************************************************/
@@ -46836,7 +46692,7 @@
 	
 	exports.__esModule = true;
 	
-	var _isClassComponent = __webpack_require__(/*! ./isClassComponent.js */ 389);
+	var _isClassComponent = __webpack_require__(/*! ./isClassComponent.js */ 388);
 	
 	var _isClassComponent2 = _interopRequireDefault(_isClassComponent);
 	
@@ -46849,7 +46705,7 @@
 	exports.default = isReferentiallyTransparentFunctionComponent;
 
 /***/ },
-/* 389 */
+/* 388 */
 /*!*****************************************!*\
   !*** ./~/recompose/isClassComponent.js ***!
   \*****************************************/
@@ -46865,7 +46721,7 @@
 	exports.default = isClassComponent;
 
 /***/ },
-/* 390 */
+/* 389 */
 /*!****************************************!*\
   !*** ./~/material-ui/SvgIcon/index.js ***!
   \****************************************/
@@ -46878,7 +46734,7 @@
 	});
 	exports.default = undefined;
 	
-	var _SvgIcon = __webpack_require__(/*! ./SvgIcon */ 391);
+	var _SvgIcon = __webpack_require__(/*! ./SvgIcon */ 390);
 	
 	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
 	
@@ -46887,7 +46743,7 @@
 	exports.default = _SvgIcon2.default;
 
 /***/ },
-/* 391 */
+/* 390 */
 /*!******************************************!*\
   !*** ./~/material-ui/SvgIcon/SvgIcon.js ***!
   \******************************************/
@@ -47057,7 +46913,272 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
+/* 391 */
+/*!*****************************************************!*\
+  !*** ./~/material-ui/svg-icons/navigation/close.js ***!
+  \*****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _pure = __webpack_require__(/*! recompose/pure */ 380);
+	
+	var _pure2 = _interopRequireDefault(_pure);
+	
+	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 389);
+	
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var NavigationClose = function NavigationClose(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _react2.default.createElement('path', { d: 'M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z' })
+	  );
+	};
+	NavigationClose = (0, _pure2.default)(NavigationClose);
+	NavigationClose.displayName = 'NavigationClose';
+	NavigationClose.muiName = 'SvgIcon';
+	
+	exports.default = NavigationClose;
+
+/***/ },
 /* 392 */
+/*!*************************************************!*\
+  !*** ./src/client/app/components/PlayerApp.jsx ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _TextField = __webpack_require__(/*! material-ui/TextField */ 393);
+	
+	var _TextField2 = _interopRequireDefault(_TextField);
+	
+	var _RaisedButton = __webpack_require__(/*! material-ui/RaisedButton */ 336);
+	
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+	
+	var _Paper = __webpack_require__(/*! material-ui/Paper */ 369);
+	
+	var _Paper2 = _interopRequireDefault(_Paper);
+	
+	var _Footer = __webpack_require__(/*! ./Footer.jsx */ 404);
+	
+	var _Footer2 = _interopRequireDefault(_Footer);
+	
+	var _OptionList = __webpack_require__(/*! ./OptionList.jsx */ 413);
+	
+	var _OptionList2 = _interopRequireDefault(_OptionList);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var style = {
+	  button: {
+	    margin: "22px"
+	  },
+	  container: {
+	    display: "flex",
+	    flexGrow: "inherit",
+	    justifyContent: "center",
+	    alignItems: "center",
+	    flexDirection: "column",
+	    flex: 1
+	  },
+	  paper: {
+	    height: "100%",
+	    width: "100%",
+	    padding: "8px 25px"
+	  },
+	  header: {
+	    color: "white",
+	    textShadow: "1px 1px 5px black"
+	  },
+	  specialRole: {
+	    width: "100%",
+	    backgroundColor: "#ff4081",
+	    color: "white",
+	    fontSize: "18px"
+	  }
+	};
+	
+	var PlayerApp = function (_React$Component) {
+	  _inherits(PlayerApp, _React$Component);
+	
+	  function PlayerApp(props, context) {
+	    _classCallCheck(this, PlayerApp);
+	
+	    var _this = _possibleConstructorReturn(this, (PlayerApp.__proto__ || Object.getPrototypeOf(PlayerApp)).call(this, props, context));
+	
+	    _this.state = {
+	      phase: "Game is starting...",
+	      playerRole: "Not assigned yet.",
+	      queryData: null,
+	      playerName: null,
+	      gameName: null,
+	      specialRole: ""
+	    };
+	
+	    _this.handleSubmit = _this.handleSubmit.bind(_this);
+	    _this.handleKeyPress = _this.handleKeyPress.bind(_this, event);
+	    return _this;
+	  }
+	
+	  _createClass(PlayerApp, [{
+	    key: 'handleSubmit',
+	    value: function handleSubmit() {
+	      this.setState({
+	        playerName: this.refs.playerName.input.value,
+	        gameName: this.refs.gameName.input.value
+	      });
+	      this.initSocketConnection(this, this.refs.playerName.input.value, this.refs.gameName.input.value);
+	    }
+	  }, {
+	    key: 'handleKeyPress',
+	    value: function handleKeyPress(component, event) {
+	      if (event.key == 'Enter') {
+	        this.handleSubmit();
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      if (this.state.playerName == null) {
+	        return _react2.default.createElement(
+	          'div',
+	          { style: style.container },
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	              _Paper2.default,
+	              { style: style.paper, zDepth: 2 },
+	              _react2.default.createElement(
+	                'h1',
+	                null,
+	                'Join game'
+	              ),
+	              _react2.default.createElement(_TextField2.default, {
+	                floatingLabelText: 'Player name',
+	                ref: 'playerName'
+	              }),
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement(_TextField2.default, {
+	                floatingLabelText: 'Game name',
+	                ref: 'gameName',
+	                onKeyPress: this.handleKeyPress
+	              }),
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement(_RaisedButton2.default, { label: 'Enter game!', primary: true, style: style.button, onTouchTap: this.handleSubmit })
+	            )
+	          )
+	        );
+	      }
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { style: style.container },
+	        _react2.default.createElement(
+	          'div',
+	          { style: style.specialRole },
+	          this.state.specialRole
+	        ),
+	        _react2.default.createElement(
+	          'h1',
+	          { style: style.header },
+	          this.state.phase
+	        ),
+	        _react2.default.createElement(_OptionList2.default, {
+	          gameName: this.state.gameName,
+	          playerName: this.state.playerName,
+	          queryData: this.state.queryData,
+	          webSocket: this.state.webSocket }),
+	        _react2.default.createElement(_Footer2.default, { role: this.state.playerRole })
+	      );
+	    }
+	  }, {
+	    key: 'initSocketConnection',
+	    value: function initSocketConnection(elem, playerName, gameName) {
+	      var component = elem;
+	      var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/players");
+	      component.setState({ webSocket: webSocket });
+	
+	      webSocket.onopen = function () {
+	        var message = {
+	          "type": "REGISTER_PLAYER",
+	          "playerName": playerName,
+	          "gameName": gameName
+	        };
+	        webSocket.send(JSON.stringify(message));
+	
+	        setInterval(function () {
+	          webSocket.send(JSON.stringify({
+	            "type": "PING",
+	            "playerName": playerName,
+	            "gameName": gameName
+	          }));
+	        }, 10000);
+	      };
+	
+	      webSocket.onmessage = function (msg) {
+	        var data = JSON.parse(msg.data);
+	
+	        if (data.type == "PLAYER_INIT") {
+	          component.setState({ playerRole: data.role });
+	        } else if (data.type == "PLAYER_QUERY") {
+	          component.setState({
+	            queryData: data,
+	            phase: data.header
+	          });
+	        } else if (data.type == "SET_SPECIAL_ROLE") {
+	          component.setState({
+	            specialRole: data.role
+	          });
+	        }
+	      };
+	
+	      webSocket.onclose = function () {
+	        var time = new Date();
+	        var closeTime = time.getHours() + ":" + time.getMinutes();
+	        alert("WebSocket connection closed at: " + closeTime);
+	      };
+	    }
+	  }]);
+	
+	  return PlayerApp;
+	}(_react2.default.Component);
+	
+	exports.default = PlayerApp;
+
+/***/ },
+/* 393 */
 /*!******************************************!*\
   !*** ./~/material-ui/TextField/index.js ***!
   \******************************************/
@@ -47070,7 +47191,7 @@
 	});
 	exports.default = undefined;
 	
-	var _TextField = __webpack_require__(/*! ./TextField */ 393);
+	var _TextField = __webpack_require__(/*! ./TextField */ 394);
 	
 	var _TextField2 = _interopRequireDefault(_TextField);
 	
@@ -47079,7 +47200,7 @@
 	exports.default = _TextField2.default;
 
 /***/ },
-/* 393 */
+/* 394 */
 /*!**********************************************!*\
   !*** ./~/material-ui/TextField/TextField.js ***!
   \**********************************************/
@@ -47139,19 +47260,19 @@
 	
 	var _transitions2 = _interopRequireDefault(_transitions);
 	
-	var _EnhancedTextarea = __webpack_require__(/*! ./EnhancedTextarea */ 394);
+	var _EnhancedTextarea = __webpack_require__(/*! ./EnhancedTextarea */ 395);
 	
 	var _EnhancedTextarea2 = _interopRequireDefault(_EnhancedTextarea);
 	
-	var _TextFieldHint = __webpack_require__(/*! ./TextFieldHint */ 400);
+	var _TextFieldHint = __webpack_require__(/*! ./TextFieldHint */ 401);
 	
 	var _TextFieldHint2 = _interopRequireDefault(_TextFieldHint);
 	
-	var _TextFieldLabel = __webpack_require__(/*! ./TextFieldLabel */ 401);
+	var _TextFieldLabel = __webpack_require__(/*! ./TextFieldLabel */ 402);
 	
 	var _TextFieldLabel2 = _interopRequireDefault(_TextFieldLabel);
 	
-	var _TextFieldUnderline = __webpack_require__(/*! ./TextFieldUnderline */ 402);
+	var _TextFieldUnderline = __webpack_require__(/*! ./TextFieldUnderline */ 403);
 	
 	var _TextFieldUnderline2 = _interopRequireDefault(_TextFieldUnderline);
 	
@@ -47660,7 +47781,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 394 */
+/* 395 */
 /*!*****************************************************!*\
   !*** ./~/material-ui/TextField/EnhancedTextarea.js ***!
   \*****************************************************/
@@ -47708,7 +47829,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactEventListener = __webpack_require__(/*! react-event-listener */ 395);
+	var _reactEventListener = __webpack_require__(/*! react-event-listener */ 396);
 	
 	var _reactEventListener2 = _interopRequireDefault(_reactEventListener);
 	
@@ -47909,7 +48030,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 395 */
+/* 396 */
 /*!*********************************************!*\
   !*** ./~/react-event-listener/lib/index.js ***!
   \*********************************************/
@@ -47955,7 +48076,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactAddonsShallowCompare = __webpack_require__(/*! react-addons-shallow-compare */ 396);
+	var _reactAddonsShallowCompare = __webpack_require__(/*! react-addons-shallow-compare */ 397);
 	
 	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 	
@@ -47963,7 +48084,7 @@
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
-	var _supports = __webpack_require__(/*! ./supports */ 398);
+	var _supports = __webpack_require__(/*! ./supports */ 399);
 	
 	var supports = _interopRequireWildcard(_supports);
 	
@@ -48125,16 +48246,16 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 396 */
+/* 397 */
 /*!*************************************************!*\
   !*** ./~/react-addons-shallow-compare/index.js ***!
   \*************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! react/lib/shallowCompare */ 397);
+	module.exports = __webpack_require__(/*! react/lib/shallowCompare */ 398);
 
 /***/ },
-/* 397 */
+/* 398 */
 /*!***************************************!*\
   !*** ./~/react/lib/shallowCompare.js ***!
   \***************************************/
@@ -48166,7 +48287,7 @@
 	module.exports = shallowCompare;
 
 /***/ },
-/* 398 */
+/* 399 */
 /*!************************************************!*\
   !*** ./~/react-event-listener/lib/supports.js ***!
   \************************************************/
@@ -48179,7 +48300,7 @@
 	});
 	exports.passiveOption = exports.detachEvent = exports.attachEvent = exports.removeEventListener = exports.addEventListener = exports.canUseDOM = undefined;
 	
-	var _defineProperty = __webpack_require__(/*! ./define-property */ 399);
+	var _defineProperty = __webpack_require__(/*! ./define-property */ 400);
 	
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 	
@@ -48222,7 +48343,7 @@
 	}();
 
 /***/ },
-/* 399 */
+/* 400 */
 /*!*******************************************************!*\
   !*** ./~/react-event-listener/lib/define-property.js ***!
   \*******************************************************/
@@ -48249,7 +48370,7 @@
 	}
 
 /***/ },
-/* 400 */
+/* 401 */
 /*!**************************************************!*\
   !*** ./~/material-ui/TextField/TextFieldHint.js ***!
   \**************************************************/
@@ -48334,7 +48455,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 401 */
+/* 402 */
 /*!***************************************************!*\
   !*** ./~/material-ui/TextField/TextFieldLabel.js ***!
   \***************************************************/
@@ -48454,7 +48575,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 402 */
+/* 403 */
 /*!*******************************************************!*\
   !*** ./~/material-ui/TextField/TextFieldUnderline.js ***!
   \*******************************************************/
@@ -48595,7 +48716,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 403 */
+/* 404 */
 /*!**********************************************!*\
   !*** ./src/client/app/components/Footer.jsx ***!
   \**********************************************/
@@ -48617,11 +48738,11 @@
 	
 	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
 	
-	var _Dialog = __webpack_require__(/*! material-ui/Dialog */ 404);
+	var _Dialog = __webpack_require__(/*! material-ui/Dialog */ 405);
 	
 	var _Dialog2 = _interopRequireDefault(_Dialog);
 	
-	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 409);
+	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 410);
 	
 	var _FlatButton2 = _interopRequireDefault(_FlatButton);
 	
@@ -48636,6 +48757,12 @@
 	var customButtonStyle = {
 	  lineHeight: 72,
 	  height: 72
+	};
+	var style = {
+	  container: {
+	    width: "90%",
+	    margin: "10px"
+	  }
 	};
 	
 	var Footer = function (_React$Component) {
@@ -48681,7 +48808,7 @@
 	
 	      return _react2.default.createElement(
 	        'footer',
-	        { id: 'footer' },
+	        { style: style.container },
 	        _react2.default.createElement(
 	          _Dialog2.default,
 	          {
@@ -48712,7 +48839,7 @@
 	exports.default = Footer;
 
 /***/ },
-/* 404 */
+/* 405 */
 /*!***************************************!*\
   !*** ./~/material-ui/Dialog/index.js ***!
   \***************************************/
@@ -48725,7 +48852,7 @@
 	});
 	exports.default = undefined;
 	
-	var _Dialog = __webpack_require__(/*! ./Dialog */ 405);
+	var _Dialog = __webpack_require__(/*! ./Dialog */ 406);
 	
 	var _Dialog2 = _interopRequireDefault(_Dialog);
 	
@@ -48734,7 +48861,7 @@
 	exports.default = _Dialog2.default;
 
 /***/ },
-/* 405 */
+/* 406 */
 /*!****************************************!*\
   !*** ./~/material-ui/Dialog/Dialog.js ***!
   \****************************************/
@@ -48786,7 +48913,7 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _reactEventListener = __webpack_require__(/*! react-event-listener */ 395);
+	var _reactEventListener = __webpack_require__(/*! react-event-listener */ 396);
 	
 	var _reactEventListener2 = _interopRequireDefault(_reactEventListener);
 	
@@ -48798,11 +48925,11 @@
 	
 	var _transitions2 = _interopRequireDefault(_transitions);
 	
-	var _Overlay = __webpack_require__(/*! ../internal/Overlay */ 406);
+	var _Overlay = __webpack_require__(/*! ../internal/Overlay */ 407);
 	
 	var _Overlay2 = _interopRequireDefault(_Overlay);
 	
-	var _RenderToLayer = __webpack_require__(/*! ../internal/RenderToLayer */ 408);
+	var _RenderToLayer = __webpack_require__(/*! ../internal/RenderToLayer */ 409);
 	
 	var _RenderToLayer2 = _interopRequireDefault(_RenderToLayer);
 	
@@ -49330,7 +49457,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 406 */
+/* 407 */
 /*!*******************************************!*\
   !*** ./~/material-ui/internal/Overlay.js ***!
   \*******************************************/
@@ -49382,7 +49509,7 @@
 	
 	var _transitions2 = _interopRequireDefault(_transitions);
 	
-	var _AutoLockScrolling = __webpack_require__(/*! ./AutoLockScrolling */ 407);
+	var _AutoLockScrolling = __webpack_require__(/*! ./AutoLockScrolling */ 408);
 	
 	var _AutoLockScrolling2 = _interopRequireDefault(_AutoLockScrolling);
 	
@@ -49479,7 +49606,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 407 */
+/* 408 */
 /*!*****************************************************!*\
   !*** ./~/material-ui/internal/AutoLockScrolling.js ***!
   \*****************************************************/
@@ -49608,7 +49735,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 408 */
+/* 409 */
 /*!*************************************************!*\
   !*** ./~/material-ui/internal/RenderToLayer.js ***!
   \*************************************************/
@@ -49796,7 +49923,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 409 */
+/* 410 */
 /*!*******************************************!*\
   !*** ./~/material-ui/FlatButton/index.js ***!
   \*******************************************/
@@ -49809,7 +49936,7 @@
 	});
 	exports.default = undefined;
 	
-	var _FlatButton = __webpack_require__(/*! ./FlatButton */ 410);
+	var _FlatButton = __webpack_require__(/*! ./FlatButton */ 411);
 	
 	var _FlatButton2 = _interopRequireDefault(_FlatButton);
 	
@@ -49818,7 +49945,7 @@
 	exports.default = _FlatButton2.default;
 
 /***/ },
-/* 410 */
+/* 411 */
 /*!************************************************!*\
   !*** ./~/material-ui/FlatButton/FlatButton.js ***!
   \************************************************/
@@ -49878,7 +50005,7 @@
 	
 	var _EnhancedButton2 = _interopRequireDefault(_EnhancedButton);
 	
-	var _FlatButtonLabel = __webpack_require__(/*! ./FlatButtonLabel */ 411);
+	var _FlatButtonLabel = __webpack_require__(/*! ./FlatButtonLabel */ 412);
 	
 	var _FlatButtonLabel2 = _interopRequireDefault(_FlatButtonLabel);
 	
@@ -50152,7 +50279,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 411 */
+/* 412 */
 /*!*****************************************************!*\
   !*** ./~/material-ui/FlatButton/FlatButtonLabel.js ***!
   \*****************************************************/
@@ -50247,7 +50374,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 412 */
+/* 413 */
 /*!**************************************************!*\
   !*** ./src/client/app/components/OptionList.jsx ***!
   \**************************************************/
@@ -50256,7 +50383,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -50265,11 +50392,15 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _List = __webpack_require__(/*! material-ui/List */ 413);
+	var _List = __webpack_require__(/*! material-ui/List */ 414);
 	
-	var _Subheader = __webpack_require__(/*! material-ui/Subheader */ 415);
+	var _Subheader = __webpack_require__(/*! material-ui/Subheader */ 416);
 	
 	var _Subheader2 = _interopRequireDefault(_Subheader);
+	
+	var _Paper = __webpack_require__(/*! material-ui/Paper */ 369);
+	
+	var _Paper2 = _interopRequireDefault(_Paper);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -50280,126 +50411,146 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var style = {
-	    root: {
-	        width: "100%"
-	    },
-	    subheader: {
-	        fontSize: "24px"
-	    },
-	    listItemLarge: {
-	        fontSize: "32px",
-	        height: "64px",
-	        lineHeight: "32px"
-	    },
-	    listItemSmall: {
-	        fontSize: "24px",
-	        height: "48px",
-	        lineHeight: "16px"
-	    }
+	  subheader: {
+	    fontSize: "14px",
+	    padding: "0px"
+	  },
+	  listItemLarge: {
+	    fontSize: "32px",
+	    height: "64px",
+	    lineHeight: "32px"
+	  },
+	  listItemSmall: {
+	    fontSize: "24px",
+	    height: "48px",
+	    lineHeight: "20px",
+	    fontWeight: "bold"
+	
+	  },
+	  listContainer: {
+	    display: "flex",
+	    justifyContent: "center",
+	    alignItems: "center",
+	    flexDirection: "column",
+	    flexGrow: "inherit",
+	    width: "70%"
+	  },
+	  paper: {
+	    height: "100%",
+	    width: "100%",
+	    padding: "10px"
+	  }
 	};
 	
 	var OptionList = function (_React$Component) {
-	    _inherits(OptionList, _React$Component);
+	  _inherits(OptionList, _React$Component);
 	
-	    function OptionList(props) {
-	        _classCallCheck(this, OptionList);
+	  function OptionList(props) {
+	    _classCallCheck(this, OptionList);
 	
-	        var _this = _possibleConstructorReturn(this, (OptionList.__proto__ || Object.getPrototypeOf(OptionList)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (OptionList.__proto__ || Object.getPrototypeOf(OptionList)).call(this, props));
 	
-	        _this.state = {
-	            listData: null,
-	            previousChoice: null
-	        };
-	        return _this;
+	    _this.state = {
+	      listData: null,
+	      previousChoice: null
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(OptionList, [{
+	    key: 'createListItem',
+	    value: function createListItem(text, key, itemStyle) {
+	      var listClickEvent = this.handleClick.bind(this, key, text);
+	      return _react2.default.createElement(_List.ListItem, {
+	        style: itemStyle,
+	        primaryText: text,
+	        key: key,
+	        onClick: listClickEvent
+	      });
 	    }
+	  }, {
+	    key: 'handleClick',
+	    value: function handleClick(key, text, elem) {
+	      this.props.webSocket.send(JSON.stringify({
+	        "type": "QUERY_RESPONSE",
+	        "playerName": this.props.playerName,
+	        "gameName": this.props.gameName,
+	        "response": key
+	      }));
+	      this.setState({
+	        listData: null,
+	        previousChoice: text
+	      });
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      this.setState({
+	        listData: nextProps.queryData,
+	        previousChoice: null
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
 	
-	    _createClass(OptionList, [{
-	        key: 'createListItem',
-	        value: function createListItem(text, key, itemStyle) {
-	            var listClickEvent = this.handleClick.bind(this, key, text);
-	            return _react2.default.createElement(_List.ListItem, {
-	                style: itemStyle,
-	                primaryText: text,
-	                key: key,
-	                onClick: listClickEvent
-	            });
+	      if (this.state.listData == null) {
+	        if (this.state.previousChoice != null) {
+	          return _react2.default.createElement(
+	            'div',
+	            { style: style.listContainer },
+	            _react2.default.createElement(
+	              'h2',
+	              null,
+	              'You chose: ',
+	              _react2.default.createElement(
+	                'b',
+	                null,
+	                this.state.previousChoice
+	              )
+	            )
+	          );
 	        }
-	    }, {
-	        key: 'handleClick',
-	        value: function handleClick(key, text, elem) {
-	            this.props.webSocket.send(JSON.stringify({
-	                "type": "QUERY_RESPONSE",
-	                "playerName": this.props.playerName,
-	                "gameName": this.props.gameName,
-	                "response": key
-	            }));
-	            this.setState({
-	                listData: null,
-	                previousChoice: text
-	            });
-	        }
-	    }, {
-	        key: 'componentWillReceiveProps',
-	        value: function componentWillReceiveProps(nextProps) {
-	            this.setState({
-	                listData: nextProps.queryData,
-	                previousChoice: null
-	            });
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
+	        return _react2.default.createElement('div', { style: style.listContainer });
+	      } else if (this.state.listData.choices.length == 0) {
+	        return _react2.default.createElement('div', { style: style.listContainer });
+	      }
 	
-	            if (this.state.listData == null) {
-	                if (this.state.previousChoice != null) {
-	                    return _react2.default.createElement(
-	                        'h2',
-	                        null,
-	                        'You chose: ',
-	                        _react2.default.createElement(
-	                            'b',
-	                            null,
-	                            this.state.previousChoice
-	                        )
-	                    );
-	                }
-	                return null;
-	            }
-	            var listStyle = style.listItemLarge;
+	      var listStyle = style.listItemSmall;
 	
-	            if (this.state.listData.choices.length > 2) {
-	                listStyle = style.listItemSmall;
-	            }
+	      var list = new Array();
+	      for (var i in this.state.listData.choices) {
+	        list.push(this.createListItem(this.state.listData.choices[i], i, listStyle));
+	      }
 	
-	            var list = new Array();
-	            for (var i in this.state.listData.choices) {
-	                list.push(this.createListItem(this.state.listData.choices[i], i, listStyle));
-	            }
+	      return _react2.default.createElement(
+	        'div',
+	        { style: style.listContainer },
+	        _react2.default.createElement(
+	          _List.List,
+	          null,
+	          _react2.default.createElement(
+	            _Paper2.default,
+	            { style: style.paper, zDepth: 4 },
+	            _react2.default.createElement(
+	              _Subheader2.default,
+	              { style: style.subheader },
+	              this.state.listData.subheader
+	            ),
+	            list
+	          )
+	        )
+	      );
+	    }
+	  }]);
 	
-	            return _react2.default.createElement(
-	                'div',
-	                { style: style.root },
-	                _react2.default.createElement(
-	                    _List.List,
-	                    null,
-	                    _react2.default.createElement(
-	                        _Subheader2.default,
-	                        { style: style.subheader },
-	                        this.state.listData.subheader
-	                    ),
-	                    list
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return OptionList;
+	  return OptionList;
 	}(_react2.default.Component);
 	
 	exports.default = OptionList;
 
 /***/ },
-/* 413 */
+/* 414 */
 /*!*************************************!*\
   !*** ./~/material-ui/List/index.js ***!
   \*************************************/
@@ -50412,15 +50563,15 @@
 	});
 	exports.default = exports.makeSelectable = exports.ListItem = exports.List = undefined;
 	
-	var _List2 = __webpack_require__(/*! ./List */ 414);
+	var _List2 = __webpack_require__(/*! ./List */ 415);
 	
 	var _List3 = _interopRequireDefault(_List2);
 	
-	var _ListItem2 = __webpack_require__(/*! ./ListItem */ 417);
+	var _ListItem2 = __webpack_require__(/*! ./ListItem */ 418);
 	
 	var _ListItem3 = _interopRequireDefault(_ListItem2);
 	
-	var _makeSelectable2 = __webpack_require__(/*! ./makeSelectable */ 421);
+	var _makeSelectable2 = __webpack_require__(/*! ./makeSelectable */ 422);
 	
 	var _makeSelectable3 = _interopRequireDefault(_makeSelectable2);
 	
@@ -50432,7 +50583,7 @@
 	exports.default = _List3.default;
 
 /***/ },
-/* 414 */
+/* 415 */
 /*!************************************!*\
   !*** ./~/material-ui/List/List.js ***!
   \************************************/
@@ -50480,7 +50631,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Subheader = __webpack_require__(/*! ../Subheader */ 415);
+	var _Subheader = __webpack_require__(/*! ../Subheader */ 416);
 	
 	var _Subheader2 = _interopRequireDefault(_Subheader);
 	
@@ -50545,7 +50696,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 415 */
+/* 416 */
 /*!******************************************!*\
   !*** ./~/material-ui/Subheader/index.js ***!
   \******************************************/
@@ -50558,7 +50709,7 @@
 	});
 	exports.default = undefined;
 	
-	var _Subheader = __webpack_require__(/*! ./Subheader */ 416);
+	var _Subheader = __webpack_require__(/*! ./Subheader */ 417);
 	
 	var _Subheader2 = _interopRequireDefault(_Subheader);
 	
@@ -50567,7 +50718,7 @@
 	exports.default = _Subheader2.default;
 
 /***/ },
-/* 416 */
+/* 417 */
 /*!**********************************************!*\
   !*** ./~/material-ui/Subheader/Subheader.js ***!
   \**********************************************/
@@ -50655,7 +50806,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 417 */
+/* 418 */
 /*!****************************************!*\
   !*** ./~/material-ui/List/ListItem.js ***!
   \****************************************/
@@ -50721,19 +50872,19 @@
 	
 	var _EnhancedButton2 = _interopRequireDefault(_EnhancedButton);
 	
-	var _IconButton = __webpack_require__(/*! ../IconButton */ 375);
+	var _IconButton = __webpack_require__(/*! ../IconButton */ 374);
 	
 	var _IconButton2 = _interopRequireDefault(_IconButton);
 	
-	var _expandLess = __webpack_require__(/*! ../svg-icons/navigation/expand-less */ 418);
+	var _expandLess = __webpack_require__(/*! ../svg-icons/navigation/expand-less */ 419);
 	
 	var _expandLess2 = _interopRequireDefault(_expandLess);
 	
-	var _expandMore = __webpack_require__(/*! ../svg-icons/navigation/expand-more */ 419);
+	var _expandMore = __webpack_require__(/*! ../svg-icons/navigation/expand-more */ 420);
 	
 	var _expandMore2 = _interopRequireDefault(_expandMore);
 	
-	var _NestedList = __webpack_require__(/*! ./NestedList */ 420);
+	var _NestedList = __webpack_require__(/*! ./NestedList */ 421);
 	
 	var _NestedList2 = _interopRequireDefault(_NestedList);
 	
@@ -51375,7 +51526,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 418 */
+/* 419 */
 /*!***********************************************************!*\
   !*** ./~/material-ui/svg-icons/navigation/expand-less.js ***!
   \***********************************************************/
@@ -51391,11 +51542,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _pure = __webpack_require__(/*! recompose/pure */ 381);
+	var _pure = __webpack_require__(/*! recompose/pure */ 380);
 	
 	var _pure2 = _interopRequireDefault(_pure);
 	
-	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 390);
+	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 389);
 	
 	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
 	
@@ -51415,7 +51566,7 @@
 	exports.default = NavigationExpandLess;
 
 /***/ },
-/* 419 */
+/* 420 */
 /*!***********************************************************!*\
   !*** ./~/material-ui/svg-icons/navigation/expand-more.js ***!
   \***********************************************************/
@@ -51431,11 +51582,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _pure = __webpack_require__(/*! recompose/pure */ 381);
+	var _pure = __webpack_require__(/*! recompose/pure */ 380);
 	
 	var _pure2 = _interopRequireDefault(_pure);
 	
-	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 390);
+	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 389);
 	
 	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
 	
@@ -51455,7 +51606,7 @@
 	exports.default = NavigationExpandMore;
 
 /***/ },
-/* 420 */
+/* 421 */
 /*!******************************************!*\
   !*** ./~/material-ui/List/NestedList.js ***!
   \******************************************/
@@ -51471,7 +51622,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _List = __webpack_require__(/*! ./List */ 414);
+	var _List = __webpack_require__(/*! ./List */ 415);
 	
 	var _List2 = _interopRequireDefault(_List);
 	
@@ -51513,7 +51664,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 421 */
+/* 422 */
 /*!**********************************************!*\
   !*** ./~/material-ui/List/makeSelectable.js ***!
   \**********************************************/
