@@ -5,6 +5,8 @@ import IconButton from 'material-ui/IconButton';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 import PlayerApp from './PlayerApp.jsx';
+import CreateGame from './CreateGame.jsx';
+import ListenGame from './ListenGame.jsx';
 
 const style = {
   container: {
@@ -43,11 +45,11 @@ class Main extends React.Component {
   }
 
   showGameCreationScreen() {
-    this.setState({renderComponent: "PLAYER_APP"});
+    this.setState({renderComponent: "CREATE_GAME"});
   }
 
   showGameScreen() {
-    this.setState({renderComponent: "PLAYER_APP"});
+    this.setState({renderComponent: "LISTEN_GAME"});
   }
 
   render() {
@@ -61,6 +63,20 @@ class Main extends React.Component {
           <PlayerApp />
         </div>
         )
+    } else if (this.state.renderComponent == "CREATE_GAME") {
+      <div style={style.container}>
+        <AppBar title="Secret Hitler"
+            iconElementLeft={<div></div>}
+         />
+       <CreateGame />
+      </div>
+    } else if (this.state.renderComponent == "LISTEN_GAME") {
+      <div style={style.container}>
+        <AppBar title="Secret Hitler"
+            iconElementLeft={<div></div>}
+         />
+       <ListenGame />
+      </div>
     } else {
       return (
         <div style={style.container}>

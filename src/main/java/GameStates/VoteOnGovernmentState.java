@@ -63,6 +63,7 @@ public class VoteOnGovernmentState implements GameState {
         boolean governmentFormed = jaVotes > neinVotes;
         
         if (governmentFormed) {
+            PlayerWebSocketHandler.setSpecialRole(game.getVariables().getChancellor(), "You are the chancellor!");
             game.changeState(State.LEGISTLATIVE_SESSION);
         } else {
             
@@ -78,6 +79,8 @@ public class VoteOnGovernmentState implements GameState {
                 Player president = game.getVariables().getPresident();
                 Player nextPresident = game.getPlayerManager().getNextPlayer(president);
                 game.getVariables().setPresident(nextPresident);
+                PlayerWebSocketHandler.clearSpecialRoles(game.getPlayerManager().getPlayers(), nextPresident);
+                PlayerWebSocketHandler.setSpecialRole(nextPresident, "You are the president!");
                 game.changeState(State.NOMINATE_CHANCELLOR);
             }
             

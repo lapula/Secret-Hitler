@@ -51,7 +51,8 @@ public class NominateChancellor implements GameState {
     @Override
     public void receiveData(String player, String data) {
         if (game.getPlayerManager().getPlayerByName(data) != null) {
-            game.getVariables().setChancellor(game.getPlayerManager().getPlayerByName(data));
+            Player newChancellor = game.getPlayerManager().getPlayerByName(data);
+            game.getVariables().setChancellor(newChancellor);
             game.changeState(State.VOTE_ON_GOVERNMENT);
         }
     }

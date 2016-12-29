@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import org.eclipse.jetty.websocket.api.Session;
 
 
 public class Game {
@@ -24,9 +25,11 @@ public class Game {
     private GameState gameState;
     private GameVariables gameVariables;
     private PolicyDeck policyDeck;
+    private List<Session> gameListeners;
     
     public Game(Integer numberOfPlayers) {
         
+        this.gameListeners = new LinkedList<>();
         this.stateFactory = new StateFactory();
         this.gameState = null;
         this.gameVariables = new GameVariables();
@@ -55,5 +58,13 @@ public class Game {
     
     public void receiveData(String player, String data) {
         this.gameState.receiveData(player, data);
+    }
+    
+    public void addGameListener(Session session) {
+        this.gameListeners.add(session);
+    }
+    
+    public List<Session> getGameListeners() {
+        return this.gameListeners;
     }
 }

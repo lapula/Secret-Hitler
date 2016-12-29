@@ -23,6 +23,8 @@ public class PlayerWebSocketHandler {
     
     private static final String PLAYER_QUERY = "PLAYER_QUERY";
     private static final String PLAYER_INIT = "PLAYER_INIT";
+    private static final String SET_SPECIAL_ROLE = "SET_SPECIAL_ROLE";
+    private static final String ALERT_PLAYER = "ALERT_PLAYER";
     
     @OnWebSocketConnect
     public void onConnect(Session user) throws Exception {
@@ -73,6 +75,7 @@ public class PlayerWebSocketHandler {
         }
     }
     
+    
     public static void sendChoiceMessage(List<Player> players, List<Player> targets, Map<String, String> choices, String header, String subheader) {
         
         JSONObject jsonChoices = new JSONObject(choices);
@@ -104,5 +107,53 @@ public class PlayerWebSocketHandler {
         });
     }
 
-
+    public static void setSpecialRole(Player target, String role) {
+        
+        JSONObject mainObj = new JSONObject();
+        mainObj.put("type", SET_SPECIAL_ROLE);
+        mainObj.put("role", role);
+        
+        try {
+            target.getSession().getRemote().sendString(mainObj.toString());
+        } catch (IOException ex) {
+            Logger.getLogger(PlayerWebSocketHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void clearSpecialRoles(List<Player> players, Player ignore) {
+        
+        JSONObject mainObj = new JSONObject();
+        mainObj.put("type", SET_SPECIAL_ROLE);
+        mainObj.put("role", "");
+        
+        String ignoreName = "";
+        if (ignore != null) {
+            ignoreName = ignore.getName();
+        }
+        
+        for (Player player : players) {
+            try {
+                if (!player.getName().equals(ignoreName)) {
+                    player.getSession().getRemote().sendString(mainObj.toString());
+                }
+                
+            } catch (IOException ex) {
+                Logger.getLogger(PlayerWebSocketHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        };
+    }
+    
+    public static void alertPlayer(Player player, String header, String text) {
+        
+        JSONObject mainObj = new JSONObject();
+        mainObj.put("type", ALERT_PLAYER);
+        mainObj.put("header", header);
+        mainObj.put("text", text);
+        
+        try {
+            player.getSession().getRemote().sendString(mainObj.toString());
+        } catch (IOException ex) {
+            Logger.getLogger(PlayerWebSocketHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

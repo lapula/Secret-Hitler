@@ -37,7 +37,7 @@ const style = {
   }
 }
 
-class PlayerApp extends React.Component {
+class GameScreen extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -177,4 +177,4 @@ class PlayerApp extends React.Component {
 
 }
 
-export default PlayerApp;
+export default GameScreen;

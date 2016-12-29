@@ -26,12 +26,15 @@ const style = {
     alignItems: "center",
     flexDirection: "column",
     flexGrow: "inherit",
-    width: "70%"
+    width: "80%"
   },
   paper: {
     height: "100%",
     width: "100%",
     padding: "10px"
+  },
+  list: {
+    width: "100%"
   }
 };
 
@@ -99,7 +102,7 @@ class OptionList extends React.Component {
 
         return(
             <div style={style.listContainer}>
-                <List>
+                <List style={style.list}>
                   <Paper style={style.paper} zDepth={4}>
                     <Subheader style={style.subheader}>{this.state.listData.subheader}</Subheader>
                     {list}

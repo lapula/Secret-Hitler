@@ -40740,6 +40740,14 @@
 	
 	var _PlayerApp2 = _interopRequireDefault(_PlayerApp);
 	
+	var _CreateGame = __webpack_require__(/*! ./CreateGame.jsx */ 423);
+	
+	var _CreateGame2 = _interopRequireDefault(_CreateGame);
+	
+	var _ListenGame = __webpack_require__(/*! ./ListenGame.jsx */ 425);
+	
+	var _ListenGame2 = _interopRequireDefault(_ListenGame);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -40794,12 +40802,12 @@
 	  }, {
 	    key: 'showGameCreationScreen',
 	    value: function showGameCreationScreen() {
-	      this.setState({ renderComponent: "PLAYER_APP" });
+	      this.setState({ renderComponent: "CREATE_GAME" });
 	    }
 	  }, {
 	    key: 'showGameScreen',
 	    value: function showGameScreen() {
-	      this.setState({ renderComponent: "PLAYER_APP" });
+	      this.setState({ renderComponent: "LISTEN_GAME" });
 	    }
 	  }, {
 	    key: 'render',
@@ -40813,6 +40821,24 @@
 	            iconElementLeft: _react2.default.createElement('div', null)
 	          }),
 	          _react2.default.createElement(_PlayerApp2.default, null)
+	        );
+	      } else if (this.state.renderComponent == "CREATE_GAME") {
+	        _react2.default.createElement(
+	          'div',
+	          { style: style.container },
+	          _react2.default.createElement(_AppBar2.default, { title: 'Secret Hitler',
+	            iconElementLeft: _react2.default.createElement('div', null)
+	          }),
+	          _react2.default.createElement(_CreateGame2.default, null)
+	        );
+	      } else if (this.state.renderComponent == "LISTEN_GAME") {
+	        _react2.default.createElement(
+	          'div',
+	          { style: style.container },
+	          _react2.default.createElement(_AppBar2.default, { title: 'Secret Hitler',
+	            iconElementLeft: _react2.default.createElement('div', null)
+	          }),
+	          _react2.default.createElement(_ListenGame2.default, null)
 	        );
 	      } else {
 	        return _react2.default.createElement(
@@ -46983,7 +47009,15 @@
 	
 	var _Paper2 = _interopRequireDefault(_Paper);
 	
-	var _Footer = __webpack_require__(/*! ./Footer.jsx */ 404);
+	var _Dialog = __webpack_require__(/*! material-ui/Dialog */ 404);
+	
+	var _Dialog2 = _interopRequireDefault(_Dialog);
+	
+	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 409);
+	
+	var _FlatButton2 = _interopRequireDefault(_FlatButton);
+	
+	var _Footer = __webpack_require__(/*! ./Footer.jsx */ 412);
 	
 	var _Footer2 = _interopRequireDefault(_Footer);
 	
@@ -47042,11 +47076,15 @@
 	      queryData: null,
 	      playerName: null,
 	      gameName: null,
-	      specialRole: ""
+	      specialRole: "",
+	      dialogOpen: false,
+	      dialogHeader: "",
+	      dialogText: ""
 	    };
 	
 	    _this.handleSubmit = _this.handleSubmit.bind(_this);
 	    _this.handleKeyPress = _this.handleKeyPress.bind(_this, event);
+	    _this.handleDialogClose = _this.handleDialogClose.bind(_this);
 	    return _this;
 	  }
 	
@@ -47065,6 +47103,13 @@
 	      if (event.key == 'Enter') {
 	        this.handleSubmit();
 	      }
+	    }
+	  }, {
+	    key: 'handleDialogClose',
+	    value: function handleDialogClose() {
+	      this.setState({
+	        dialogOpen: false
+	      });
 	    }
 	  }, {
 	    key: 'render',
@@ -47120,7 +47165,17 @@
 	          playerName: this.state.playerName,
 	          queryData: this.state.queryData,
 	          webSocket: this.state.webSocket }),
-	        _react2.default.createElement(_Footer2.default, { role: this.state.playerRole })
+	        _react2.default.createElement(_Footer2.default, { role: this.state.playerRole }),
+	        _react2.default.createElement(
+	          _Dialog2.default,
+	          {
+	            title: this.state.dialogHeader,
+	            actions: _react2.default.createElement(_FlatButton2.default, { label: 'I see.', primary: true, onTouchTap: this.handleDialogClose }),
+	            modal: true,
+	            open: this.state.dialogOpen
+	          },
+	          this.state.dialogText
+	        )
 	      );
 	    }
 	  }, {
@@ -47160,6 +47215,12 @@
 	        } else if (data.type == "SET_SPECIAL_ROLE") {
 	          component.setState({
 	            specialRole: data.role
+	          });
+	        } else if (data.type == "ALERT_PLAYER") {
+	          component.setState({
+	            dialogOpen: true,
+	            dialogHeader: data.header,
+	            dialogText: data.text
 	          });
 	        }
 	      };
@@ -48717,129 +48778,6 @@
 
 /***/ },
 /* 404 */
-/*!**********************************************!*\
-  !*** ./src/client/app/components/Footer.jsx ***!
-  \**********************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _RaisedButton = __webpack_require__(/*! material-ui/RaisedButton */ 336);
-	
-	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
-	
-	var _Dialog = __webpack_require__(/*! material-ui/Dialog */ 405);
-	
-	var _Dialog2 = _interopRequireDefault(_Dialog);
-	
-	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 410);
-	
-	var _FlatButton2 = _interopRequireDefault(_FlatButton);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var customButtonStyle = {
-	  lineHeight: 72,
-	  height: 72
-	};
-	var style = {
-	  container: {
-	    width: "90%",
-	    margin: "10px"
-	  }
-	};
-	
-	var Footer = function (_React$Component) {
-	  _inherits(Footer, _React$Component);
-	
-	  function Footer(props) {
-	    _classCallCheck(this, Footer);
-	
-	    var _this = _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).call(this, props));
-	
-	    _this.handleRequestClose = _this.handleRequestClose.bind(_this);
-	    _this.handleTouchTap = _this.handleTouchTap.bind(_this);
-	
-	    _this.state = {
-	      open: false
-	    };
-	    return _this;
-	  }
-	
-	  _createClass(Footer, [{
-	    key: 'handleRequestClose',
-	    value: function handleRequestClose() {
-	      this.setState({
-	        open: false
-	      });
-	    }
-	  }, {
-	    key: 'handleTouchTap',
-	    value: function handleTouchTap() {
-	      this.setState({
-	        open: true
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	
-	      var roleDialog = _react2.default.createElement(_FlatButton2.default, {
-	        label: 'Got it!',
-	        primary: true,
-	        onTouchTap: this.handleRequestClose
-	      });
-	
-	      return _react2.default.createElement(
-	        'footer',
-	        { style: style.container },
-	        _react2.default.createElement(
-	          _Dialog2.default,
-	          {
-	            open: this.state.open,
-	            title: 'Your role is:',
-	            actions: roleDialog,
-	            onRequestClose: this.handleRequestClose
-	          },
-	          this.props.role
-	        ),
-	        _react2.default.createElement(_RaisedButton2.default, {
-	          primary: true,
-	          label: 'Your role',
-	          labelStyle: { fontSize: '36px' },
-	          style: { height: "60px", lineHeight: "0px" },
-	          buttonStyle: { overflow: "hidden" },
-	          overlayStyle: { paddingTop: "8px" },
-	          fullWidth: true,
-	          onTouchTap: this.handleTouchTap
-	        })
-	      );
-	    }
-	  }]);
-	
-	  return Footer;
-	}(_react2.default.Component);
-	
-	exports.default = Footer;
-
-/***/ },
-/* 405 */
 /*!***************************************!*\
   !*** ./~/material-ui/Dialog/index.js ***!
   \***************************************/
@@ -48852,7 +48790,7 @@
 	});
 	exports.default = undefined;
 	
-	var _Dialog = __webpack_require__(/*! ./Dialog */ 406);
+	var _Dialog = __webpack_require__(/*! ./Dialog */ 405);
 	
 	var _Dialog2 = _interopRequireDefault(_Dialog);
 	
@@ -48861,7 +48799,7 @@
 	exports.default = _Dialog2.default;
 
 /***/ },
-/* 406 */
+/* 405 */
 /*!****************************************!*\
   !*** ./~/material-ui/Dialog/Dialog.js ***!
   \****************************************/
@@ -48925,11 +48863,11 @@
 	
 	var _transitions2 = _interopRequireDefault(_transitions);
 	
-	var _Overlay = __webpack_require__(/*! ../internal/Overlay */ 407);
+	var _Overlay = __webpack_require__(/*! ../internal/Overlay */ 406);
 	
 	var _Overlay2 = _interopRequireDefault(_Overlay);
 	
-	var _RenderToLayer = __webpack_require__(/*! ../internal/RenderToLayer */ 409);
+	var _RenderToLayer = __webpack_require__(/*! ../internal/RenderToLayer */ 408);
 	
 	var _RenderToLayer2 = _interopRequireDefault(_RenderToLayer);
 	
@@ -49457,7 +49395,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 407 */
+/* 406 */
 /*!*******************************************!*\
   !*** ./~/material-ui/internal/Overlay.js ***!
   \*******************************************/
@@ -49509,7 +49447,7 @@
 	
 	var _transitions2 = _interopRequireDefault(_transitions);
 	
-	var _AutoLockScrolling = __webpack_require__(/*! ./AutoLockScrolling */ 408);
+	var _AutoLockScrolling = __webpack_require__(/*! ./AutoLockScrolling */ 407);
 	
 	var _AutoLockScrolling2 = _interopRequireDefault(_AutoLockScrolling);
 	
@@ -49606,7 +49544,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 408 */
+/* 407 */
 /*!*****************************************************!*\
   !*** ./~/material-ui/internal/AutoLockScrolling.js ***!
   \*****************************************************/
@@ -49735,7 +49673,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 409 */
+/* 408 */
 /*!*************************************************!*\
   !*** ./~/material-ui/internal/RenderToLayer.js ***!
   \*************************************************/
@@ -49923,7 +49861,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 410 */
+/* 409 */
 /*!*******************************************!*\
   !*** ./~/material-ui/FlatButton/index.js ***!
   \*******************************************/
@@ -49936,7 +49874,7 @@
 	});
 	exports.default = undefined;
 	
-	var _FlatButton = __webpack_require__(/*! ./FlatButton */ 411);
+	var _FlatButton = __webpack_require__(/*! ./FlatButton */ 410);
 	
 	var _FlatButton2 = _interopRequireDefault(_FlatButton);
 	
@@ -49945,7 +49883,7 @@
 	exports.default = _FlatButton2.default;
 
 /***/ },
-/* 411 */
+/* 410 */
 /*!************************************************!*\
   !*** ./~/material-ui/FlatButton/FlatButton.js ***!
   \************************************************/
@@ -50005,7 +49943,7 @@
 	
 	var _EnhancedButton2 = _interopRequireDefault(_EnhancedButton);
 	
-	var _FlatButtonLabel = __webpack_require__(/*! ./FlatButtonLabel */ 412);
+	var _FlatButtonLabel = __webpack_require__(/*! ./FlatButtonLabel */ 411);
 	
 	var _FlatButtonLabel2 = _interopRequireDefault(_FlatButtonLabel);
 	
@@ -50279,7 +50217,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
-/* 412 */
+/* 411 */
 /*!*****************************************************!*\
   !*** ./~/material-ui/FlatButton/FlatButtonLabel.js ***!
   \*****************************************************/
@@ -50374,6 +50312,129 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../process/browser.js */ 3)))
 
 /***/ },
+/* 412 */
+/*!**********************************************!*\
+  !*** ./src/client/app/components/Footer.jsx ***!
+  \**********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _RaisedButton = __webpack_require__(/*! material-ui/RaisedButton */ 336);
+	
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+	
+	var _Dialog = __webpack_require__(/*! material-ui/Dialog */ 404);
+	
+	var _Dialog2 = _interopRequireDefault(_Dialog);
+	
+	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 409);
+	
+	var _FlatButton2 = _interopRequireDefault(_FlatButton);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var customButtonStyle = {
+	  lineHeight: 72,
+	  height: 72
+	};
+	var style = {
+	  container: {
+	    width: "90%",
+	    margin: "10px"
+	  }
+	};
+	
+	var Footer = function (_React$Component) {
+	  _inherits(Footer, _React$Component);
+	
+	  function Footer(props) {
+	    _classCallCheck(this, Footer);
+	
+	    var _this = _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).call(this, props));
+	
+	    _this.handleRequestClose = _this.handleRequestClose.bind(_this);
+	    _this.handleTouchTap = _this.handleTouchTap.bind(_this);
+	
+	    _this.state = {
+	      open: false
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(Footer, [{
+	    key: 'handleRequestClose',
+	    value: function handleRequestClose() {
+	      this.setState({
+	        open: false
+	      });
+	    }
+	  }, {
+	    key: 'handleTouchTap',
+	    value: function handleTouchTap() {
+	      this.setState({
+	        open: true
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      var roleDialog = _react2.default.createElement(_FlatButton2.default, {
+	        label: 'Got it!',
+	        primary: true,
+	        onTouchTap: this.handleRequestClose
+	      });
+	
+	      return _react2.default.createElement(
+	        'footer',
+	        { style: style.container },
+	        _react2.default.createElement(
+	          _Dialog2.default,
+	          {
+	            open: this.state.open,
+	            title: 'Your role is:',
+	            actions: roleDialog,
+	            onRequestClose: this.handleRequestClose
+	          },
+	          this.props.role
+	        ),
+	        _react2.default.createElement(_RaisedButton2.default, {
+	          primary: true,
+	          label: 'Your role',
+	          labelStyle: { fontSize: '36px' },
+	          style: { height: "60px", lineHeight: "0px" },
+	          buttonStyle: { overflow: "hidden" },
+	          overlayStyle: { paddingTop: "8px" },
+	          fullWidth: true,
+	          onTouchTap: this.handleTouchTap
+	        })
+	      );
+	    }
+	  }]);
+	
+	  return Footer;
+	}(_react2.default.Component);
+	
+	exports.default = Footer;
+
+/***/ },
 /* 413 */
 /*!**************************************************!*\
   !*** ./src/client/app/components/OptionList.jsx ***!
@@ -50433,12 +50494,15 @@
 	    alignItems: "center",
 	    flexDirection: "column",
 	    flexGrow: "inherit",
-	    width: "70%"
+	    width: "80%"
 	  },
 	  paper: {
 	    height: "100%",
 	    width: "100%",
 	    padding: "10px"
+	  },
+	  list: {
+	    width: "100%"
 	  }
 	};
 	
@@ -50528,7 +50592,7 @@
 	        { style: style.listContainer },
 	        _react2.default.createElement(
 	          _List.List,
-	          null,
+	          { style: style.list },
 	          _react2.default.createElement(
 	            _Paper2.default,
 	            { style: style.paper, zDepth: 4 },
@@ -51838,6 +51902,536 @@
 	
 	exports.makeSelectable = makeSelectable;
 	exports.default = makeSelectable;
+
+/***/ },
+/* 423 */
+/*!**************************************************!*\
+  !*** ./src/client/app/components/CreateGame.jsx ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _TextField = __webpack_require__(/*! material-ui/TextField */ 393);
+	
+	var _TextField2 = _interopRequireDefault(_TextField);
+	
+	var _RaisedButton = __webpack_require__(/*! material-ui/RaisedButton */ 336);
+	
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+	
+	var _Paper = __webpack_require__(/*! material-ui/Paper */ 369);
+	
+	var _Paper2 = _interopRequireDefault(_Paper);
+	
+	var _GameScreen = __webpack_require__(/*! ./GameScreen.jsx */ 424);
+	
+	var _GameScreen2 = _interopRequireDefault(_GameScreen);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var style = {
+	  button: {
+	    margin: "22px"
+	  },
+	  container: {
+	    display: "flex",
+	    flexGrow: "inherit",
+	    justifyContent: "center",
+	    alignItems: "center",
+	    flexDirection: "column",
+	    flex: 1
+	  },
+	  paper: {
+	    height: "100%",
+	    width: "100%",
+	    padding: "8px 25px"
+	  }
+	};
+	
+	var CreateGame = function (_React$Component) {
+	  _inherits(CreateGame, _React$Component);
+	
+	  function CreateGame(props, context) {
+	    _classCallCheck(this, CreateGame);
+	
+	    var _this = _possibleConstructorReturn(this, (CreateGame.__proto__ || Object.getPrototypeOf(CreateGame)).call(this, props, context));
+	
+	    _this.state = {
+	      gamePlayers: "",
+	      gameName: ""
+	    };
+	
+	    _this.handleSubmit = _this.handleSubmit.bind(_this);
+	    _this.handleKeyPress = _this.handleKeyPress.bind(_this, event);
+	    return _this;
+	  }
+	
+	  _createClass(CreateGame, [{
+	    key: 'handleSubmit',
+	    value: function handleSubmit() {
+	      this.setState({
+	        gamePlayers: this.refs.gamePlayers.input.value,
+	        gameName: this.refs.gameName.input.value
+	      });
+	    }
+	  }, {
+	    key: 'handleKeyPress',
+	    value: function handleKeyPress(component, event) {
+	      if (event.key == 'Enter') {
+	        this.handleSubmit();
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      if (this.state.gamePlayers != "" && this.state.gameName != "") {
+	        return _react2.default.createElement(_GameScreen2.default, { createGame: true, gamePlayers: this.state.gamePlayers, gameName: this.state.gameName });
+	      }
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { style: style.container },
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            _Paper2.default,
+	            { style: style.paper, zDepth: 2 },
+	            _react2.default.createElement(
+	              'h1',
+	              null,
+	              'Create game'
+	            ),
+	            _react2.default.createElement(_TextField2.default, {
+	              floatingLabelText: 'Game name',
+	              ref: 'gameName'
+	            }),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement(_TextField2.default, {
+	              floatingLabelText: 'Number of players',
+	              ref: 'gamePlayers',
+	              onKeyPress: this.handleKeyPress
+	            }),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement(_RaisedButton2.default, { label: 'Create game!', primary: true, style: style.button, onTouchTap: this.handleSubmit })
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return CreateGame;
+	}(_react2.default.Component);
+	
+	exports.default = CreateGame;
+
+/***/ },
+/* 424 */
+/*!**************************************************!*\
+  !*** ./src/client/app/components/GameScreen.jsx ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _TextField = __webpack_require__(/*! material-ui/TextField */ 393);
+	
+	var _TextField2 = _interopRequireDefault(_TextField);
+	
+	var _RaisedButton = __webpack_require__(/*! material-ui/RaisedButton */ 336);
+	
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+	
+	var _Paper = __webpack_require__(/*! material-ui/Paper */ 369);
+	
+	var _Paper2 = _interopRequireDefault(_Paper);
+	
+	var _Dialog = __webpack_require__(/*! material-ui/Dialog */ 404);
+	
+	var _Dialog2 = _interopRequireDefault(_Dialog);
+	
+	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 409);
+	
+	var _FlatButton2 = _interopRequireDefault(_FlatButton);
+	
+	var _Footer = __webpack_require__(/*! ./Footer.jsx */ 412);
+	
+	var _Footer2 = _interopRequireDefault(_Footer);
+	
+	var _OptionList = __webpack_require__(/*! ./OptionList.jsx */ 413);
+	
+	var _OptionList2 = _interopRequireDefault(_OptionList);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var style = {
+	  button: {
+	    margin: "22px"
+	  },
+	  container: {
+	    display: "flex",
+	    flexGrow: "inherit",
+	    justifyContent: "center",
+	    alignItems: "center",
+	    flexDirection: "column",
+	    flex: 1
+	  },
+	  paper: {
+	    height: "100%",
+	    width: "100%",
+	    padding: "8px 25px"
+	  },
+	  header: {
+	    color: "white",
+	    textShadow: "1px 1px 5px black"
+	  },
+	  specialRole: {
+	    width: "100%",
+	    backgroundColor: "#ff4081",
+	    color: "white",
+	    fontSize: "18px"
+	  }
+	};
+	
+	var GameScreen = function (_React$Component) {
+	  _inherits(GameScreen, _React$Component);
+	
+	  function GameScreen(props, context) {
+	    _classCallCheck(this, GameScreen);
+	
+	    var _this = _possibleConstructorReturn(this, (GameScreen.__proto__ || Object.getPrototypeOf(GameScreen)).call(this, props, context));
+	
+	    _this.state = {
+	      phase: "Game is starting...",
+	      playerRole: "Not assigned yet.",
+	      queryData: null,
+	      playerName: null,
+	      gameName: null,
+	      specialRole: "",
+	      dialogOpen: false,
+	      dialogHeader: "",
+	      dialogText: ""
+	    };
+	
+	    _this.handleSubmit = _this.handleSubmit.bind(_this);
+	    _this.handleKeyPress = _this.handleKeyPress.bind(_this, event);
+	    _this.handleDialogClose = _this.handleDialogClose.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(GameScreen, [{
+	    key: 'handleSubmit',
+	    value: function handleSubmit() {
+	      this.setState({
+	        playerName: this.refs.playerName.input.value,
+	        gameName: this.refs.gameName.input.value
+	      });
+	      this.initSocketConnection(this, this.refs.playerName.input.value, this.refs.gameName.input.value);
+	    }
+	  }, {
+	    key: 'handleKeyPress',
+	    value: function handleKeyPress(component, event) {
+	      if (event.key == 'Enter') {
+	        this.handleSubmit();
+	      }
+	    }
+	  }, {
+	    key: 'handleDialogClose',
+	    value: function handleDialogClose() {
+	      this.setState({
+	        dialogOpen: false
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      if (this.state.playerName == null) {
+	        return _react2.default.createElement(
+	          'div',
+	          { style: style.container },
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	              _Paper2.default,
+	              { style: style.paper, zDepth: 2 },
+	              _react2.default.createElement(
+	                'h1',
+	                null,
+	                'Join game'
+	              ),
+	              _react2.default.createElement(_TextField2.default, {
+	                floatingLabelText: 'Player name',
+	                ref: 'playerName'
+	              }),
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement(_TextField2.default, {
+	                floatingLabelText: 'Game name',
+	                ref: 'gameName',
+	                onKeyPress: this.handleKeyPress
+	              }),
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement(_RaisedButton2.default, { label: 'Enter game!', primary: true, style: style.button, onTouchTap: this.handleSubmit })
+	            )
+	          )
+	        );
+	      }
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { style: style.container },
+	        _react2.default.createElement(
+	          'div',
+	          { style: style.specialRole },
+	          this.state.specialRole
+	        ),
+	        _react2.default.createElement(
+	          'h1',
+	          { style: style.header },
+	          this.state.phase
+	        ),
+	        _react2.default.createElement(_OptionList2.default, {
+	          gameName: this.state.gameName,
+	          playerName: this.state.playerName,
+	          queryData: this.state.queryData,
+	          webSocket: this.state.webSocket }),
+	        _react2.default.createElement(_Footer2.default, { role: this.state.playerRole }),
+	        _react2.default.createElement(
+	          _Dialog2.default,
+	          {
+	            title: this.state.dialogHeader,
+	            actions: _react2.default.createElement(_FlatButton2.default, { label: 'I see.', primary: true, onTouchTap: this.handleDialogClose }),
+	            modal: true,
+	            open: this.state.dialogOpen
+	          },
+	          this.state.dialogText
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'initSocketConnection',
+	    value: function initSocketConnection(elem, playerName, gameName) {
+	      var component = elem;
+	      var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/players");
+	      component.setState({ webSocket: webSocket });
+	
+	      webSocket.onopen = function () {
+	        var message = {
+	          "type": "REGISTER_PLAYER",
+	          "playerName": playerName,
+	          "gameName": gameName
+	        };
+	        webSocket.send(JSON.stringify(message));
+	
+	        setInterval(function () {
+	          webSocket.send(JSON.stringify({
+	            "type": "PING",
+	            "playerName": playerName,
+	            "gameName": gameName
+	          }));
+	        }, 10000);
+	      };
+	
+	      webSocket.onmessage = function (msg) {
+	        var data = JSON.parse(msg.data);
+	
+	        if (data.type == "PLAYER_INIT") {
+	          component.setState({ playerRole: data.role });
+	        } else if (data.type == "PLAYER_QUERY") {
+	          component.setState({
+	            queryData: data,
+	            phase: data.header
+	          });
+	        } else if (data.type == "SET_SPECIAL_ROLE") {
+	          component.setState({
+	            specialRole: data.role
+	          });
+	        } else if (data.type == "ALERT_PLAYER") {
+	          component.setState({
+	            dialogOpen: true,
+	            dialogHeader: data.header,
+	            dialogText: data.text
+	          });
+	        }
+	      };
+	
+	      webSocket.onclose = function () {
+	        var time = new Date();
+	        var closeTime = time.getHours() + ":" + time.getMinutes();
+	        alert("WebSocket connection closed at: " + closeTime);
+	      };
+	    }
+	  }]);
+	
+	  return GameScreen;
+	}(_react2.default.Component);
+	
+	exports.default = GameScreen;
+
+/***/ },
+/* 425 */
+/*!**************************************************!*\
+  !*** ./src/client/app/components/ListenGame.jsx ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _TextField = __webpack_require__(/*! material-ui/TextField */ 393);
+	
+	var _TextField2 = _interopRequireDefault(_TextField);
+	
+	var _RaisedButton = __webpack_require__(/*! material-ui/RaisedButton */ 336);
+	
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+	
+	var _Paper = __webpack_require__(/*! material-ui/Paper */ 369);
+	
+	var _Paper2 = _interopRequireDefault(_Paper);
+	
+	var _GameScreen = __webpack_require__(/*! ./GameScreen.jsx */ 424);
+	
+	var _GameScreen2 = _interopRequireDefault(_GameScreen);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var style = {
+	  button: {
+	    margin: "22px"
+	  },
+	  container: {
+	    display: "flex",
+	    flexGrow: "inherit",
+	    justifyContent: "center",
+	    alignItems: "center",
+	    flexDirection: "column",
+	    flex: 1
+	  },
+	  paper: {
+	    height: "100%",
+	    width: "100%",
+	    padding: "8px 25px"
+	  }
+	};
+	
+	var ListenGame = function (_React$Component) {
+	  _inherits(ListenGame, _React$Component);
+	
+	  function ListenGame(props, context) {
+	    _classCallCheck(this, ListenGame);
+	
+	    var _this = _possibleConstructorReturn(this, (ListenGame.__proto__ || Object.getPrototypeOf(ListenGame)).call(this, props, context));
+	
+	    _this.state = {
+	      gameName: ""
+	    };
+	
+	    _this.handleSubmit = _this.handleSubmit.bind(_this);
+	    _this.handleKeyPress = _this.handleKeyPress.bind(_this, event);
+	    return _this;
+	  }
+	
+	  _createClass(ListenGame, [{
+	    key: 'handleSubmit',
+	    value: function handleSubmit() {
+	      this.setState({
+	        gameName: this.refs.gameName.input.value
+	      });
+	    }
+	  }, {
+	    key: 'handleKeyPress',
+	    value: function handleKeyPress(component, event) {
+	      if (event.key == 'Enter') {
+	        this.handleSubmit();
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      if (this.state.gameName != "") {
+	        return _react2.default.createElement(_GameScreen2.default, { createGame: false, gamePlayers: null, gameName: this.state.gameName });
+	      }
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { style: style.container },
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            _Paper2.default,
+	            { style: style.paper, zDepth: 2 },
+	            _react2.default.createElement(
+	              'h1',
+	              null,
+	              'Register game screen'
+	            ),
+	            _react2.default.createElement(_TextField2.default, {
+	              floatingLabelText: 'Game name',
+	              ref: 'gameName'
+	            }),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement(_RaisedButton2.default, { label: 'Register screen!', primary: true, style: style.button, onTouchTap: this.handleSubmit })
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return ListenGame;
+	}(_react2.default.Component);
+	
+	exports.default = ListenGame;
 
 /***/ }
 /******/ ]);

@@ -20,6 +20,7 @@ public class Main {
         port(getHerokuAssignedPort());
         staticFiles.location("/public");
         webSocket("/players", PlayerWebSocketHandler.class);
+        webSocket("/games", GameWebSocketHandler.class);
         init();
         
         get("/", (request, response) -> {

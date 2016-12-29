@@ -38,7 +38,9 @@ public class PlayerManager {
         System.out.println(players.size());
         System.out.println(this.gamePlayers);
         if (players.size() == this.gamePlayers) {
-            game.getVariables().setPresident(getRandomPlayer());
+            Player president = getRandomPlayer();
+            game.getVariables().setPresident(president);
+            PlayerWebSocketHandler.setSpecialRole(president, "You are the president!");
             game.changeState(State.NOMINATE_CHANCELLOR);
         }
     }

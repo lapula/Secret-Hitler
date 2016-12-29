@@ -7,6 +7,7 @@ package GameStates;
 
 import GameLogic.Game;
 import GameLogic.Player;
+import com.lapula.secret.hitler.PlayerWebSocketHandler;
 import java.util.HashMap;
 
 /**
@@ -23,6 +24,8 @@ public class RoundStartState implements GameState {
     
     @Override
     public void doAction() {
+        
+        
         game.getVariables().setElectionResults(new HashMap<>());
         game.getVariables().setGovernmentVotesThisRound(0);
         game.getVariables().setChancellor(null);
@@ -30,6 +33,8 @@ public class RoundStartState implements GameState {
         Player nextPresident = game.getPlayerManager().getNextPlayer(president);
         game.getVariables().setPresident(nextPresident);
         game.getVariables().setVetoedPolicies(null);
+        PlayerWebSocketHandler.clearSpecialRoles(game.getPlayerManager().getPlayers(), nextPresident);
+        PlayerWebSocketHandler.setSpecialRole(nextPresident, "You are the president!");
         
         System.out.println("Liberal policies: " + game.getVariables().getLiberalPolicyCount());
         System.out.println("Fascist policies: " + game.getVariables().getFascistPolicyCount());
