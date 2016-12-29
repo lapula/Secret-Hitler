@@ -25,7 +25,7 @@ public class GameWebSocketHandler {
     private static final String LISTEN_GAME = "LISTEN_GAME";
     private static final String CREATE_GAME = "CREATE_GAME";
     private static final String STATUS_UPDATE = "STATUS_UPDATE";
-    private static final String PING = "PING";
+    private static final String POLL = "POLL";
     
     @OnWebSocketConnect
     public void onConnect(Session user) throws Exception {
@@ -53,10 +53,9 @@ public class GameWebSocketHandler {
             Game game = new Game(Integer.parseInt(gamePlayers));
             Main.games.put(gameName, game);
             game.getGameListeners().add(user);
-        } else if (type.equals(PING)) {
-            JSONObject mainObj = new JSONObject();
-            mainObj.put("hey", "world");
-            sendStatusUpdate(Main.games.get(gameName).getGameListeners(), mainObj);
+        } else if (type.equals(POLL)) {
+            Game game = Main.games.get(gameName);
+            sendStatusUpdate(Main.games.get(gameName).getGameListeners(), game.toJSON());
         }
     }
     

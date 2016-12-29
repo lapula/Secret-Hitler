@@ -56,7 +56,7 @@ class GameScreen extends React.Component {
 
         setInterval(function(){
             webSocket.send(JSON.stringify({
-              "type":"PING",
+              "type":"POLL",
               "gameName": component.props.gameName
             }));
         }, 5000);
@@ -64,9 +64,9 @@ class GameScreen extends React.Component {
 
     webSocket.onmessage = function (msg) {
         let data = JSON.parse(msg.data)
-        console.log(data)
+        console.log(JSON.stringify(data, null, 4))
         if (data.type == "STATUS_UPDATE") {
-            component.setState({data: data});
+            component.setState({data: JSON.stringify(data)});
         }
     };
 

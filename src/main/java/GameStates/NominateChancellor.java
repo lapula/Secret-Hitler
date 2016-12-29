@@ -31,9 +31,6 @@ public class NominateChancellor implements GameState {
     public void doAction() {
         
         Player president = game.getVariables().getPresident();
-        
-        System.out.println(president.getName());
-        
         Map<String, String> choices = new HashMap<>();
         
         game.getPlayerManager().getPlayers().forEach(player -> {

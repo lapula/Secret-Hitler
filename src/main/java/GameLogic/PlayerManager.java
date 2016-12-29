@@ -60,6 +60,14 @@ public class PlayerManager {
         return players;
     }
     
+    public List<String> getPlayerNames() {
+        List<String> names = new ArrayList<>();
+        for (int i = 0; i < players.size(); i++) {
+            names.add(players.get(i).getName());
+        }
+        return names;
+    }
+    
     public Player getPlayerByName(String name) {
         for (Player p : players) {
             if (p.getName().equals(name)) {

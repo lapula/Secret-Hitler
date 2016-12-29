@@ -33360,7 +33360,7 @@
 	    },
 	    timePicker: {
 	      color: palette.alternateTextColor,
-	      textColor: palette.accent3Color,
+	      textColor: palette.alternateTextColor,
 	      accentColor: palette.primary1Color,
 	      clockColor: palette.textColor,
 	      clockCircleColor: palette.clockCircleColor,
@@ -40245,15 +40245,11 @@
 	    return funcs[0];
 	  }
 	
-	  var last = funcs[funcs.length - 1];
-	  return function () {
-	    var result = last.apply(undefined, arguments);
-	    for (var i = funcs.length - 2; i >= 0; i--) {
-	      var f = funcs[i];
-	      result = f(result);
-	    }
-	    return result;
-	  };
+	  return funcs.reduce(function (a, b) {
+	    return function () {
+	      return a(b.apply(undefined, arguments));
+	    };
+	  });
 	}
 
 /***/ },
@@ -41817,7 +41813,9 @@
 	      args[_key] = arguments[_key];
 	    }
 	
-	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = EnhancedButton.__proto__ || (0, _getPrototypeOf2.default)(EnhancedButton)).call.apply(_ref, [this].concat(args))), _this), _this.state = { isKeyboardFocused: false }, _this.handleKeyDown = function (event) {
+	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = EnhancedButton.__proto__ || (0, _getPrototypeOf2.default)(EnhancedButton)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+	      isKeyboardFocused: false
+	    }, _this.handleKeyDown = function (event) {
 	      if (!_this.props.disabled && !_this.props.disableKeyboardFocus) {
 	        if ((0, _keycode2.default)(event) === 'enter' && _this.state.isKeyboardFocused) {
 	          _this.handleTouchTap(event);
@@ -44731,7 +44729,8 @@
 	          position: 'absolute',
 	          top: 0,
 	          left: 0,
-	          overflow: 'hidden'
+	          overflow: 'hidden',
+	          pointerEvents: 'none'
 	        }, style);
 	
 	        rippleGroup = _react2.default.createElement(
@@ -45775,41 +45774,83 @@
 	    }
 	
 	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = IconButton.__proto__ || (0, _getPrototypeOf2.default)(IconButton)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+	      hovered: false,
+	      isKeyboardFocused: false,
+	      // Not to be confonded with the touch property.
+	      // This state is to determined if it's a mobile device.
+	      touch: false,
 	      tooltipShown: false
 	    }, _this.handleBlur = function (event) {
 	      _this.hideTooltip();
-	      if (_this.props.onBlur) _this.props.onBlur(event);
+	      if (_this.props.onBlur) {
+	        _this.props.onBlur(event);
+	      }
 	    }, _this.handleFocus = function (event) {
 	      _this.showTooltip();
-	      if (_this.props.onFocus) _this.props.onFocus(event);
+	      if (_this.props.onFocus) {
+	        _this.props.onFocus(event);
+	      }
 	    }, _this.handleMouseLeave = function (event) {
-	      if (!_this.refs.button.isKeyboardFocused()) _this.hideTooltip();
-	      if (_this.props.onMouseLeave) _this.props.onMouseLeave(event);
+	      if (!_this.button.isKeyboardFocused()) {
+	        _this.hideTooltip();
+	      }
+	      _this.setState({ hovered: false });
+	      if (_this.props.onMouseLeave) {
+	        _this.props.onMouseLeave(event);
+	      }
 	    }, _this.handleMouseOut = function (event) {
 	      if (_this.props.disabled) _this.hideTooltip();
 	      if (_this.props.onMouseOut) _this.props.onMouseOut(event);
 	    }, _this.handleMouseEnter = function (event) {
 	      _this.showTooltip();
-	      if (_this.props.onMouseEnter) _this.props.onMouseEnter(event);
-	    }, _this.handleKeyboardFocus = function (event, keyboardFocused) {
-	      if (keyboardFocused && !_this.props.disabled) {
+	
+	      // Cancel hover styles for touch devices
+	      if (!_this.state.touch) {
+	        _this.setState({ hovered: true });
+	      }
+	      if (_this.props.onMouseEnter) {
+	        _this.props.onMouseEnter(event);
+	      }
+	    }, _this.handleTouchStart = function (event) {
+	      _this.setState({ touch: true });
+	      _this.props.onTouchStart(event);
+	    }, _this.handleKeyboardFocus = function (event, isKeyboardFocused) {
+	      var _this$props = _this.props,
+	          disabled = _this$props.disabled,
+	          onFocus = _this$props.onFocus,
+	          onBlur = _this$props.onBlur,
+	          onKeyboardFocus = _this$props.onKeyboardFocus;
+	
+	      if (isKeyboardFocused && !disabled) {
 	        _this.showTooltip();
-	        if (_this.props.onFocus) _this.props.onFocus(event);
+	        if (onFocus) {
+	          onFocus(event);
+	        }
 	      } else {
 	        _this.hideTooltip();
-	        if (_this.props.onBlur) _this.props.onBlur(event);
+	        if (onBlur) {
+	          onBlur(event);
+	        }
 	      }
 	
-	      if (_this.props.onKeyboardFocus) {
-	        _this.props.onKeyboardFocus(event, keyboardFocused);
+	      _this.setState({ isKeyboardFocused: isKeyboardFocused });
+	      if (onKeyboardFocus) {
+	        onKeyboardFocus(event, isKeyboardFocused);
 	      }
 	    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
 	  }
 	
 	  (0, _createClass3.default)(IconButton, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.disabled) {
+	        this.setState({ hovered: false });
+	      }
+	    }
+	  }, {
 	    key: 'setKeyboardFocus',
 	    value: function setKeyboardFocus() {
-	      this.refs.button.setKeyboardFocus();
+	      this.button.setKeyboardFocus();
 	    }
 	  }, {
 	    key: 'showTooltip',
@@ -45826,26 +45867,32 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+	
 	      var _props = this.props,
 	          disabled = _props.disabled,
+	          hoveredStyle = _props.hoveredStyle,
 	          disableTouchRipple = _props.disableTouchRipple,
 	          children = _props.children,
 	          iconClassName = _props.iconClassName,
-	          onKeyboardFocus = _props.onKeyboardFocus,
+	          style = _props.style,
 	          tooltip = _props.tooltip,
 	          tooltipPositionProp = _props.tooltipPosition,
 	          tooltipStyles = _props.tooltipStyles,
 	          touch = _props.touch,
 	          iconStyle = _props.iconStyle,
-	          other = (0, _objectWithoutProperties3.default)(_props, ['disabled', 'disableTouchRipple', 'children', 'iconClassName', 'onKeyboardFocus', 'tooltip', 'tooltipPosition', 'tooltipStyles', 'touch', 'iconStyle']);
+	          other = (0, _objectWithoutProperties3.default)(_props, ['disabled', 'hoveredStyle', 'disableTouchRipple', 'children', 'iconClassName', 'style', 'tooltip', 'tooltipPosition', 'tooltipStyles', 'touch', 'iconStyle']);
 	
 	      var fonticon = void 0;
 	
 	      var styles = getStyles(this.props, this.context);
 	      var tooltipPosition = tooltipPositionProp.split('-');
 	
+	      var hovered = (this.state.hovered || this.state.isKeyboardFocused) && !disabled;
+	
+	      var mergedRootStyles = (0, _simpleAssign2.default)(styles.root, hovered ? hoveredStyle : {}, style);
+	
 	      var tooltipElement = tooltip ? _react2.default.createElement(_Tooltip2.default, {
-	        ref: 'tooltip',
 	        label: tooltip,
 	        show: this.state.tooltipShown,
 	        touch: touch,
@@ -45875,11 +45922,15 @@
 	
 	      return _react2.default.createElement(
 	        _EnhancedButton2.default,
-	        (0, _extends3.default)({}, other, {
-	          ref: 'button',
+	        (0, _extends3.default)({
+	          ref: function ref(_ref2) {
+	            return _this2.button = _ref2;
+	          }
+	        }, other, {
 	          centerRipple: true,
 	          disabled: disabled,
-	          style: (0, _simpleAssign2.default)(styles.root, this.props.style),
+	          onTouchStart: this.handleTouchStart,
+	          style: mergedRootStyles,
 	          disableTouchRipple: disableTouchRipple,
 	          onBlur: this.handleBlur,
 	          onFocus: this.handleFocus,
@@ -45928,6 +45979,10 @@
 	   */
 	  disabled: _react.PropTypes.bool,
 	  /**
+	   * Override the inline-styles of the root element when the component is hovered.
+	   */
+	  hoveredStyle: _react.PropTypes.object,
+	  /**
 	   * The URL to link to when the button is clicked.
 	   */
 	  href: _react.PropTypes.string,
@@ -45937,6 +45992,7 @@
 	  iconClassName: _react.PropTypes.string,
 	  /**
 	   * Override the inline-styles of the icon element.
+	   * Note: you can specify iconHoverColor as a String inside this object.
 	   */
 	  iconStyle: _react.PropTypes.object,
 	  /** @ignore */
@@ -45956,6 +46012,8 @@
 	  onMouseLeave: _react.PropTypes.func,
 	  /** @ignore */
 	  onMouseOut: _react.PropTypes.func,
+	  /** @ignore */
+	  onTouchStart: _react.PropTypes.func,
 	  /**
 	   * Override the inline-styles of the root element.
 	   */
@@ -45975,7 +46033,7 @@
 	   */
 	  tooltipStyles: _react.PropTypes.object,
 	  /**
-	   * If true, increase the tooltip element's size.  Useful for increasing tooltip
+	   * If true, increase the tooltip element's size. Useful for increasing tooltip
 	   * readability on mobile devices.
 	   */
 	  touch: _react.PropTypes.bool
@@ -46538,8 +46596,8 @@
 	
 	exports.__esModule = true;
 	var createHelper = function createHelper(func, helperName) {
-	  var setDisplayName = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
-	  var noArgs = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+	  var setDisplayName = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+	  var noArgs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 	
 	  if (process.env.NODE_ENV !== 'production' && setDisplayName) {
 	    var _ret = function () {
@@ -46561,13 +46619,6 @@
 	        v: function v() {
 	          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	            args[_key] = arguments[_key];
-	          }
-	
-	          if (args.length > func.length) {
-	            /* eslint-disable */
-	            console.error(
-	            /* eslint-enable */
-	            'Too many arguments passed to ' + helperName + '(). It should called ' + ('like so: ' + helperName + '(...args)(BaseComponent).'));
 	          }
 	
 	          return function (BaseComponent) {
@@ -46714,7 +46765,7 @@
   \********************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
 	exports.__esModule = true;
 	
@@ -46725,10 +46776,11 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var isReferentiallyTransparentFunctionComponent = function isReferentiallyTransparentFunctionComponent(Component) {
-	  return Boolean(typeof Component === 'function' && !(0, _isClassComponent2.default)(Component) && !Component.defaultProps && !Component.contextTypes && !Component.propTypes);
+	  return Boolean(typeof Component === 'function' && !(0, _isClassComponent2.default)(Component) && !Component.defaultProps && !Component.contextTypes && (process.env.NODE_ENV === 'production' || !Component.propTypes));
 	};
 	
 	exports.default = isReferentiallyTransparentFunctionComponent;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../process/browser.js */ 3)))
 
 /***/ },
 /* 388 */
@@ -47787,6 +47839,9 @@
 	  onBlur: _react.PropTypes.func,
 	  /**
 	   * Callback function that is fired when the textfield's value changes.
+	   *
+	   * @param {object} event Change event targeting the text field.
+	   * @param {string} newValue The new value of the text field.
 	   */
 	  onChange: _react.PropTypes.func,
 	  /** @ignore */
@@ -48611,6 +48666,8 @@
 	  muiTheme: _react.PropTypes.object.isRequired,
 	  /**
 	   * Callback function for when the label is selected via a touch tap.
+	   *
+	   * @param {object} event TouchTap event targeting the text field label.
 	   */
 	  onTouchTap: _react.PropTypes.func,
 	  /**
@@ -51781,7 +51838,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var makeSelectable = function makeSelectable(MyComponent) {
+	var makeSelectable = exports.makeSelectable = function makeSelectable(MyComponent) {
 	  var _class, _temp2;
 	
 	  return _temp2 = _class = function (_Component) {
@@ -51900,7 +51957,6 @@
 	  }, _temp2;
 	};
 	
-	exports.makeSelectable = makeSelectable;
 	exports.default = makeSelectable;
 
 /***/ },
@@ -52154,7 +52210,7 @@
 	
 	        setInterval(function () {
 	          webSocket.send(JSON.stringify({
-	            "type": "PING",
+	            "type": "POLL",
 	            "gameName": component.props.gameName
 	          }));
 	        }, 5000);
@@ -52162,9 +52218,9 @@
 	
 	      webSocket.onmessage = function (msg) {
 	        var data = JSON.parse(msg.data);
-	        console.log(data);
+	        console.log(JSON.stringify(data, null, 4));
 	        if (data.type == "STATUS_UPDATE") {
-	          component.setState({ data: data });
+	          component.setState({ data: JSON.stringify(data) });
 	        }
 	      };
 	
