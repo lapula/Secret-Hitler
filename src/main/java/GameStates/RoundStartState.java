@@ -6,7 +6,9 @@
 package GameStates;
 
 import GameLogic.Game;
+import GameLogic.GameVariables;
 import GameLogic.Player;
+import GameLogic.PlayerManager;
 import com.lapula.secret.hitler.PlayerWebSocketHandler;
 import java.util.HashMap;
 
@@ -24,20 +26,38 @@ public class RoundStartState implements GameState {
     
     @Override
     public void doAction() {
+        GameVariables gameVariables = game.getVariables();
+        PlayerManager playerManager = game.getPlayerManager();
         
-        
-        game.getVariables().setElectionResults(new HashMap<>());
-        game.getVariables().setGovernmentVotesThisRound(0);
-        game.getVariables().setChancellor(null);
-        Player president = game.getVariables().getPresident();
-        Player nextPresident = game.getPlayerManager().getNextPlayer(president);
-        game.getVariables().setPresident(nextPresident);
-        game.getVariables().setVetoedPolicies(null);
-        PlayerWebSocketHandler.clearSpecialRoles(game.getPlayerManager().getPlayers(), nextPresident);
+        Player nextPresident;
+        if (gameVariables.getSpecialElectionPhase() == 1) {
+            gameVariables.setSpecialElectionPhase(2);
+            nextPresident = gameVariables.getSpecialElectionPresident();
+        } else if (gameVariables.getSpecialElectionPhase() == 2) {
+            Player president = gameVariables.getPresidentBeforeSpecialElection();
+            if (!playerManager.getPlayers().contains(president)) {
+                int index = playerManager.getPlayersIncludingExecuted().indexOf(president);
+                if (index == playerManager.getPlayersIncludingExecuted().size() - 1) {
+                    index = -1;
+                }
+                president = playerManager.getPlayersIncludingExecuted().get(index + 1);
+            }
+            nextPresident = playerManager.getNextPlayer(president);
+            gameVariables.setSpecialElectionPhase(0);
+        } else {
+            Player president = gameVariables.getPresident();
+            nextPresident = playerManager.getNextPlayer(president);
+        }
+        gameVariables.setPresident(nextPresident);
+        gameVariables.setElectionResults(new HashMap<>());
+        gameVariables.setGovernmentVotesThisRound(0);
+        gameVariables.setChancellor(null);
+        gameVariables.setVetoedPolicies(null);
+        PlayerWebSocketHandler.clearSpecialRoles(playerManager.getPlayers(), nextPresident);
         PlayerWebSocketHandler.setSpecialRole(nextPresident, "You are the president!");
         
-        System.out.println("Liberal policies: " + game.getVariables().getLiberalPolicyCount());
-        System.out.println("Fascist policies: " + game.getVariables().getFascistPolicyCount());
+        System.out.println("Liberal policies: " + gameVariables.getLiberalPolicyCount());
+        System.out.println("Fascist policies: " + gameVariables.getFascistPolicyCount());
         
         game.changeState(State.NOMINATE_CHANCELLOR);
     }

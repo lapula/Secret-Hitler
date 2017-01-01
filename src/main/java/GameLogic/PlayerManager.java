@@ -19,13 +19,14 @@ import java.util.Random;
  */
 public class PlayerManager {
     
+    private List<Player> playersIncludingExecuted;
     private List<Player> players;
     private Game game;
     private int gamePlayers;
     private List<String> roleList;
     
     public PlayerManager(Game game) {
-        players = new ArrayList<>();
+        this.players = new ArrayList<>();
         this.game = game;
         this.gamePlayers = game.getVariables().getGamePlayers();
         this.roleList = initRoles(gamePlayers);
@@ -41,23 +42,25 @@ public class PlayerManager {
             Player president = getRandomPlayer();
             game.getVariables().setPresident(president);
             PlayerWebSocketHandler.setSpecialRole(president, "You are the president!");
+            playersIncludingExecuted = new ArrayList<>(players);
             game.changeState(State.NOMINATE_CHANCELLOR);
         }
     }
     
     public Player getNextPlayer(Player player) {
-        System.out.println(player.getName());
         int oldIndex = players.indexOf(player);
         if (oldIndex == players.size() - 1) {
             oldIndex = -1;
         }
-        System.out.println(oldIndex);
-        System.out.println(players.get(oldIndex + 1).getName());
         return players.get(oldIndex + 1);
     }
     
     public List<Player> getPlayers() {
         return players;
+    }
+    
+    public List<Player> getPlayersIncludingExecuted() {
+        return playersIncludingExecuted;
     }
     
     public List<String> getPlayerNames() {

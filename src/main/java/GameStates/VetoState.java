@@ -100,7 +100,7 @@ public class VetoState implements GameState {
                 } else {
                     game.getVariables().addFascistPolicy();
                 }
-                game.changeState(State.ROUND_START);
+                game.changeState(State.DETERMINE_EXECUTIVE_ACTION);
             }
         }
         

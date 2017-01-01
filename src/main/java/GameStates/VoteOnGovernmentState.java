@@ -42,7 +42,7 @@ public class VoteOnGovernmentState implements GameState {
     @Override
     public void receiveData(String player, String data) {
         game.getVariables().addVote(player, data);
-        if (game.getVariables().getElectionResults().size() == game.getVariables().getGamePlayers()) {
+        if (game.getVariables().getElectionResults().size() == game.getPlayerManager().getPlayers().size()) {
             handleElectionResults();
         }
     }

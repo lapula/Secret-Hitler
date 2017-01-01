@@ -9,6 +9,7 @@ import GameStates.State;
 import GameStates.NominateChancellor;
 import GameStates.GameState;
 import GameStates.StateFactory;
+import com.lapula.secret.hitler.GameWebSocketHandler;
 import com.lapula.secret.hitler.PlayerWebSocketHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +42,17 @@ public class Game {
         playerManager = new PlayerManager(this);
     }
     
+    public void changeState(State state) {
+        this.gameState =  this.stateFactory.getGameState(this, state);
+        this.gameState.doAction();
+        GameWebSocketHandler.sendStatusUpdate(this.gameListeners, this.toJSON());
+   }
+    
+    public void receiveData(String player, String data) {
+        this.gameState.receiveData(player, data);
+        GameWebSocketHandler.sendStatusUpdate(this.gameListeners, this.toJSON());
+    }
+    
     public PlayerManager getPlayerManager() {
         return this.playerManager;
     }
@@ -51,15 +63,6 @@ public class Game {
     
     public PolicyDeck getPolicyDeck() {
         return this.policyDeck;
-    }
-    
-    public void changeState(State state) {
-        this.gameState =  this.stateFactory.getGameState(this, state);
-        this.gameState.doAction();
-   }
-    
-    public void receiveData(String player, String data) {
-        this.gameState.receiveData(player, data);
     }
     
     public void addGameListener(Session session) {

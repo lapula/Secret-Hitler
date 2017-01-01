@@ -55,7 +55,7 @@ public class GameWebSocketHandler {
             game.getGameListeners().add(user);
         } else if (type.equals(POLL)) {
             Game game = Main.games.get(gameName);
-            sendStatusUpdate(Main.games.get(gameName).getGameListeners(), game.toJSON());
+            //sendStatusUpdate(Main.games.get(gameName).getGameListeners(), game.toJSON());
         }
     }
     

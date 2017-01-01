@@ -21,12 +21,27 @@ public class PolicyDeck {
     }
     
     public List<Policy> drawNextThree() {
+        System.out.println(policyDeck.toString());
         if (policyDeck.size() < 3) {
             policyDeck = initPolicyDeck();
         }
         List<Policy> topThree = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            topThree.add(policyDeck.remove(policyDeck.size() - 1 - i));
+            topThree.add(policyDeck.remove(policyDeck.size() - 1));
+        }
+        return topThree;
+    }
+    
+    public String nextThreeToString() {
+        if (policyDeck.size() < 3) {
+            policyDeck = initPolicyDeck();
+        }
+        String topThree = "";
+        for (int i = 0; i < 3; i++) {
+            topThree += policyDeck.get(policyDeck.size() - 1 - i);
+            if (i < 2) {
+                topThree += ", ";
+            }
         }
         return topThree;
     }

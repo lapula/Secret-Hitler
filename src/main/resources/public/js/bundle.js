@@ -47234,8 +47234,6 @@
 	    key: 'initSocketConnection',
 	    value: function initSocketConnection(elem, playerName, gameName) {
 	      var component = elem;
-	      console.log(location.hostname);
-	      console.log(location.port);
 	      var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/players");
 	      component.setState({ webSocket: webSocket });
 	
@@ -52183,10 +52181,15 @@
 	  _createClass(GameScreen, [{
 	    key: 'render',
 	    value: function render() {
+	      var state = JSON.stringify(this.state.data, null, 4);
 	      return _react2.default.createElement(
 	        'div',
 	        { style: style.container },
-	        this.state.data
+	        _react2.default.createElement(
+	          'span',
+	          { style: { backgroundColor: "white" } },
+	          state
+	        )
 	      );
 	    }
 	  }, {

@@ -28,9 +28,10 @@ class GameScreen extends React.Component {
   }
 
   render() {
+    let state = JSON.stringify(this.state.data, null, 4);
     return (
       <div style={style.container}>
-        {this.state.data}
+        <span style={{backgroundColor: "white"}}>{state}</span>
       </div>
     );
   }

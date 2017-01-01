@@ -125,8 +125,6 @@ class PlayerApp extends React.Component {
 
   initSocketConnection(elem, playerName, gameName) {
     var component = elem;
-    console.log(location.hostname)
-    console.log(location.port)
     var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/players");
     component.setState({webSocket: webSocket});
 

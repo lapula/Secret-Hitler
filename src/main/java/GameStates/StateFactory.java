@@ -28,6 +28,16 @@ public class StateFactory {
             return new LegistlativeSessionState(game);
         } else if (state.equals(State.VETO)) {
             return new VetoState(game);
+        } else if (state.equals(State.DETERMINE_EXECUTIVE_ACTION)) {
+            return new DetermineExecutiveActionState(game);
+        } else if (state.equals(State.INVESTIGATE_LOYALTY)) {
+            return new InvestigateLoyaltyState(game);
+        } else if (state.equals(State.CALL_SPECIAL_ELECTION)) {
+            return new CallSpecialElectionState(game);
+        } else if (state.equals(State.POLICY_PEEK)) {
+            return new PolicyPeekState(game);
+        } else if (state.equals(State.EXECUTION)) {
+            return new ExecutionState(game);
         }
         
         return null;

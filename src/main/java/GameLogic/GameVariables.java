@@ -22,6 +22,10 @@ public class GameVariables {
     private int governmentVotesThisRound;
     private int liberalPoliciesPassed;
     private int fascistPoliciesPassed;
+    private int specialElectionPhase;
+    private Player specialElectionPresident;
+    private Player presidentBeforeSpecialElection;
+    
     
     private List<Policy> vetoedPolicies;
     
@@ -30,6 +34,7 @@ public class GameVariables {
         this.governmentVotesThisRound = 0;
         this.liberalPoliciesPassed = 0;
         this.fascistPoliciesPassed = 0;
+        this.specialElectionPhase = 0;
     }
 
     public Map<String, String> getElectionResults() {
@@ -99,5 +104,28 @@ public class GameVariables {
     public void setVetoedPolicies(List<Policy> vetoedPolicies) {
         this.vetoedPolicies = vetoedPolicies;
     }
-    
+
+    public Player getSpecialElectionPresident() {
+        return specialElectionPresident;
+    }
+
+    public void setSpecialElectionPresident(Player specialElectionPresident) {
+        this.specialElectionPresident = specialElectionPresident;
+    }
+
+    public Player getPresidentBeforeSpecialElection() {
+        return presidentBeforeSpecialElection;
+    }
+
+    public void setPresidentBeforeSpecialElection(Player presidentBeforeSpecialElection) {
+        this.presidentBeforeSpecialElection = presidentBeforeSpecialElection;
+    }
+
+    public int getSpecialElectionPhase() {
+        return specialElectionPhase;
+    }
+
+    public void setSpecialElectionPhase(int specialElectionPhase) {
+        this.specialElectionPhase = specialElectionPhase;
+    }
 }
