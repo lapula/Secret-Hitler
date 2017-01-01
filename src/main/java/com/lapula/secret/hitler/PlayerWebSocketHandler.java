@@ -1,12 +1,15 @@
 
 package com.lapula.secret.hitler;
 
+import GameLogic.Game;
 import GameLogic.Player;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -28,14 +31,19 @@ public class PlayerWebSocketHandler {
     
     @OnWebSocketConnect
     public void onConnect(Session user) throws Exception {
-        Long dayInMilliseconds = 60000l * 60l * 24l;
-        user.setIdleTimeout(dayInMilliseconds);
+        Long dayInMilliseconds = 1000l * 60l * 60l * 24l;
+        user.setIdleTimeout(10000l);
         System.out.println("Player connected to server");
     }
 
     @OnWebSocketClose
     public void onClose(Session user, int statusCode, String reason) {
-        System.out.println("closed");
+        for (Game game : Main.games.values()) {
+            if (game.getPlayerManager().getPlayerSession(user) != null) {
+                game.getPlayerManager().getPlayerSession(user).setSession(null);
+                System.out.println("nulled player connection!");
+            }
+        }
     }
 
     @OnWebSocketMessage
@@ -47,7 +55,11 @@ public class PlayerWebSocketHandler {
         String playerName = obj.getString("playerName");
         
         if (type.equals("REGISTER_PLAYER")) {
-            Main.games.get(gameName).getPlayerManager().addPlayer(new Player(playerName, gameName, user));
+            if (Main.games.get(gameName).getPlayerManager().getPlayerByName(playerName) == null) {
+                Main.games.get(gameName).getPlayerManager().addPlayer(new Player(playerName, gameName, user));
+            } else {
+                Main.games.get(gameName).getPlayerManager().getPlayerByName(playerName).setSession(user);
+            }
         } else if (type.equals("QUERY_RESPONSE")) {
             String response = obj.getString("response");
             Main.games.get(gameName).receiveData(playerName, response);
@@ -87,6 +99,16 @@ public class PlayerWebSocketHandler {
         
         targets.forEach(target -> {
             try {
+                if (target.getSession() == null) {
+                    try {
+                        System.out.println("trying again in 10s");
+                        TimeUnit.SECONDS.sleep(10);
+                        sendChoiceMessage(players, targets, choices, header, subheader);
+                        return;
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(PlayerWebSocketHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                 target.getSession().getRemote().sendString(mainObj.toString());
             } catch (IOException ex) {
                 Logger.getLogger(PlayerWebSocketHandler.class.getName()).log(Level.SEVERE, null, ex);

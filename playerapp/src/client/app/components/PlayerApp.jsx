@@ -128,6 +128,14 @@ class PlayerApp extends React.Component {
     var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/players");
     component.setState({webSocket: webSocket});
 
+    var pingInterval = setInterval(function(){
+        webSocket.send(JSON.stringify({
+          "type":"PING",
+          "playerName": playerName,
+          "gameName": gameName
+        }));
+    }, 10000);
+
     webSocket.onopen = function() {
         var message =  {
           "type":"REGISTER_PLAYER",
@@ -135,14 +143,6 @@ class PlayerApp extends React.Component {
           "gameName": gameName
         }
         webSocket.send(JSON.stringify(message));
-
-        setInterval(function(){
-            webSocket.send(JSON.stringify({
-              "type":"PING",
-              "playerName": playerName,
-              "gameName": gameName
-            }));
-        }, 10000);
     };
 
     webSocket.onmessage = function (msg) {
@@ -169,9 +169,21 @@ class PlayerApp extends React.Component {
     };
 
     webSocket.onclose = function () {
+      clearInterval(pingInterval);
       var time = new Date();
       var closeTime = time.getHours() + ":" + time.getMinutes();
       alert("WebSocket connection closed at: " + closeTime);
+
+      setTimeout(function(){
+        console.log("opening connection again")
+        component.initSocketConnection(elem, playerName, gameName);
+      }, 3000);
+
+
+    };
+
+    webSocket.onerror = function(err) {
+        console.log("Error: " + err);
     };
   }
 

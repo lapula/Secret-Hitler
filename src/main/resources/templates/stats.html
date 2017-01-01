@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WebsSockets</title>
+</head>
+    
+<body>
+    <p>
+        <span th:text="${freeMemory}"></span>MB/<span th:text="${totalMemory}"></span>MB
+    </p>
+    <ol th:each="game : ${runningGames}">
+        <li th:text="${game.key}">keyvalue</li>
+    </ol>
+</body>
+</html>

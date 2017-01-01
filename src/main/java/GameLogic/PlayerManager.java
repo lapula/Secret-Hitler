@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import org.eclipse.jetty.websocket.api.Session;
 
 /**
  *
@@ -74,6 +75,15 @@ public class PlayerManager {
     public Player getPlayerByName(String name) {
         for (Player p : players) {
             if (p.getName().equals(name)) {
+                return p;
+            }
+        }
+        return null;
+    }
+    
+    public Player getPlayerSession(Session session) {
+        for (Player p : players) {
+            if (p.getSession().equals(session)) {
                 return p;
             }
         }

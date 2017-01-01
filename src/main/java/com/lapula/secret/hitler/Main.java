@@ -25,14 +25,20 @@ public class Main {
         
         get("/", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
-            return new ModelAndView(model, "client");
+            return new ModelAndView(model, "index");
         }, new ThymeleafTemplateEngine());
         
-        get("/refresh", (request, response) -> {
+        get("/stats", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
             Game game = new Game(2);
             games.put("gg", game);
-            return new ModelAndView(model, "game");
+            System.out.println(Runtime.getRuntime().freeMemory());
+            System.out.println(Runtime.getRuntime().totalMemory());
+            model.put("freeMemory", "" + (Runtime.getRuntime().freeMemory() / 1000000));
+            model.put("totalMemory", "" + (Runtime.getRuntime().totalMemory() / 1000000));
+            model.put("runningGames", games);
+            
+            return new ModelAndView(model, "stats");
         }, new ThymeleafTemplateEngine());
     }
     
