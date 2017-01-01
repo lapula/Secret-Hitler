@@ -54,6 +54,7 @@ public class PlayerWebSocketHandler {
         String gameName = obj.getString("gameName");
         String playerName = obj.getString("playerName");
         
+        // TODO Differentiate register and reconnect
         if (type.equals("REGISTER_PLAYER")) {
             if (Main.games.get(gameName).getPlayerManager().getPlayerByName(playerName) == null) {
                 Main.games.get(gameName).getPlayerManager().addPlayer(new Player(playerName, gameName, user));
@@ -136,6 +137,16 @@ public class PlayerWebSocketHandler {
         mainObj.put("role", role);
         
         try {
+            if (target.getSession() == null) {
+                try {
+                    System.out.println("trying again in 10s");
+                    TimeUnit.SECONDS.sleep(10);
+                    setSpecialRole(target, role);
+                    return;
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(PlayerWebSocketHandler.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             target.getSession().getRemote().sendString(mainObj.toString());
         } catch (IOException ex) {
             Logger.getLogger(PlayerWebSocketHandler.class.getName()).log(Level.SEVERE, null, ex);

@@ -20,6 +20,13 @@ const style = {
     flexDirection: "column",
     flex: 1
   },
+  connectingContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    flexGrow: "inherit"
+  },
   paper: {
     height: "100%",
     width: "100%",
@@ -41,6 +48,7 @@ class PlayerApp extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      hasWebsocketConnection: false,
       phase: "Game is starting...",
       playerRole: "Not assigned yet.",
       queryData: null,
@@ -78,7 +86,6 @@ class PlayerApp extends React.Component {
   }
 
   render() {
-
     if (this.state.playerName == null) {
       return (
         <div style={style.container}>
@@ -99,28 +106,38 @@ class PlayerApp extends React.Component {
           </div>
         </div>
       )
+    } else {
+      let header = <h1 style={style.header}>{this.state.phase}</h1>;
+      if (!this.state.hasWebsocketConnection) {
+        header = (
+          <div style={style.connectingContainer}>
+              <h1 style={style.header}>Connecting...</h1>
+          </div>
+        )
     }
 
-    return (
-      <div style={style.container}>
-          <div style={style.specialRole}>{this.state.specialRole}</div>
-          <h1 style={style.header}>{this.state.phase}</h1>
-          <OptionList
-            gameName={this.state.gameName}
-            playerName={this.state.playerName}
-            queryData={this.state.queryData}
-            webSocket={this.state.webSocket} />
-          <Footer role={this.state.playerRole}/>
-            <Dialog
-            title={this.state.dialogHeader}
-            actions={<FlatButton label="I see." primary={true} onTouchTap={this.handleDialogClose} />}
-            modal={true}
-            open={this.state.dialogOpen}
-          >
-            {this.state.dialogText}
-          </Dialog>
-      </div>
-    );
+      return (
+        <div style={style.container}>
+            <div style={style.specialRole}>{this.state.specialRole}</div>
+            {header}
+            <OptionList
+              gameName={this.state.gameName}
+              playerName={this.state.playerName}
+              queryData={this.state.queryData}
+              webSocket={this.state.webSocket}
+              visible={this.state.hasWebsocketConnection} />
+            <Footer role={this.state.playerRole}/>
+              <Dialog
+              title={this.state.dialogHeader}
+              actions={<FlatButton label="I see." primary={true} onTouchTap={this.handleDialogClose} />}
+              modal={true}
+              open={this.state.dialogOpen}
+            >
+              {this.state.dialogText}
+            </Dialog>
+        </div>
+      );
+    }
   }
 
   initSocketConnection(elem, playerName, gameName) {
@@ -137,6 +154,9 @@ class PlayerApp extends React.Component {
     }, 10000);
 
     webSocket.onopen = function() {
+        component.setState({
+          hasWebsocketConnection: true
+        })
         var message =  {
           "type":"REGISTER_PLAYER",
           "playerName": playerName,
@@ -172,7 +192,10 @@ class PlayerApp extends React.Component {
       clearInterval(pingInterval);
       var time = new Date();
       var closeTime = time.getHours() + ":" + time.getMinutes();
-      alert("WebSocket connection closed at: " + closeTime);
+      console.log("WebSocket connection closed at: " + closeTime);
+      component.setState({
+        hasWebsocketConnection: false
+      })
 
       setTimeout(function(){
         console.log("opening connection again")

@@ -47045,6 +47045,13 @@
 	    flexDirection: "column",
 	    flex: 1
 	  },
+	  connectingContainer: {
+	    display: "flex",
+	    justifyContent: "center",
+	    alignItems: "center",
+	    flexDirection: "column",
+	    flexGrow: "inherit"
+	  },
 	  paper: {
 	    height: "100%",
 	    width: "100%",
@@ -47071,6 +47078,7 @@
 	    var _this = _possibleConstructorReturn(this, (PlayerApp.__proto__ || Object.getPrototypeOf(PlayerApp)).call(this, props, context));
 	
 	    _this.state = {
+	      hasWebsocketConnection: false,
 	      phase: "Game is starting...",
 	      playerRole: "Not assigned yet.",
 	      queryData: null,
@@ -47114,7 +47122,6 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	
 	      if (this.state.playerName == null) {
 	        return _react2.default.createElement(
 	          'div',
@@ -47145,38 +47152,52 @@
 	            )
 	          )
 	        );
-	      }
-	
-	      return _react2.default.createElement(
-	        'div',
-	        { style: style.container },
-	        _react2.default.createElement(
-	          'div',
-	          { style: style.specialRole },
-	          this.state.specialRole
-	        ),
-	        _react2.default.createElement(
+	      } else {
+	        var header = _react2.default.createElement(
 	          'h1',
 	          { style: style.header },
 	          this.state.phase
-	        ),
-	        _react2.default.createElement(_OptionList2.default, {
-	          gameName: this.state.gameName,
-	          playerName: this.state.playerName,
-	          queryData: this.state.queryData,
-	          webSocket: this.state.webSocket }),
-	        _react2.default.createElement(_Footer2.default, { role: this.state.playerRole }),
-	        _react2.default.createElement(
-	          _Dialog2.default,
-	          {
-	            title: this.state.dialogHeader,
-	            actions: _react2.default.createElement(_FlatButton2.default, { label: 'I see.', primary: true, onTouchTap: this.handleDialogClose }),
-	            modal: true,
-	            open: this.state.dialogOpen
-	          },
-	          this.state.dialogText
-	        )
-	      );
+	        );
+	        if (!this.state.hasWebsocketConnection) {
+	          header = _react2.default.createElement(
+	            'div',
+	            { style: style.connectingContainer },
+	            _react2.default.createElement(
+	              'h1',
+	              { style: style.header },
+	              'Connecting...'
+	            )
+	          );
+	        }
+	
+	        return _react2.default.createElement(
+	          'div',
+	          { style: style.container },
+	          _react2.default.createElement(
+	            'div',
+	            { style: style.specialRole },
+	            this.state.specialRole
+	          ),
+	          header,
+	          _react2.default.createElement(_OptionList2.default, {
+	            gameName: this.state.gameName,
+	            playerName: this.state.playerName,
+	            queryData: this.state.queryData,
+	            webSocket: this.state.webSocket,
+	            visible: this.state.hasWebsocketConnection }),
+	          _react2.default.createElement(_Footer2.default, { role: this.state.playerRole }),
+	          _react2.default.createElement(
+	            _Dialog2.default,
+	            {
+	              title: this.state.dialogHeader,
+	              actions: _react2.default.createElement(_FlatButton2.default, { label: 'I see.', primary: true, onTouchTap: this.handleDialogClose }),
+	              modal: true,
+	              open: this.state.dialogOpen
+	            },
+	            this.state.dialogText
+	          )
+	        );
+	      }
 	    }
 	  }, {
 	    key: 'initSocketConnection',
@@ -47194,6 +47215,9 @@
 	      }, 10000);
 	
 	      webSocket.onopen = function () {
+	        component.setState({
+	          hasWebsocketConnection: true
+	        });
 	        var message = {
 	          "type": "REGISTER_PLAYER",
 	          "playerName": playerName,
@@ -47229,7 +47253,10 @@
 	        clearInterval(pingInterval);
 	        var time = new Date();
 	        var closeTime = time.getHours() + ":" + time.getMinutes();
-	        alert("WebSocket connection closed at: " + closeTime);
+	        console.log("WebSocket connection closed at: " + closeTime);
+	        component.setState({
+	          hasWebsocketConnection: false
+	        });
 	
 	        setTimeout(function () {
 	          console.log("opening connection again");
@@ -50567,6 +50594,10 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	
+	      if (!this.props.visible) {
+	        return null;
+	      }
 	
 	      if (this.state.listData == null) {
 	        if (this.state.previousChoice != null) {

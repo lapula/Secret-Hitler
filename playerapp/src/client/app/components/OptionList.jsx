@@ -82,6 +82,10 @@ class OptionList extends React.Component {
 
     render() {
 
+        if (!this.props.visible) {
+          return null;
+        }
+
         if (this.state.listData == null) {
           if (this.state.previousChoice != null) {
             return (<div style={style.listContainer}>
