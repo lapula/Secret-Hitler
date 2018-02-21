@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  text-align: center;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: inherit;
+}
+
+.menuButton {
+  margin: 12px
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 1
+}
+
+.formButton {
+  margin: 22px;
+}
+
+.paper {
+  height: 100%;
+  width: 100%;
+  padding: 8px 25px;
+}

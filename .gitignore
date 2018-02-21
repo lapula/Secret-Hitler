@@ -3,3 +3,5 @@ node_modules/
 node
 node.tar.gz
 bower_components
+.idea
+*.iml

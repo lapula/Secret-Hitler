@@ -5,19 +5,9 @@ import Paper from 'material-ui/Paper';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
+import styles from './general-style.css';
 import Footer from './Footer.jsx';
 import OptionList from './OptionList.jsx';
-
-const style = {
-  container: {
-    display: "flex",
-    flexGrow: "inherit",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    flex: 1
-  }
-}
 
 class GameScreen extends React.Component {
   constructor(props, context) {
@@ -30,7 +20,7 @@ class GameScreen extends React.Component {
   render() {
     let state = JSON.stringify(this.state.data, null, 4);
     return (
-      <div style={style.container}>
+      <div className={styles.container}>
         <span style={{backgroundColor: "white"}}>{state}</span>
       </div>
     );

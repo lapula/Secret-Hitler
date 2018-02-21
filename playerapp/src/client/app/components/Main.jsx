@@ -4,29 +4,11 @@ import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
+import styles from './general-style.css';
 import PlayerApp from './PlayerApp.jsx';
 import CreateGame from './CreateGame.jsx';
 import ListenGame from './ListenGame.jsx';
 
-const style = {
-  container: {
-    display: "flex",
-    textAlign: "center",
-    height: "100%",
-    flexDirection: "column",
-    justifyContent: "center"
-  },
-  button: {
-    margin: "12px"
-  },
-  buttonContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    flex: 1
-  }
-}
 
 class Main extends React.Component {
   constructor(props, context) {
@@ -34,72 +16,46 @@ class Main extends React.Component {
     this.state = {
       renderComponent: null
     };
-
     this.showPlayerScreen = this.showPlayerScreen.bind(this);
     this.showGameCreationScreen = this.showGameCreationScreen.bind(this);
     this.showGameScreen = this.showGameScreen.bind(this);
   }
 
-  showPlayerScreen() {
-    this.setState({renderComponent: "PLAYER_APP"});
-  }
+  showPlayerScreen() {this.setState({renderComponent: "PLAYER_APP"});}
+  showGameCreationScreen() {this.setState({renderComponent: "CREATE_GAME"});}
+  showGameScreen() {this.setState({renderComponent: "LISTEN_GAME"});}
 
-  showGameCreationScreen() {
-    this.setState({renderComponent: "CREATE_GAME"});
-  }
-
-  showGameScreen() {
-    this.setState({renderComponent: "LISTEN_GAME"});
-  }
-
-  render() {
-
+  renderNavigationView() {
     if (this.state.renderComponent == "PLAYER_APP") {
-      return (
-        <div style={style.container}>
-          <AppBar title="Secret Hitler"
-              iconElementLeft={<div></div>}
-           />
-          <PlayerApp />
-        </div>
-        )
+      return (<PlayerApp />)
     } else if (this.state.renderComponent == "CREATE_GAME") {
-      return(
-        <div style={style.container}>
-          <AppBar title="Secret Hitler"
-              iconElementLeft={<div></div>}
-           />
-         <CreateGame />
-        </div>
-      )
+      return(<CreateGame />)
     } else if (this.state.renderComponent == "LISTEN_GAME") {
-      return(
-        <div style={style.container}>
-          <AppBar title="Secret Hitler"
-              iconElementLeft={<div></div>}
-           />
-         <ListenGame />
-        </div>
-      )
+      return(<ListenGame />)
     } else {
-      return (
-        <div style={style.container}>
-          <AppBar title="Secret Hitler"
-              iconElementLeft={<div></div>}
-           />
-         <div style={style.buttonContainer}>
-            <RaisedButton label="Join a game" primary={true} style={style.button}
-              onTouchTap={this.showPlayerScreen} /><br />
-            <RaisedButton label="Create a game" primary={true} style={style.button}
-              onTouchTap={this.showGameCreationScreen} /><br />
-            <RaisedButton label="Open game screen" primary={true} style={style.button}
-              onTouchTap={this.showGameScreen} /><br />
-          </div>
-        </div>
+      return(
+        <div className={styles.buttonContainer}>
+           <RaisedButton label="Join a game" primary={true} className={styles.menuButton}
+             onTouchTap={this.showPlayerScreen} /><br />
+           <RaisedButton label="Create a game" primary={true} className={styles.menuButton}
+             onTouchTap={this.showGameCreationScreen} /><br />
+           <RaisedButton label="Open game screen" primary={true} className={styles.menuButton}
+             onTouchTap={this.showGameScreen} /><br />
+         </div>
       )
     }
   }
 
+  render() {
+    return (
+      <div className={styles.container}>
+        <AppBar title="Secret Hitler"
+            iconElementLeft={<div></div>}
+         />
+        {this.renderNavigationView()}
+      </div>
+      )
+  }
 }
 
 export default Main;

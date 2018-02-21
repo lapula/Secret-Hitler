@@ -3,26 +3,8 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 
+import styles from './general-style.css';
 import GameScreen from './GameScreen.jsx';
-
-const style = {
-  button: {
-    margin: "22px"
-  },
-  container: {
-    display: "flex",
-    flexGrow: "inherit",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    flex: 1
-  },
-  paper: {
-    height: "100%",
-    width: "100%",
-    padding: "8px 25px"
-  }
-}
 
 class CreateGame extends React.Component {
   constructor(props, context) {
@@ -55,9 +37,9 @@ class CreateGame extends React.Component {
     }
 
     return (
-      <div style={style.container}>
+      <div className={styles.container}>
         <div>
-          <Paper style={style.paper} zDepth={2}>
+          <Paper className={styles.paper} zDepth={2}>
             <h1>Create game</h1>
             <TextField
                 floatingLabelText="Game name"
@@ -68,7 +50,7 @@ class CreateGame extends React.Component {
                   ref="gamePlayers"
                   onKeyPress={this.handleKeyPress}
             /><br />
-          <RaisedButton label="Create game!" primary={true} style={style.button} onTouchTap={this.handleSubmit} />
+          <RaisedButton label="Create game!" primary={true} className={styles.formButton} onTouchTap={this.handleSubmit} />
         </Paper>
       </div>
     </div>

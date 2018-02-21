@@ -1,11 +1,19 @@
 var webpack = require('webpack');
-var path = require('path');
+const path = require('path');
+const paths = {
+  DIST: path.resolve(__dirname, 'dist'),
+  SRC: path.resolve(__dirname, 'src'),
+  JS: path.resolve(__dirname, 'src/client/app'),
+};
+
 
 var APP_DIR = path.resolve(__dirname, 'src/client/app');
 var JS_DIR = path.resolve(__dirname, '../src/main/resources/public/js');
 
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 var config = {
-  entry: APP_DIR + '/index.jsx',
+  entry: path.join(paths.JS, 'index.jsx'),
   output: {
     path: JS_DIR,
     filename: 'bundle.js'
@@ -16,6 +24,13 @@ var config = {
         test : /\.jsx?/,
         include : APP_DIR,
         loader : 'babel'
+      },
+      {
+        test: /\.css$/,
+        loaders: [
+          'style?sourceMap',
+          'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
+        ]
       }
     ]
   }
