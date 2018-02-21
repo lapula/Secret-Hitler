@@ -6,10 +6,11 @@ import Paper from 'material-ui/Paper';
 import styles from './general-style.css';
 import GameScreen from './GameScreen.jsx';
 
-class ListenGame extends React.Component {
+class RegisterGame extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      gamePlayers: "",
       gameName: ""
     };
 
@@ -19,6 +20,7 @@ class ListenGame extends React.Component {
 
   handleSubmit() {
     this.setState({
+      gamePlayers: this.refs.gamePlayers.input.value,
       gameName: this.refs.gameName.input.value
     });
   }
@@ -29,28 +31,44 @@ class ListenGame extends React.Component {
     }
   }
 
+  renderHeader() {
+    return (this.props.createNewGame ? <h1>Create game</h1> : <h1>Register game screen</h1>);
+  }
+
+  renderPlayersNumber() {
+    if (this.props.createNewGame) {
+      return (
+          <TextField
+                floatingLabelText="Number of players"
+                ref="gamePlayers"
+                onKeyPress={this.handleKeyPress}
+          />
+      )
+    }
+    return "";
+  }
+
   render() {
-    if (this.state.gameName != "") {
-      return (<GameScreen createGame={false} gamePlayers={""} gameName={this.state.gameName} />)
+    if (this.state.gamePlayers != "" && this.state.gameName != "") {
+      return (<GameScreen createGame={this.props.createNewGame} gamePlayers={this.state.gamePlayers} gameName={this.state.gameName} />)
     }
 
     return (
       <div className={styles.container}>
         <div>
           <Paper className={styles.paper} zDepth={2}>
-            <h1>Register game screen</h1>
+            {this.renderHeader()}
             <TextField
                 floatingLabelText="Game name"
                 ref="gameName"
-                onKeyPress={this.handleKeyPress}
-              /><br />
-            <RaisedButton label="Register screen!" primary={true} className={styles.formButton} onTouchTap={this.handleSubmit} />
+              />
+            {this.renderPlayersNumber()}
+            <RaisedButton label="Create game!" primary={true} className={styles.formButton} onTouchTap={this.handleSubmit} />
         </Paper>
       </div>
     </div>
     )
   }
-
 }
 
-export default ListenGame;
+export default RegisterGame;

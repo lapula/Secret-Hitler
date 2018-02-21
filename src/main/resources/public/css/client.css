@@ -6,10 +6,11 @@ html {
 body {
     height: 100%;
     margin: 0 !important;
-    background-image: url("../images/sh_bg.jpg");
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center; 
+    background: url("../images/gs_symbol.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 #app {

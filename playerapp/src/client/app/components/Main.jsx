@@ -6,8 +6,7 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 import styles from './general-style.css';
 import PlayerApp from './PlayerApp.jsx';
-import CreateGame from './CreateGame.jsx';
-import ListenGame from './ListenGame.jsx';
+import RegisterGame from './RegisterGame.jsx';
 
 
 class Main extends React.Component {
@@ -29,9 +28,9 @@ class Main extends React.Component {
     if (this.state.renderComponent == "PLAYER_APP") {
       return (<PlayerApp />)
     } else if (this.state.renderComponent == "CREATE_GAME") {
-      return(<CreateGame />)
+      return(<RegisterGame createNewGame={true}/>)
     } else if (this.state.renderComponent == "LISTEN_GAME") {
-      return(<ListenGame />)
+      return(<RegisterGame createNewGame={false}/>)
     } else {
       return(
         <div className={styles.buttonContainer}>
@@ -49,7 +48,7 @@ class Main extends React.Component {
   render() {
     return (
       <div className={styles.container}>
-        <AppBar title="Secret Hitler"
+        <AppBar title="The Sith Imperative"
             iconElementLeft={<div></div>}
          />
         {this.renderNavigationView()}

@@ -9,7 +9,20 @@
 }
 
 .menuButton {
-  margin: 12px
+  margin: 12px;
+}
+
+.menuButton button {
+  height: 3em !important;
+  line-height: 3em !important;
+}
+
+.menuButton button div div {
+  height: 3em !important;
+}
+
+.menuButton button div div span {
+  font-size: 1.5em !important;
 }
 
 .buttonContainer {
@@ -28,4 +41,34 @@
   height: 100%;
   width: 100%;
   padding: 8px 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.roleDialog {
+  width: 90%;
+  margin: 10px;
+}
+
+.cardWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  border: 5px solid black;
+}
+
+.cardImage {
+  width: 90%;
+  object-fit: contain;
+}
+
+.cardText {
+  color: black;
+  font-size: 36px;
+  margin: 30px;
+  font-weight: bold;
 }
