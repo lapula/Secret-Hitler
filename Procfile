@@ -1,1 +1,1 @@
-web: java -cp target/classes:target/dependency/* com.lapula.secret.hitler.Main
+web: java -cp target/classes:target/dependency/* SithImperative.Main

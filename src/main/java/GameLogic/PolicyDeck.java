@@ -60,4 +60,8 @@ public class PolicyDeck {
         
         return deck;
     }
+
+    public Integer getDeckCardsCount() {
+        return policyDeck.size();
+    }
 }

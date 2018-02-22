@@ -91,6 +91,7 @@ public class Game {
         json.put("separatistPoliciesPassed", gameVariables.getSeparatistPolicyCount());
         json.put("electionResults", electionResults);
         json.put("players", playerManager.getPlayerNames());
+        json.put("cardsInDeck", this.getPolicyDeck().getDeckCardsCount());
         
         return json;
     }
