@@ -10,7 +10,7 @@ package GameStates;
  * @author pulli
  */
 public enum State {
-    STARTING_GAME,
+    GAME_START,
     ROUND_START,
     NOMINATE_VICE_CHAIR,
     VOTE_ON_GOVERNMENT,

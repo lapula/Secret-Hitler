@@ -8,6 +8,7 @@ package GameStates;
 import GameLogic.Game;
 import GameLogic.Player;
 import GameLogic.Role;
+import SocketInterface.PlayerWebSocketActions;
 import SocketInterface.PlayerWebSocketHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class InvestigateLoyaltyState implements GameState {
         
         List<Player> target = new ArrayList<>();
         target.add(supremeChancellor);
-        PlayerWebSocketHandler.sendChoiceMessage(game.getPlayerManager().getPlayers(), target, choices, HEADER, SUB_HEADER);
+        PlayerWebSocketActions.sendChoiceMessage(game.getPlayerManager().getPlayers(), target, choices, HEADER, SUB_HEADER);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class InvestigateLoyaltyState implements GameState {
         }
         String investigationInfo = "Player " + investigate.getName() + " is a " + investigateRole.toString() + "!";
         if (investigate != null) {
-            PlayerWebSocketHandler.alertPlayer(supremeChancellor, HEADER, investigationInfo);
+            PlayerWebSocketActions.alertPlayer(supremeChancellor, HEADER, investigationInfo);
             game.changeState(State.ROUND_START);
         }
     }

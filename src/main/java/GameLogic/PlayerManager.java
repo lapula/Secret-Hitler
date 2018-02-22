@@ -6,6 +6,7 @@
 package GameLogic;
 
 import GameStates.State;
+import SocketInterface.PlayerWebSocketActions;
 import SocketInterface.PlayerWebSocketHandler;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +19,15 @@ import org.eclipse.jetty.websocket.api.Session;
  */
 public class PlayerManager {
 
-    private static final String IS_SUPREME_CHANCELLOR_TEXT = "You are the Supreme Chancellor!";
-    private static final String LOYALIST = "LOYALIST";
-    private static final String SEPARATIST = "SEPARATIST";
-    private static final String SUPREME_CHANCELLOR = "SUPREME_CHANCELLOR";
-    
+
+    public void setPlayersIncludingExecuted(List<Player> playersIncludingExecuted) {
+        this.playersIncludingExecuted = playersIncludingExecuted;
+    }
+
     private List<Player> playersIncludingExecuted;
     private List<Player> players;
     private Game game;
+
     private int gamePlayers;
     private List<Role> roleList;
     
@@ -39,16 +41,6 @@ public class PlayerManager {
     public void addPlayer(Player player) {
         player.setRole(this.getRole());
         players.add(player);
-        PlayerWebSocketHandler.initPlayer(player, player.getRole());
-        System.out.println(players.size());
-        System.out.println(this.gamePlayers);
-        if (players.size() == this.gamePlayers) {
-            Player supremeChancellor = getRandomPlayer();
-            game.getVariables().setSupremeChancellor(supremeChancellor);
-            PlayerWebSocketHandler.setSpecialRole(supremeChancellor, IS_SUPREME_CHANCELLOR_TEXT);
-            playersIncludingExecuted = new ArrayList<>(players);
-            game.changeState(State.NOMINATE_VICE_CHAIR);
-        }
     }
     
     public Player getNextPlayer(Player player) {
@@ -105,6 +97,10 @@ public class PlayerManager {
         Role role = this.roleList.get(index);
         this.roleList.remove(index);
         return role;
+    }
+
+    public int getGamePlayers() {
+        return gamePlayers;
     }
     
     private List<Role> initRoles(int gamePlayers) {

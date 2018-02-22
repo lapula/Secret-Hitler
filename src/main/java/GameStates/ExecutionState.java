@@ -7,6 +7,7 @@ package GameStates;
 
 import GameLogic.Game;
 import GameLogic.Player;
+import SocketInterface.PlayerWebSocketActions;
 import SocketInterface.PlayerWebSocketHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +43,7 @@ public class ExecutionState implements GameState {
         
         List<Player> target = new ArrayList<>();
         target.add(supremeChancellor);
-        PlayerWebSocketHandler.sendChoiceMessage(game.getPlayerManager().getPlayers(), target, choices, EXECUTION_HEADER, EXECUTION_SUB_HEADER);
+        PlayerWebSocketActions.sendChoiceMessage(game.getPlayerManager().getPlayers(), target, choices, EXECUTION_HEADER, EXECUTION_SUB_HEADER);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class ExecutionState implements GameState {
         Player execute = game.getPlayerManager().getPlayerByName(data);
         if (execute != null) {
             game.getPlayerManager().getPlayers().remove(execute);
-            PlayerWebSocketHandler.alertPlayer(execute, EXECUTED_HEADER, EXECUTED_SUB_HEADER);
+            PlayerWebSocketActions.alertPlayer(execute, EXECUTED_HEADER, EXECUTED_SUB_HEADER);
             game.changeState(State.ROUND_START);
         }
     }

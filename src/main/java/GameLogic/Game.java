@@ -30,12 +30,12 @@ public class Game {
         
         this.gameListeners = new LinkedList<>();
         this.stateFactory = new StateFactory();
-        this.gameState = null;
         this.gameVariables = new GameVariables();
         this.policyDeck = new PolicyDeck();
         
         this.gameVariables.setGamePlayers(numberOfPlayers);
         playerManager = new PlayerManager(this);
+        this.changeState(State.GAME_START);
     }
     
     public void changeState(State state) {

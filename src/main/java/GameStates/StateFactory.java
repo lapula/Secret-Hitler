@@ -38,6 +38,8 @@ public class StateFactory {
             return new PolicyPeekState(game);
         } else if (state.equals(State.EXECUTION)) {
             return new ExecutionState(game);
+        } else if (state.equals(State.GAME_START)) {
+            return new GameStartState(game);
         }
         
         return null;

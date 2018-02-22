@@ -61,6 +61,7 @@ public class PlayerWebSocketHandler {
     private void registerPlayer(String gameName, String playerName, Session user) {
         if (Main.games.get(gameName).getPlayerManager().getPlayerByName(playerName) == null) {
             Main.games.get(gameName).getPlayerManager().addPlayer(new Player(playerName, gameName, user));
+            Main.games.get(gameName).receiveData(playerName, null);
         } else {
             Main.games.get(gameName).getPlayerManager().getPlayerByName(playerName).setSession(user);
         }
