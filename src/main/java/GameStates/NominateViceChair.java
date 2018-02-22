@@ -7,7 +7,7 @@ package GameStates;
 
 import GameLogic.Game;
 import GameLogic.Player;
-import com.lapula.secret.hitler.PlayerWebSocketHandler;
+import SithImperative.PlayerWebSocketHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,40 +16,38 @@ import java.util.Map;
  *
  * @author pulli
  */
-public class NominateChancellor implements GameState {
-    
+public class NominateViceChair implements GameState {
+
+    private static final String HEADER = "The Supreme Chancellor is nominating his Vice Chair!";
+    private static final String SUB_HEADER = "Supreme Chancellor, who do you wish to nominate?";
+
     private Game game;
-    
-    private final String HEADER = "The president is nominating his chancellor!";
-    private final String SUB_HEADER = "President, who do you wish to nominate?";
-    
-    public NominateChancellor(Game game) {
+    public NominateViceChair(Game game) {
         this.game = game;
     }
     
     @Override
     public void doAction() {
         
-        Player president = game.getVariables().getPresident();
+        Player supremeChancellor = game.getVariables().getSupremeChancellor();
         Map<String, String> choices = new HashMap<>();
         
         game.getPlayerManager().getPlayers().forEach(player -> {
-            if (!player.getName().equals(president.getName())) {
+            if (!player.getName().equals(supremeChancellor.getName())) {
                 choices.put(player.getName(), player.getName());
             }
         });
         
         List<Player> target = new ArrayList<>();
-        target.add(president);
+        target.add(supremeChancellor);
         PlayerWebSocketHandler.sendChoiceMessage(game.getPlayerManager().getPlayers(), target, choices, HEADER, SUB_HEADER);
     }
-    
-    
+
     @Override
     public void receiveData(String player, String data) {
         if (game.getPlayerManager().getPlayerByName(data) != null) {
-            Player newChancellor = game.getPlayerManager().getPlayerByName(data);
-            game.getVariables().setChancellor(newChancellor);
+            Player viceChair = game.getPlayerManager().getPlayerByName(data);
+            game.getVariables().setViceChair(viceChair);
             game.changeState(State.VOTE_ON_GOVERNMENT);
         }
     }

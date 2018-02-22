@@ -7,7 +7,7 @@ package GameStates;
 
 import GameLogic.Game;
 import GameLogic.Player;
-import com.lapula.secret.hitler.PlayerWebSocketHandler;
+import SithImperative.PlayerWebSocketHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,41 +18,41 @@ import java.util.Map;
  * @author pulli
  */
 public class CallSpecialElectionState implements GameState {
-    
+
+    private static final String SPECIAL_ELECTION = "Special election!";
+    private static final String SPECIAL_ELECTION_DESCRIPTION = "Supreme Chancellor, please nominate the next Supreme Chancellor!";
+    private static final String SPECIAL_ELECTION_INFORM_SUPREME_CHANCELLOR = "You are now the Supreme Chancellor!";
+
     Game game;
-    
-    private final String HEADER = "Special election!";
-    private final String SUB_HEADER = "President, nominate the next president!";
-    
     public CallSpecialElectionState(Game game) {
         this.game = game;
     }
 
     @Override
     public void doAction() {
-        Player president = game.getVariables().getPresident();
+        Player supremeChancellor = game.getVariables().getSupremeChancellor();
         Map<String, String> choices = new HashMap<>();
         
         game.getPlayerManager().getPlayers().forEach(player -> {
-            if (!player.getName().equals(president.getName())) {
+            if (!player.getName().equals(supremeChancellor.getName())) {
                 choices.put(player.getName(), player.getName());
             }
         });
         
         List<Player> target = new ArrayList<>();
-        target.add(president);
-        PlayerWebSocketHandler.sendChoiceMessage(game.getPlayerManager().getPlayers(), target, choices, HEADER, SUB_HEADER);
+        target.add(supremeChancellor);
+        PlayerWebSocketHandler.sendChoiceMessage(game.getPlayerManager().getPlayers(), target, choices, SPECIAL_ELECTION, SPECIAL_ELECTION_DESCRIPTION);
     }
 
     @Override
     public void receiveData(String player, String data) {
-        Player president = game.getVariables().getPresident();
-        Player specialPresident = game.getPlayerManager().getPlayerByName(data);
-        if (specialPresident != null) {
-            game.getVariables().setPresidentBeforeSpecialElection(president);
-            game.getVariables().setSpecialElectionPresident(specialPresident);
+        Player supremeChancellor = game.getVariables().getSupremeChancellor();
+        Player specialSupremeChancellor = game.getPlayerManager().getPlayerByName(data);
+        if (specialSupremeChancellor != null) {
+            game.getVariables().setSupremeChancellorBeforeSpecialElection(supremeChancellor);
+            game.getVariables().setSpecialElectionSupremeChancellor(specialSupremeChancellor);
             game.getVariables().setSpecialElectionPhase(1);
-            PlayerWebSocketHandler.alertPlayer(specialPresident, "Special election!", "You are the next president!");
+            PlayerWebSocketHandler.alertPlayer(specialSupremeChancellor, SPECIAL_ELECTION, SPECIAL_ELECTION_INFORM_SUPREME_CHANCELLOR);
             game.changeState(State.ROUND_START);
         }
     }

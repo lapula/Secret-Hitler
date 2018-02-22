@@ -9,13 +9,14 @@ package GameLogic;
  *
  * @author pulli
  */
-public enum Policy {
-    LOYALIST_POLICY("Loyalist policy"),
-    SEPARATIST_POLICY("Separatist policy");
-    
+public enum Role {
+    SHEEV_PALPATINE("Sheev Palpatine"),
+    SEPARATIST("Separatist"),
+    LOYALIST("Loyalist");
+
     private String stringValue;
-    
-    Policy(String stringValue) {
+
+    Role(String stringValue) {
         this.stringValue = stringValue;
     }
     

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.lapula.secret.hitler;
+package SithImperative;
 
 import java.util.Map;
 

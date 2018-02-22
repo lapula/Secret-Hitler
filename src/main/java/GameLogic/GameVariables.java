@@ -16,24 +16,24 @@ import java.util.Map;
 public class GameVariables {
     
     private Map<String, String> electionResults;
-    private Player president;
-    private Player chancellor;
+    private Player supremeChancellor;
+    private Player viceChair;
     private int gamePlayers;
-    private int governmentVotesThisRound;
-    private int liberalPoliciesPassed;
-    private int fascistPoliciesPassed;
+    private int senateVotesThisRound;
+    private int loyalistPoliciesPassed;
+    private int separatistPoliciesPassed;
     private int specialElectionPhase;
-    private Player specialElectionPresident;
-    private Player presidentBeforeSpecialElection;
+    private Player specialElectionSupremeChancellor;
+    private Player supremeChancellorBeforeSpecialElection;
     
     
     private List<Policy> vetoedPolicies;
     
     public GameVariables() {
         this.electionResults = new HashMap<>();
-        this.governmentVotesThisRound = 0;
-        this.liberalPoliciesPassed = 0;
-        this.fascistPoliciesPassed = 0;
+        this.senateVotesThisRound = 0;
+        this.loyalistPoliciesPassed = 0;
+        this.separatistPoliciesPassed = 0;
         this.specialElectionPhase = 0;
     }
 
@@ -49,20 +49,20 @@ public class GameVariables {
         this.electionResults = electionResults;
     }
 
-    public Player getPresident() {
-        return president;
+    public Player getSupremeChancellor() {
+        return supremeChancellor;
     }
 
-    public void setPresident(Player president) {
-        this.president = president;
+    public void setSupremeChancellor(Player supremeChancellor) {
+        this.supremeChancellor = supremeChancellor;
     }
 
-    public Player getChancellor() {
-        return chancellor;
+    public Player getViceChair() {
+        return viceChair;
     }
 
-    public void setChancellor(Player chancellor) {
-        this.chancellor = chancellor;
+    public void setViceChair(Player viceChair) {
+        this.viceChair = viceChair;
     }
 
     public int getGamePlayers() {
@@ -73,28 +73,28 @@ public class GameVariables {
         this.gamePlayers = gamePlayers;
     }
 
-    public int getGovernmentVotesThisRound() {
-        return governmentVotesThisRound;
+    public int getSenateVotesThisRound() {
+        return senateVotesThisRound;
     }
 
-    public void setGovernmentVotesThisRound(int governmentVotesThisRound) {
-        this.governmentVotesThisRound = governmentVotesThisRound;
+    public void setSenateVotesThisRound(int senateVotesThisRound) {
+        this.senateVotesThisRound = senateVotesThisRound;
     }
     
-    public void addLiberalPolicy() {
-        this.liberalPoliciesPassed++;
+    public void addLoyalistPolicy() {
+        this.loyalistPoliciesPassed++;
     }
     
-    public int getLiberalPolicyCount() {
-        return this.liberalPoliciesPassed;
+    public int getLoyalistPolicyCount() {
+        return this.loyalistPoliciesPassed;
     }
     
-    public int getFascistPolicyCount() {
-        return this.fascistPoliciesPassed;
+    public int getSeparatistPolicyCount() {
+        return this.separatistPoliciesPassed;
     }
     
-    public void addFascistPolicy() {
-        this.fascistPoliciesPassed++;
+    public void addSeparatistPolicy() {
+        this.separatistPoliciesPassed++;
     }
     
     public List<Policy> getVetoedPolicies() {
@@ -105,20 +105,20 @@ public class GameVariables {
         this.vetoedPolicies = vetoedPolicies;
     }
 
-    public Player getSpecialElectionPresident() {
-        return specialElectionPresident;
+    public Player getSpecialElectionSupremeChancellor() {
+        return specialElectionSupremeChancellor;
     }
 
-    public void setSpecialElectionPresident(Player specialElectionPresident) {
-        this.specialElectionPresident = specialElectionPresident;
+    public void setSpecialElectionSupremeChancellor(Player specialElectionSupremeChancellor) {
+        this.specialElectionSupremeChancellor = specialElectionSupremeChancellor;
     }
 
-    public Player getPresidentBeforeSpecialElection() {
-        return presidentBeforeSpecialElection;
+    public Player getSupremeChancellorBeforeSpecialElection() {
+        return supremeChancellorBeforeSpecialElection;
     }
 
-    public void setPresidentBeforeSpecialElection(Player presidentBeforeSpecialElection) {
-        this.presidentBeforeSpecialElection = presidentBeforeSpecialElection;
+    public void setSupremeChancellorBeforeSpecialElection(Player supremeChancellorBeforeSpecialElection) {
+        this.supremeChancellorBeforeSpecialElection = supremeChancellorBeforeSpecialElection;
     }
 
     public int getSpecialElectionPhase() {

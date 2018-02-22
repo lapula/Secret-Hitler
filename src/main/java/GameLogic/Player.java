@@ -16,7 +16,7 @@ public class Player {
     private String name;
     private String gameName;
     private Session session;
-    private String role;
+    private Role role;
     
     public Player() {}
 
@@ -34,11 +34,11 @@ public class Player {
         this.gameName = gameName;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

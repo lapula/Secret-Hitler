@@ -12,7 +12,7 @@ package GameStates;
 public enum State {
     STARTING_GAME,
     ROUND_START,
-    NOMINATE_CHANCELLOR,
+    NOMINATE_VICE_CHAIR,
     VOTE_ON_GOVERNMENT,
     LEGISTLATIVE_SESSION,
     VETO,

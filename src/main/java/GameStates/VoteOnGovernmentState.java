@@ -7,7 +7,7 @@ package GameStates;
 
 import GameLogic.Game;
 import GameLogic.Player;
-import com.lapula.secret.hitler.PlayerWebSocketHandler;
+import SithImperative.PlayerWebSocketHandler;
 import java.util.HashMap;
 import java.util.Map;
 /**
@@ -15,7 +15,14 @@ import java.util.Map;
  * @author pulli
  */
 public class VoteOnGovernmentState implements GameState {
-    
+
+    private static final String YES_VOTE = "In favour!";
+    private static final String NO_VOTE = "Against!";
+    private static final String YES = "YES";
+    private static final String NO = "NO";
+    private static final String INFORM_VICE_CHAIR = "You are the Vice Chair!";
+    private static final String INFORM_SUPREME_CHANCELLOR = "You are the Supreme Chancellor!";
+
     private int attempt;
     private Game game;
     
@@ -30,11 +37,11 @@ public class VoteOnGovernmentState implements GameState {
         game.getVariables().setElectionResults(new HashMap<>());
         
         // increase government formation attempt counter
-        game.getVariables().setGovernmentVotesThisRound(game.getVariables().getGovernmentVotesThisRound() + 1);
+        game.getVariables().setSenateVotesThisRound(game.getVariables().getSenateVotesThisRound() + 1);
         
         Map<String, String> choices = new HashMap<>();
-        choices.put("JA", "Ja!");
-        choices.put("NEIN", "Nein!");
+        choices.put(YES, YES_VOTE);
+        choices.put(NO, NO_VOTE);
         PlayerWebSocketHandler.sendChoiceMessage(game.getPlayerManager().getPlayers(), game.getPlayerManager().getPlayers(), choices, "Vote!", "Do you approve this government?");
     }
     
@@ -49,39 +56,40 @@ public class VoteOnGovernmentState implements GameState {
     
     private void handleElectionResults() {
         
-        int jaVotes = 0;
-        int neinVotes = 0;
+        int yesVotes = 0;
+        int noVotes = 0;
         
         for (String result : game.getVariables().getElectionResults().values()) {
-            if (result.equals("JA")) {
-                jaVotes++;
-            } else if (result.equals("NEIN")) {
-                neinVotes++;
+            if (result.equals(YES)) {
+                yesVotes++;
+            } else if (result.equals(NO)) {
+                noVotes++;
             }
         }
         
-        boolean governmentFormed = jaVotes > neinVotes;
+        boolean governmentFormed = yesVotes > noVotes;
         
         if (governmentFormed) {
-            PlayerWebSocketHandler.setSpecialRole(game.getVariables().getChancellor(), "You are the chancellor!");
+            PlayerWebSocketHandler.setSpecialRole(game.getVariables().getViceChair(), INFORM_VICE_CHAIR);
             game.changeState(State.LEGISTLATIVE_SESSION);
         } else {
-            
-            if (game.getVariables().getGovernmentVotesThisRound() == 3) {
+
+            //TODO inform players about this
+            if (game.getVariables().getSenateVotesThisRound() == 3) {
                 if (Math.random() > 0.5) {
-                    game.getVariables().addFascistPolicy();
+                    game.getVariables().addSeparatistPolicy();
                 } else {
-                    game.getVariables().addLiberalPolicy();
+                    game.getVariables().addLoyalistPolicy();
                 }
                 game.changeState(State.ROUND_START);
             } else {
-                game.getVariables().setChancellor(null);
-                Player president = game.getVariables().getPresident();
-                Player nextPresident = game.getPlayerManager().getNextPlayer(president);
-                game.getVariables().setPresident(nextPresident);
-                PlayerWebSocketHandler.clearSpecialRoles(game.getPlayerManager().getPlayers(), nextPresident);
-                PlayerWebSocketHandler.setSpecialRole(nextPresident, "You are the president!");
-                game.changeState(State.NOMINATE_CHANCELLOR);
+                game.getVariables().setViceChair(null);
+                Player supremeChancellor = game.getVariables().getSupremeChancellor();
+                Player nextSupremeChancellor = game.getPlayerManager().getNextPlayer(supremeChancellor);
+                game.getVariables().setSupremeChancellor(nextSupremeChancellor);
+                PlayerWebSocketHandler.clearSpecialRoles(game.getPlayerManager().getPlayers(), nextSupremeChancellor);
+                PlayerWebSocketHandler.setSpecialRole(nextSupremeChancellor, INFORM_SUPREME_CHANCELLOR);
+                game.changeState(State.NOMINATE_VICE_CHAIR);
             }
             
             

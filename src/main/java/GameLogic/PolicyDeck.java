@@ -51,10 +51,10 @@ public class PolicyDeck {
         List<Policy> deck = new ArrayList<>();
         
         for (int i = 0; i < 6; i++) {
-            deck.add(Policy.LIBERAL);
+            deck.add(Policy.LOYALIST_POLICY);
         }
         for (int i = 0; i < 11; i++) {
-            deck.add(Policy.FASCIST);
+            deck.add(Policy.SEPARATIST_POLICY);
         }
         Collections.shuffle(deck);
         

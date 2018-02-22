@@ -9,7 +9,7 @@ import GameLogic.Game;
 import GameLogic.GameVariables;
 import GameLogic.Player;
 import GameLogic.PlayerManager;
-import com.lapula.secret.hitler.PlayerWebSocketHandler;
+import SithImperative.PlayerWebSocketHandler;
 import java.util.HashMap;
 
 /**
@@ -18,8 +18,9 @@ import java.util.HashMap;
  */
 public class RoundStartState implements GameState {
 
+    private static final String INFORM_SUPREME_CHANCELLOR = "You are the Supreme Chancellor!";
+
     private Game game;
-    
     public RoundStartState(Game game) {
         this.game = game;
     }
@@ -29,37 +30,37 @@ public class RoundStartState implements GameState {
         GameVariables gameVariables = game.getVariables();
         PlayerManager playerManager = game.getPlayerManager();
         
-        Player nextPresident;
+        Player nextSupremeChancellor;
         if (gameVariables.getSpecialElectionPhase() == 1) {
             gameVariables.setSpecialElectionPhase(2);
-            nextPresident = gameVariables.getSpecialElectionPresident();
+            nextSupremeChancellor = gameVariables.getSpecialElectionSupremeChancellor();
         } else if (gameVariables.getSpecialElectionPhase() == 2) {
-            Player president = gameVariables.getPresidentBeforeSpecialElection();
-            if (!playerManager.getPlayers().contains(president)) {
-                int index = playerManager.getPlayersIncludingExecuted().indexOf(president);
+            Player supremeChancellor = gameVariables.getSupremeChancellorBeforeSpecialElection();
+            if (!playerManager.getPlayers().contains(supremeChancellor)) {
+                int index = playerManager.getPlayersIncludingExecuted().indexOf(supremeChancellor);
                 if (index == playerManager.getPlayersIncludingExecuted().size() - 1) {
                     index = -1;
                 }
-                president = playerManager.getPlayersIncludingExecuted().get(index + 1);
+                supremeChancellor = playerManager.getPlayersIncludingExecuted().get(index + 1);
             }
-            nextPresident = playerManager.getNextPlayer(president);
+            nextSupremeChancellor = playerManager.getNextPlayer(supremeChancellor);
             gameVariables.setSpecialElectionPhase(0);
         } else {
-            Player president = gameVariables.getPresident();
-            nextPresident = playerManager.getNextPlayer(president);
+            Player supremeChancellor = gameVariables.getSupremeChancellor();
+            nextSupremeChancellor = playerManager.getNextPlayer(supremeChancellor);
         }
-        gameVariables.setPresident(nextPresident);
+        gameVariables.setSupremeChancellor(nextSupremeChancellor);
         gameVariables.setElectionResults(new HashMap<>());
-        gameVariables.setGovernmentVotesThisRound(0);
-        gameVariables.setChancellor(null);
+        gameVariables.setSenateVotesThisRound(0);
+        gameVariables.setViceChair(null);
         gameVariables.setVetoedPolicies(null);
-        PlayerWebSocketHandler.clearSpecialRoles(playerManager.getPlayers(), nextPresident);
-        PlayerWebSocketHandler.setSpecialRole(nextPresident, "You are the president!");
+        PlayerWebSocketHandler.clearSpecialRoles(playerManager.getPlayers(), nextSupremeChancellor);
+        PlayerWebSocketHandler.setSpecialRole(nextSupremeChancellor, INFORM_SUPREME_CHANCELLOR);
         
-        System.out.println("Liberal policies: " + gameVariables.getLiberalPolicyCount());
-        System.out.println("Fascist policies: " + gameVariables.getFascistPolicyCount());
+        System.out.println("Loyalist policies: " + gameVariables.getLoyalistPolicyCount());
+        System.out.println("Separatist policies: " + gameVariables.getSeparatistPolicyCount());
         
-        game.changeState(State.NOMINATE_CHANCELLOR);
+        game.changeState(State.NOMINATE_VICE_CHAIR);
     }
 
     @Override

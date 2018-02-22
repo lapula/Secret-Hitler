@@ -6,18 +6,14 @@
 package GameLogic;
 
 import GameStates.State;
-import GameStates.NominateChancellor;
 import GameStates.GameState;
 import GameStates.StateFactory;
-import com.lapula.secret.hitler.GameWebSocketHandler;
-import com.lapula.secret.hitler.PlayerWebSocketHandler;
-import java.util.ArrayList;
-import java.util.HashMap;
+import SithImperative.GameWebSocketHandler;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+
 import org.eclipse.jetty.websocket.api.Session;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -75,24 +71,24 @@ public class Game {
     
     public JSONObject toJSON() {
         
-        String presidentName = "";
-        String chancellorName = "";
+        String supremeChancellorName = "";
+        String viceChairName = "";
         JSONObject electionResults = new JSONObject(gameVariables.getElectionResults());
         
-        if (gameVariables.getPresident() != null) {
-            presidentName = gameVariables.getPresident().getName();
+        if (gameVariables.getSupremeChancellor() != null) {
+            supremeChancellorName = gameVariables.getSupremeChancellor().getName();
         }
-        if (gameVariables.getChancellor() != null) {
-            chancellorName = gameVariables.getChancellor().getName();
+        if (gameVariables.getViceChair() != null) {
+            viceChairName = gameVariables.getViceChair().getName();
         }
         System.out.println(playerManager.getPlayers().toString());
         JSONObject json = new JSONObject();
-        json.put("president", presidentName);
-        json.put("chancellor", chancellorName);
+        json.put("supremeChancellor", supremeChancellorName);
+        json.put("viceChair", viceChairName);
         json.put("gamePlayers", gameVariables.getGamePlayers());
-        json.put("governmentVotesThisRound", gameVariables.getGovernmentVotesThisRound());
-        json.put("liberalPoliciesPassed", gameVariables.getLiberalPolicyCount());
-        json.put("fascistPoliciesPassed", gameVariables.getFascistPolicyCount());
+        json.put("governmentVotesThisRound", gameVariables.getSenateVotesThisRound());
+        json.put("loyalistPoliciesPassed", gameVariables.getLoyalistPolicyCount());
+        json.put("separatistPoliciesPassed", gameVariables.getSeparatistPolicyCount());
         json.put("electionResults", electionResults);
         json.put("players", playerManager.getPlayerNames());
         

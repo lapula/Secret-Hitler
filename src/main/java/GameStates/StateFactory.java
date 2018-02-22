@@ -18,8 +18,8 @@ public class StateFactory {
         if (state.equals(null)) {
             return null;
         }
-        if (state.equals(State.NOMINATE_CHANCELLOR)) {
-            return new NominateChancellor(game);
+        if (state.equals(State.NOMINATE_VICE_CHAIR)) {
+            return new NominateViceChair(game);
         } else if (state.equals(State.VOTE_ON_GOVERNMENT)) {
             return new VoteOnGovernmentState(game);
         } else if (state.equals(State.ROUND_START)) {

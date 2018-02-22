@@ -14,7 +14,6 @@ import GameLogic.Game;
 public class DetermineExecutiveActionState implements GameState {
     
     Game game;
-    
     public DetermineExecutiveActionState(Game game) {
         this.game = game;
     }
@@ -23,23 +22,23 @@ public class DetermineExecutiveActionState implements GameState {
     public void doAction() {
         
         int gamePlayers = game.getVariables().getGamePlayers();
-        int fascistPolicies = game.getVariables().getFascistPolicyCount();
+        int separatistPolicies = game.getVariables().getSeparatistPolicyCount();
         
-        if (fascistPolicies >= 4) {
+        if (separatistPolicies >= 4) {
             game.changeState(State.EXECUTION);
-        } else if (fascistPolicies == 3) {
+        } else if (separatistPolicies == 3) {
             if (gamePlayers > 3) { //6
                 game.changeState(State.CALL_SPECIAL_ELECTION);
             } else {
                 game.changeState(State.POLICY_PEEK);
             }
-        } else if (fascistPolicies == 2) {
+        } else if (separatistPolicies == 2) {
             if (gamePlayers > 3) { //6
                 game.changeState(State.INVESTIGATE_LOYALTY);
             } else {
                 game.changeState(State.ROUND_START);
             }
-        } else if (fascistPolicies == 1) {
+        } else if (separatistPolicies == 1) {
             if (gamePlayers > 3) {//8
                 game.changeState(State.INVESTIGATE_LOYALTY);
             } else {

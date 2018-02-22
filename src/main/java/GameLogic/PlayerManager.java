@@ -6,11 +6,9 @@
 package GameLogic;
 
 import GameStates.State;
-import com.lapula.secret.hitler.PlayerWebSocketHandler;
+import SithImperative.PlayerWebSocketHandler;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import org.eclipse.jetty.websocket.api.Session;
 
@@ -19,12 +17,17 @@ import org.eclipse.jetty.websocket.api.Session;
  * @author pulli
  */
 public class PlayerManager {
+
+    private static final String IS_SUPREME_CHANCELLOR_TEXT = "You are the Supreme Chancellor!";
+    private static final String LOYALIST = "LOYALIST";
+    private static final String SEPARATIST = "SEPARATIST";
+    private static final String SUPREME_CHANCELLOR = "SUPREME_CHANCELLOR";
     
     private List<Player> playersIncludingExecuted;
     private List<Player> players;
     private Game game;
     private int gamePlayers;
-    private List<String> roleList;
+    private List<Role> roleList;
     
     public PlayerManager(Game game) {
         this.players = new ArrayList<>();
@@ -40,11 +43,11 @@ public class PlayerManager {
         System.out.println(players.size());
         System.out.println(this.gamePlayers);
         if (players.size() == this.gamePlayers) {
-            Player president = getRandomPlayer();
-            game.getVariables().setPresident(president);
-            PlayerWebSocketHandler.setSpecialRole(president, "You are the president!");
+            Player supremeChancellor = getRandomPlayer();
+            game.getVariables().setSupremeChancellor(supremeChancellor);
+            PlayerWebSocketHandler.setSpecialRole(supremeChancellor, IS_SUPREME_CHANCELLOR_TEXT);
             playersIncludingExecuted = new ArrayList<>(players);
-            game.changeState(State.NOMINATE_CHANCELLOR);
+            game.changeState(State.NOMINATE_VICE_CHAIR);
         }
     }
     
@@ -96,50 +99,45 @@ public class PlayerManager {
         return players.get(index);
     }
     
-    private String getRole() {
+    private Role getRole() {
         Random random = new Random();
         int index = random.nextInt(this.roleList.size());
-        String role = this.roleList.get(index);
+        Role role = this.roleList.get(index);
         this.roleList.remove(index);
         return role;
     }
     
-    private List<String> initRoles(int gamePlayers) {
-        
-        String liberal = "LIBERAL";
-        String fascist = "FASCIST";
-        String hitler = "HITLER";
-        
-        int liberals;
+    private List<Role> initRoles(int gamePlayers) {
+        int loyalists;
         
         switch(gamePlayers) {
         case 5 :
-            liberals = 3;
+            loyalists = 3;
         case 6 :
-            liberals = 4;
+            loyalists = 4;
         case 7 :
-            liberals = 4;
+            loyalists = 4;
         case 8 :
-            liberals = 4;
+            loyalists = 4;
         case 9 :
-            liberals = 4;
+            loyalists = 4;
         case 10 :
-            liberals = 4;
+            loyalists = 4;
         default :
-            liberals = 1;
+            loyalists = 1;
      }
         
-     int fascists = gamePlayers - liberals - 1;
+     int separatists = gamePlayers - loyalists - 1;
      
-     List<String> roles = new ArrayList<>();
-     roles.add(hitler);
-     
-     for (int i = 0; i < fascists; i++) {
-         roles.add(fascist);
+     List<Role> roles = new ArrayList<>();
+     roles.add(Role.SHEEV_PALPATINE);
+
+     for (int i = 0; i < separatists; i++) {
+         roles.add(Role.SEPARATIST);
      }
-     
-     for (int i = 0; i < liberals; i++) {
-         roles.add(liberal);
+
+     for (int i = 0; i < loyalists; i++) {
+         roles.add(Role.LOYALIST);
      }
         
      return roles;

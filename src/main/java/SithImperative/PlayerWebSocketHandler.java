@@ -1,23 +1,21 @@
 
-package com.lapula.secret.hitler;
+package SithImperative;
 
 import GameLogic.Game;
 import GameLogic.Player;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import GameLogic.Role;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.jetty.websocket.api.Session;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -75,11 +73,11 @@ public class PlayerWebSocketHandler {
         }
     }
     
-    public static void initPlayer(Player player, String role) {
+    public static void initPlayer(Player player, Role role) {
         
         JSONObject mainObj = new JSONObject();
         mainObj.put("type", PLAYER_INIT);
-        mainObj.put("role", role);
+        mainObj.put("role", role.toString());
         
         try {
             player.getSession().getRemote().sendString(mainObj.toString());

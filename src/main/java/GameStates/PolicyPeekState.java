@@ -7,25 +7,27 @@ package GameStates;
 
 import GameLogic.Game;
 import GameLogic.Player;
-import com.lapula.secret.hitler.PlayerWebSocketHandler;
+import SithImperative.PlayerWebSocketHandler;
 
 /**
  *
  * @author pulli
  */
 public class PolicyPeekState implements GameState {
-    
+
+    private static final String HEADER = "Policy peek!";
+
     Game game;
-    
     public PolicyPeekState(Game game) {
         this.game = game;
     }
 
     @Override
     public void doAction() {
-        Player president = game.getVariables().getPresident();
+        Player supremeChancellor = game.getVariables().getSupremeChancellor();
         String topThree = game.getPolicyDeck().nextThreeToString();
-        PlayerWebSocketHandler.alertPlayer(president, "Policy peek!", "The next policies are: " + topThree);
+        String policiesText = "The next policies are: " + topThree;
+        PlayerWebSocketHandler.alertPlayer(supremeChancellor, HEADER, policiesText);
         
         game.changeState(State.ROUND_START);
     }
