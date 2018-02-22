@@ -23,6 +23,8 @@ public class VoteOnGovernmentState implements GameState {
     private static final String NO = "NO";
     private static final String INFORM_VICE_CHAIR = "You are the Vice Chair!";
     private static final String INFORM_SUPREME_CHANCELLOR = "You are the Supreme Chancellor!";
+    private static final String VOTE_HEADER = "Vote!";
+    private static final String VOTE_SUB_HEADER = "Do you approve this government?";
 
     private int attempt;
     private Game game;
@@ -43,7 +45,7 @@ public class VoteOnGovernmentState implements GameState {
         Map<String, String> choices = new HashMap<>();
         choices.put(YES, YES_VOTE);
         choices.put(NO, NO_VOTE);
-        PlayerWebSocketActions.sendChoiceMessage(game.getPlayerManager().getPlayers(), game.getPlayerManager().getPlayers(), choices, "Vote!", "Do you approve this government?");
+        PlayerWebSocketActions.sendChoiceMessage(game.getPlayerManager().getPlayers(), game.getPlayerManager().getPlayers(), choices, VOTE_HEADER, VOTE_SUB_HEADER);
     }
     
     

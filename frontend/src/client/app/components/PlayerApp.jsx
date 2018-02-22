@@ -5,44 +5,10 @@ import Paper from 'material-ui/Paper';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
+import styles from './playerapp-style.css'
 import Footer from './Footer.jsx';
 import OptionList from './OptionList.jsx';
 
-const style = {
-  button: {
-    margin: "22px"
-  },
-  container: {
-    display: "flex",
-    flexGrow: "inherit",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    flex: 1
-  },
-  connectingContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    flexGrow: "inherit"
-  },
-  paper: {
-    height: "100%",
-    width: "100%",
-    padding: "8px 25px"
-  },
-  header: {
-    color: "white",
-    textShadow: "1px 1px 5px black"
-  },
-  specialRole: {
-    width: "100%",
-    backgroundColor: "#ff4081",
-    color: "white",
-    fontSize: "18px"
-  }
-}
 
 class PlayerApp extends React.Component {
   constructor(props, context) {
@@ -52,31 +18,18 @@ class PlayerApp extends React.Component {
       phase: "Game is starting...",
       playerRole: "Not assigned yet.",
       queryData: null,
-      playerName: null,
-      gameName: null,
       specialRole: "",
       dialogOpen: false,
       dialogHeader: "",
       dialogText: ""
     };
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this, event);
     this.handleDialogClose = this.handleDialogClose.bind(this);
+    this.sendQueryResponse = this.sendQueryResponse.bind(this);
   }
 
-  handleSubmit() {
-    this.setState({
-      playerName: this.refs.playerName.input.value,
-      gameName: this.refs.gameName.input.value
-    });
-    this.initSocketConnection(this, this.refs.playerName.input.value, this.refs.gameName.input.value);
-  }
-
-  handleKeyPress(component, event) {
-    if(event.key == 'Enter'){
-      this.handleSubmit();
-    }
+  componentWillMount() {
+    this.initSocketConnection(this, this.props.playerName, this.props.gameName);
   }
 
   handleDialogClose() {
@@ -85,60 +38,43 @@ class PlayerApp extends React.Component {
     })
   }
 
-  render() {
-    if (this.state.playerName == null) {
-      return (
-        <div style={style.container}>
-          <div>
-            <Paper style={style.paper} zDepth={2}>
-              <h1>Join game</h1>
-              <TextField
-                  floatingLabelText="Player name"
-                  ref="playerName"
-                /><br />
-              <TextField
-                    floatingLabelText="Game name"
-                    ref="gameName"
-                    onKeyPress={this.handleKeyPress}
-              /><br />
-            <RaisedButton label="Enter game!" primary={true} style={style.button} onTouchTap={this.handleSubmit} />
-          </Paper>
-          </div>
+  renderHeader() {
+    let header = <h1 className={styles.header}>{this.state.phase}</h1>;
+    if (!this.state.hasWebsocketConnection) {
+      header = (
+        <div className={styles.connectingContainer}>
+            <h1 className={styles.header}>Connecting...</h1>
         </div>
       )
-    } else {
-      let header = <h1 style={style.header}>{this.state.phase}</h1>;
-      if (!this.state.hasWebsocketConnection) {
-        header = (
-          <div style={style.connectingContainer}>
-              <h1 style={style.header}>Connecting...</h1>
-          </div>
-        )
-    }
-
-      return (
-        <div style={style.container}>
-            <div style={style.specialRole}>{this.state.specialRole}</div>
-            {header}
-            <OptionList
-              gameName={this.state.gameName}
-              playerName={this.state.playerName}
-              queryData={this.state.queryData}
-              webSocket={this.state.webSocket}
-              visible={this.state.hasWebsocketConnection} />
-            <Footer role={this.state.playerRole}/>
-              <Dialog
-              title={this.state.dialogHeader}
-              actions={<FlatButton label="I see." primary={true} onTouchTap={this.handleDialogClose} />}
-              modal={true}
-              open={this.state.dialogOpen}
-            >
-              {this.state.dialogText}
-            </Dialog>
-        </div>
-      );
     }
   }
+
+  render() {
+    return (
+      <div className={styles.container}>
+          <div className={styles.specialRole}>{this.state.specialRole}</div>
+          {this.renderHeader()}
+          <OptionList
+            queryData={this.state.queryData}
+            webSocket={this.state.webSocket}
+            visible={this.state.hasWebsocketConnection}
+            sendQueryResponse={this.sendQueryResponse}
+          />
+          <Footer role={this.state.playerRole} />
+          <Dialog
+            title={this.state.dialogHeader}
+            actions={<FlatButton label="I see." primary={true} onTouchTap={this.handleDialogClose} />}
+            modal={true}
+            open={this.state.dialogOpen}
+          >
+            {this.state.dialogText}
+          </Dialog>
+      </div>
+    );
+  }
+
+
+  //####################### WebSocket ###########################
 
   initSocketConnection(elem, playerName, gameName) {
     var component = elem;
@@ -208,6 +144,15 @@ class PlayerApp extends React.Component {
     webSocket.onerror = function(err) {
         console.log("Error: " + err);
     };
+  }
+
+  sendQueryResponse(responseKey) {
+      this.state.webSocket.send(JSON.stringify({
+        "type": "QUERY_RESPONSE",
+        "playerName": this.props.playerName,
+        "gameName": this.props.gameName,
+        "response": responseKey
+      }));
   }
 
 }

@@ -45,30 +45,3 @@
   flex-direction: column;
   align-items: center;
 }
-
-.roleDialog {
-  width: 90%;
-  margin: 10px;
-}
-
-.cardWrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: white;
-  padding: 10px;
-  border-radius: 10px;
-  border: 5px solid black;
-}
-
-.cardImage {
-  width: 90%;
-  object-fit: contain;
-}
-
-.cardText {
-  color: black;
-  font-size: 36px;
-  margin: 30px;
-  font-weight: bold;
-}

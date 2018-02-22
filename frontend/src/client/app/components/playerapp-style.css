@@ -1,0 +1,103 @@
+.subheader {
+    font-size: 14px;
+    padding: 0px;
+}
+
+.listItemLarge {
+    font-size: 32px;
+    height: 64px;
+    line-height: 32px;
+}
+
+.listItemSmall {
+    font-size: 24px;
+    height: 48px;
+    line-height: 20px;
+    font-weight: bold;
+
+}
+
+.listContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-grow: inherit;
+  width: 80%;
+}
+
+.listPaper {
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+}
+
+.list {
+  width: 100%;
+}
+
+
+.button {
+  margin: 22px;
+}
+
+.container {
+  display: flex;
+  flex-grow: inherit;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 1;
+}
+
+.connectingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-grow: inherit;
+}
+
+.paper {
+  height: 100%;
+  width: 100%;
+  padding: 8px 25px
+}
+
+.header {
+  color: white;
+  text-shadow: 1px 1px 5px black;
+}
+
+.specialRole {
+  width: 100%;
+  background-color: #ff4081;
+  color: white;
+  font-size: 18px
+}
+
+.roleDialog {
+  width: 90%;
+  margin: 10px;
+}
+
+.cardWrapper {
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  border: 5px solid black;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.cardImage {
+  width: 90%;
+  border-radius: 20px;
+}
+
+.cardText {
+  color: black;
+  font-size: 36px;
+  margin: 30px;
+  font-weight: bold;
+}

@@ -5,16 +5,21 @@ import FlatButton from 'material-ui/FlatButton';
 import ReactFontFace from 'react-font-face'
 
 import starfont from '../resources/Starjedi.ttf';
-import styles from './general-style.css';
-import republicLogo from '../resources/Republic_Emblem.svg.png';
+import styles from './playerapp-style.css';
+import republicLogo from '../resources/Republic_Emblem.png';
+import cisLogo from '../resources/Republic_Emblem.png';
+import palpatineLogo from '../resources/palpatine.jpg';
 
+const ROLE_SEPARATIST = "Separatist";
+const ROLE_PALPATINE = "Sheev Palpatine";
+const ROLE_LOYALIST = "Loyalist";
 
 class Footer extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      open: true
     };
     this.handleRequestClose = this.handleRequestClose.bind(this);
     this.handleTouchTap = this.handleTouchTap.bind(this);
@@ -33,7 +38,14 @@ class Footer extends React.Component {
   }
 
   renderCardImage() {
-    return (<img src={republicLogo} alt={this.props.role} className={styles.cardImage}/>)
+    if (this.props.role == ROLE_LOYALIST) {
+      return (<img src={republicLogo} alt={this.props.role} className={styles.cardImage}/>)
+    } else if (this.props.role == ROLE_SEPARATIST) {
+      return (<img src={cisLogo} alt={this.props.role} className={styles.cardImage}/>)
+    } else if (this.props.role == ROLE_PALPATINE) {
+      return (<img src={palpatineLogo} alt={this.props.role} className={styles.cardImage}/>)
+    }
+
   }
 
   render() {
@@ -53,6 +65,7 @@ class Footer extends React.Component {
           title="Your role is:"
           actions={roleDialog}
           onRequestClose={this.handleRequestClose}
+          style={{textAlign: "center"}}
         >
           <div className={styles.cardWrapper}>
             {this.renderCardImage()}

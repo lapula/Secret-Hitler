@@ -5,7 +5,7 @@ import IconButton from 'material-ui/IconButton';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 import styles from './general-style.css';
-import PlayerApp from './PlayerApp.jsx';
+import RegisterPlayer from './RegisterPlayer.jsx';
 import RegisterGame from './RegisterGame.jsx';
 
 
@@ -26,7 +26,7 @@ class Main extends React.Component {
 
   renderNavigationView() {
     if (this.state.renderComponent == "PLAYER_APP") {
-      return (<PlayerApp />)
+      return (<RegisterPlayer />)
     } else if (this.state.renderComponent == "CREATE_GAME") {
       return(<RegisterGame createNewGame={true}/>)
     } else if (this.state.renderComponent == "LISTEN_GAME") {
