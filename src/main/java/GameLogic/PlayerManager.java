@@ -6,7 +6,7 @@
 package GameLogic;
 
 import GameStates.State;
-import SithImperative.PlayerWebSocketHandler;
+import SocketInterface.PlayerWebSocketHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

@@ -7,7 +7,8 @@ package GameStates;
 
 import GameLogic.Game;
 import GameLogic.Player;
-import SithImperative.PlayerWebSocketHandler;
+import SocketInterface.PlayerWebSocketActions;
+import SocketInterface.PlayerWebSocketHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +41,7 @@ public class NominateViceChair implements GameState {
         
         List<Player> target = new ArrayList<>();
         target.add(supremeChancellor);
-        PlayerWebSocketHandler.sendChoiceMessage(game.getPlayerManager().getPlayers(), target, choices, HEADER, SUB_HEADER);
+        PlayerWebSocketActions.sendChoiceMessage(game.getPlayerManager().getPlayers(), target, choices, HEADER, SUB_HEADER);
     }
 
     @Override

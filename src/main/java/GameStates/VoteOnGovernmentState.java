@@ -7,7 +7,8 @@ package GameStates;
 
 import GameLogic.Game;
 import GameLogic.Player;
-import SithImperative.PlayerWebSocketHandler;
+import SocketInterface.PlayerWebSocketActions;
+import SocketInterface.PlayerWebSocketHandler;
 import java.util.HashMap;
 import java.util.Map;
 /**
@@ -42,7 +43,7 @@ public class VoteOnGovernmentState implements GameState {
         Map<String, String> choices = new HashMap<>();
         choices.put(YES, YES_VOTE);
         choices.put(NO, NO_VOTE);
-        PlayerWebSocketHandler.sendChoiceMessage(game.getPlayerManager().getPlayers(), game.getPlayerManager().getPlayers(), choices, "Vote!", "Do you approve this government?");
+        PlayerWebSocketActions.sendChoiceMessage(game.getPlayerManager().getPlayers(), game.getPlayerManager().getPlayers(), choices, "Vote!", "Do you approve this government?");
     }
     
     
@@ -70,7 +71,7 @@ public class VoteOnGovernmentState implements GameState {
         boolean governmentFormed = yesVotes > noVotes;
         
         if (governmentFormed) {
-            PlayerWebSocketHandler.setSpecialRole(game.getVariables().getViceChair(), INFORM_VICE_CHAIR);
+            PlayerWebSocketActions.setSpecialRole(game.getVariables().getViceChair(), INFORM_VICE_CHAIR);
             game.changeState(State.LEGISTLATIVE_SESSION);
         } else {
 
@@ -87,8 +88,8 @@ public class VoteOnGovernmentState implements GameState {
                 Player supremeChancellor = game.getVariables().getSupremeChancellor();
                 Player nextSupremeChancellor = game.getPlayerManager().getNextPlayer(supremeChancellor);
                 game.getVariables().setSupremeChancellor(nextSupremeChancellor);
-                PlayerWebSocketHandler.clearSpecialRoles(game.getPlayerManager().getPlayers(), nextSupremeChancellor);
-                PlayerWebSocketHandler.setSpecialRole(nextSupremeChancellor, INFORM_SUPREME_CHANCELLOR);
+                PlayerWebSocketActions.clearSpecialRoles(game.getPlayerManager().getPlayers(), nextSupremeChancellor);
+                PlayerWebSocketActions.setSpecialRole(nextSupremeChancellor, INFORM_SUPREME_CHANCELLOR);
                 game.changeState(State.NOMINATE_VICE_CHAIR);
             }
             

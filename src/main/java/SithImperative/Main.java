@@ -4,12 +4,15 @@ import GameLogic.Game;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
+import SocketInterface.GameWebSocketHandler;
+import SocketInterface.PlayerWebSocketHandler;
 import spark.ModelAndView;
 import static spark.Spark.*;
 
 public class Main {
 
-    static Map<String, Game> games = new ConcurrentHashMap<>();
+    public static Map<String, Game> games = new ConcurrentHashMap<>();
 
 
     public static void main(String[] args) {

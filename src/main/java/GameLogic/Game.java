@@ -8,7 +8,7 @@ package GameLogic;
 import GameStates.State;
 import GameStates.GameState;
 import GameStates.StateFactory;
-import SithImperative.GameWebSocketHandler;
+import SocketInterface.GameWebSocketHandler;
 
 import java.util.LinkedList;
 import java.util.List;
