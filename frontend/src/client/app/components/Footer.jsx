@@ -40,7 +40,7 @@ class Footer extends React.Component {
 
     const roleDialog = (
       <FlatButton
-        label="Got it!"
+        label="Understood!"
         primary={true}
         onTouchTap={this.handleRequestClose}
       />
