@@ -51,6 +51,8 @@ class OptionList extends React.Component {
     getChoicesArray() {
       let list = [];
       Object.entries(this.state.choices).map(([key, value]) => {
+        console.log(key);
+        console.log(value);
         list.push(this.createListItem(key, value))
       })
       return list;
@@ -74,7 +76,10 @@ class OptionList extends React.Component {
         } else if (this.state.previousChoice) {
           return (
             <div className={styles.listContainer}>
-              <h2>You chose: <b>{this.state.previousChoice}</b></h2>
+              <Paper className={styles.listPaper} zDepth={4}>
+                <Subheader className={styles.subheader}>{this.state.subheader}</Subheader>
+                <h2>You chose: <b>{this.state.previousChoice}</b></h2>
+              </Paper>
             </div>
           );
         } else {

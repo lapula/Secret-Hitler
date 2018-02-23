@@ -40,6 +40,8 @@ public class StateFactory {
             return new ExecutionState(game);
         } else if (state.equals(State.GAME_START)) {
             return new GameStartState(game);
+        } else if (state.equals(State.GAME_END)) {
+            return new GameEndState(game);
         }
         
         return null;

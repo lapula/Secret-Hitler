@@ -7,7 +7,7 @@ import ReactFontFace from 'react-font-face'
 import starfont from '../resources/Starjedi.ttf';
 import styles from './playerapp-style.css';
 import republicLogo from '../resources/Republic_Emblem.png';
-import cisLogo from '../resources/Republic_Emblem.png';
+import cisLogo from '../resources/CIS_emblem.png';
 import palpatineLogo from '../resources/palpatine.jpg';
 
 const ROLE_SEPARATIST = "Separatist";
@@ -46,6 +46,10 @@ class Footer extends React.Component {
       return (<img src={palpatineLogo} alt={this.props.role} className={styles.cardImage}/>)
     }
 
+  }
+
+  componentDidMount() {
+    window.dispatchEvent(new Event('resize'))
   }
 
   render() {

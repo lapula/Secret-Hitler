@@ -12,6 +12,7 @@ import SocketInterface.GameWebSocketHandler;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
@@ -25,6 +26,8 @@ public class Game {
     private GameVariables gameVariables;
     private PolicyDeck policyDeck;
     private List<Session> gameListeners;
+
+    private boolean gameStarted;
     
     public Game(Integer numberOfPlayers) {
         
@@ -32,6 +35,7 @@ public class Game {
         this.stateFactory = new StateFactory();
         this.gameVariables = new GameVariables();
         this.policyDeck = new PolicyDeck();
+        gameStarted = false;
         
         this.gameVariables.setGamePlayers(numberOfPlayers);
         playerManager = new PlayerManager(this);
@@ -39,9 +43,14 @@ public class Game {
     }
     
     public void changeState(State state) {
-        this.gameState =  this.stateFactory.getGameState(this, state);
+        if (checkGameEndConditions()) {
+            this.gameState = this.stateFactory.getGameState(this, State.GAME_END);
+        } else {
+            this.gameState =  this.stateFactory.getGameState(this, state);
+        }
         this.gameState.doAction();
         GameWebSocketHandler.sendStatusUpdate(this.gameListeners, this.toJSON());
+
    }
     
     public void receiveData(String player, String data) {
@@ -68,13 +77,49 @@ public class Game {
     public List<Session> getGameListeners() {
         return this.gameListeners;
     }
-    
+
+    public boolean isGameStarted() {
+        return gameStarted;
+    }
+
+    public void setGameStarted() {
+        this.gameStarted = true;
+    }
+
+
+    private boolean checkGameEndConditions() {
+        if (!gameStarted) {
+            return false;
+        }
+        if (this.gameVariables.getSeparatistPolicyCount() >= 6) {
+            return true;
+        }
+        if (this.gameVariables.getViceChair() != null) {
+            if (this.gameVariables.getViceChair().getRole().equals(Role.SHEEV_PALPATINE)
+                    && this.gameVariables.getSeparatistPolicyCount() >= 3
+                    && !this.gameState.equals(State.VOTE_ON_GOVERNMENT)
+                    && !this.gameState.equals(State.CALL_SPECIAL_ELECTION)) {
+                return true;
+            }
+        }
+        if (this.gameVariables.getLoyalistPolicyCount() >= 5) {
+            return true;
+        }
+        List<Player> palpatineInGame = this.playerManager.getPlayers().stream()
+                .filter(player -> player.getRole().equals(Role.SHEEV_PALPATINE))
+                .collect(Collectors.toList());
+        if (palpatineInGame.size() == 0) {
+            return true;
+        }
+        return false;
+    }
+
     public JSONObject toJSON() {
-        
+
         String supremeChancellorName = "";
         String viceChairName = "";
         JSONObject electionResults = new JSONObject(gameVariables.getElectionResults());
-        
+
         if (gameVariables.getSupremeChancellor() != null) {
             supremeChancellorName = gameVariables.getSupremeChancellor().getName();
         }

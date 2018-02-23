@@ -47,6 +47,7 @@ class PlayerApp extends React.Component {
         </div>
       )
     }
+    return header;
   }
 
   render() {

@@ -46,6 +46,7 @@ public class GameStartState implements GameState {
             game.getVariables().setSupremeChancellor(supremeChancellor);
             PlayerWebSocketActions.setSpecialRole(supremeChancellor, IS_SUPREME_CHANCELLOR_TEXT);
             playerManager.setPlayersIncludingExecuted(new ArrayList<>(playerManager.getPlayers()));
+            game.setGameStarted();
             game.changeState(State.NOMINATE_VICE_CHAIR);
         }
     }

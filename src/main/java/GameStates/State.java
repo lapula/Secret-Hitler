@@ -21,5 +21,5 @@ public enum State {
     CALL_SPECIAL_ELECTION,
     POLICY_PEEK,
     EXECUTION,
-    END_GAME;
+    GAME_END;
 }
