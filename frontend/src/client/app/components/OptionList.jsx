@@ -12,7 +12,9 @@ class OptionList extends React.Component {
       this.state = {
         choices: null,
         subheader: null,
-        previousChoice: null
+        previousChoice: null,
+        gameState: null,
+        previousSubheader: null
       };
     }
 
@@ -42,17 +44,19 @@ class OptionList extends React.Component {
           choices: nextProps.queryData.choices,
           subheader: nextProps.queryData.subheader
         });
+        if (nextProps.queryData.gameState !== this.state.gameState) {
+          this.setState({
+            previousChoice: null,
+            previousSubheader: nextProps.queryData.subheader,
+            gameState: nextProps.queryData.gameState
+          })
+        }
       }
-      this.setState({
-        previousChoice: null
-      });
     }
 
     getChoicesArray() {
       let list = [];
       Object.entries(this.state.choices).map(([key, value]) => {
-        console.log(key);
-        console.log(value);
         list.push(this.createListItem(key, value))
       })
       return list;
@@ -77,8 +81,8 @@ class OptionList extends React.Component {
           return (
             <div className={styles.listContainer}>
               <Paper className={styles.listPaper} zDepth={4}>
-                <Subheader className={styles.subheader}>{this.state.subheader}</Subheader>
-                <h2>You chose: <b>{this.state.previousChoice}</b></h2>
+                <Subheader className={styles.subheader}>{this.state.previousSubheader}</Subheader>
+                <div className={styles.previousChoice}>You chose: {this.state.previousChoice}</div>
               </Paper>
             </div>
           );

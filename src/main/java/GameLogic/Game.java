@@ -23,6 +23,8 @@ public class Game {
     private StateFactory stateFactory;
     private PlayerManager playerManager;
     private GameState gameState;
+
+    private State gameStateType;
     private GameVariables gameVariables;
     private PolicyDeck policyDeck;
     private List<Session> gameListeners;
@@ -48,6 +50,7 @@ public class Game {
         } else {
             this.gameState =  this.stateFactory.getGameState(this, state);
         }
+        this.gameStateType = state;
         this.gameState.doAction();
         GameWebSocketHandler.sendStatusUpdate(this.gameListeners, this.toJSON());
 
@@ -84,6 +87,10 @@ public class Game {
 
     public void setGameStarted() {
         this.gameStarted = true;
+    }
+
+    public State getGameStateType() {
+        return gameStateType;
     }
 
 

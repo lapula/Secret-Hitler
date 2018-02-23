@@ -8,7 +8,7 @@ package GameStates;
 import GameLogic.Game;
 import GameLogic.Player;
 import SocketInterface.PlayerWebSocketActions;
-import SocketInterface.PlayerWebSocketHandler;
+
 import java.util.HashMap;
 import java.util.Map;
 /**
@@ -45,7 +45,7 @@ public class VoteOnGovernmentState implements GameState {
         Map<String, String> choices = new HashMap<>();
         choices.put(YES, YES_VOTE);
         choices.put(NO, NO_VOTE);
-        PlayerWebSocketActions.sendChoiceMessage(game.getPlayerManager().getPlayers(), game.getPlayerManager().getPlayers(), choices, VOTE_HEADER, VOTE_SUB_HEADER);
+        PlayerWebSocketActions.sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), game.getPlayerManager().getPlayers(), choices, VOTE_HEADER, VOTE_SUB_HEADER, game.getGameStateType().toString());
     }
     
     

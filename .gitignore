@@ -5,3 +5,4 @@ node.tar.gz
 bower_components
 .idea
 *.iml
+src/main/resources/public/js/

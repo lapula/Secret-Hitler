@@ -9,7 +9,7 @@ import GameLogic.Game;
 import GameLogic.Player;
 import GameLogic.Policy;
 import SocketInterface.PlayerWebSocketActions;
-import SocketInterface.PlayerWebSocketHandler;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,7 +71,7 @@ public class VetoState implements GameState {
         
         List<Player> target = new ArrayList<>();
         target.add(legistlator);
-        PlayerWebSocketActions.sendChoiceMessage(game.getPlayerManager().getPlayers(), target, choices, header, subheader);
+        PlayerWebSocketActions.sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), target, choices, header, subheader, game.getGameStateType().toString());
     }
 
     // use legistlative sessions receiveData instead?

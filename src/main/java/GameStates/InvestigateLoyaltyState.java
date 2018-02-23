@@ -9,7 +9,7 @@ import GameLogic.Game;
 import GameLogic.Player;
 import GameLogic.Role;
 import SocketInterface.PlayerWebSocketActions;
-import SocketInterface.PlayerWebSocketHandler;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +42,7 @@ public class InvestigateLoyaltyState implements GameState {
         
         List<Player> target = new ArrayList<>();
         target.add(supremeChancellor);
-        PlayerWebSocketActions.sendChoiceMessage(game.getPlayerManager().getPlayers(), target, choices, HEADER, SUB_HEADER);
+        PlayerWebSocketActions.sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), target, choices, HEADER, SUB_HEADER, game.getGameStateType().toString());
     }
 
     @Override

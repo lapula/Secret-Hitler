@@ -1,9 +1,0 @@
-{
-  "name": "Secret Hitler",
-  "short_name": "Secret Hitler",
-  "theme_color": "#00bcd4",
-  "background_color": "#00bcd4",
-  "start_url": "/",
-  "display": "fullscreen",
-  "orientation": "portrait"
-}

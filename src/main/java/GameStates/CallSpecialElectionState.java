@@ -8,7 +8,7 @@ package GameStates;
 import GameLogic.Game;
 import GameLogic.Player;
 import SocketInterface.PlayerWebSocketActions;
-import SocketInterface.PlayerWebSocketHandler;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +42,7 @@ public class CallSpecialElectionState implements GameState {
         
         List<Player> target = new ArrayList<>();
         target.add(supremeChancellor);
-        PlayerWebSocketActions.sendChoiceMessage(game.getPlayerManager().getPlayers(), target, choices, SPECIAL_ELECTION, SPECIAL_ELECTION_DESCRIPTION);
+        PlayerWebSocketActions.sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), target, choices, SPECIAL_ELECTION, SPECIAL_ELECTION_DESCRIPTION, game.getGameStateType().toString());
     }
 
     @Override

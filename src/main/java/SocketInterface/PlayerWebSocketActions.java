@@ -32,11 +32,12 @@ public class PlayerWebSocketActions {
     }
 
 
-    public static void sendChoiceMessage(List<Player> players, List<Player> targets, Map<String, String> choices, String header, String subheader) {
+    public static void sendQueryAndInfoMessages(List<Player> players, List<Player> targets, Map<String, String> choices, String header, String subheader, String gameState) {
 
         JSONObject jsonChoices = new JSONObject(choices);
         JSONObject mainObj = new JSONObject();
         mainObj.put("type", PLAYER_QUERY);
+        mainObj.put("gameState", gameState);
         mainObj.put("header", header);
         mainObj.put("subheader", subheader);
         mainObj.put("choices", jsonChoices);
@@ -47,7 +48,7 @@ public class PlayerWebSocketActions {
                     try {
                         System.out.println("trying again in 10s");
                         TimeUnit.SECONDS.sleep(10);
-                        sendChoiceMessage(players, targets, choices, header, subheader);
+                        sendQueryAndInfoMessages(players, targets, choices, header, subheader, gameState);
                         return;
                     } catch (InterruptedException ex) {
                         Logger.getLogger(PlayerWebSocketHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -59,8 +60,8 @@ public class PlayerWebSocketActions {
             }
         });
 
+
         mainObj.put("choices", "");
-        mainObj.put("subheader", "");
 
         players.forEach(player -> {
             try {
