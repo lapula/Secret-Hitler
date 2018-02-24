@@ -5,23 +5,84 @@ import Paper from 'material-ui/Paper';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-import styles from './general-style.css';
-import Footer from './Footer.jsx';
-import OptionList from './OptionList.jsx';
+import styles from './gamescreen-style.css';
+import GamePlayerColumn from './GamePlayerColumn.jsx';
+import GamePolicies from './GamePolicies.jsx';
+import GameRoleInfo from './GameRoleInfo.jsx';
+
+const testStateNormal = {
+  "data": {
+        "supremeChancellor": "Aapeli",
+        "cardsInDeck": 17,
+        "governmentVotesThisRound": 0,
+        "electionResults": {},
+        "players": [
+            "Aapeli",
+            "Bert",
+            "Cecilia",
+            "David"
+        ],
+        "loyalistPoliciesPassed": 0,
+        "separatistPoliciesPassed": 0,
+        "viceChair": "",
+        "state": "GAME_START",
+        "gamePlayers": 5
+    },
+}
+
+const testStateElectionResults = {
+  "data": {
+        "supremeChancellor": "Bert",
+        "cardsInDeck": 11,
+        "governmentVotesThisRound": 2,
+        "electionResults": {
+            "Aapeli": "YES",
+            "Bert": "NO",
+            "Cecilia": "YES",
+            "David": "YES",
+            "Eemeli": "NO"
+        },
+        "players": [
+          "Aapeli",
+          "Bert",
+          "Cecilia",
+          "David",
+          "Eemeli"
+        ],
+        "loyalistPoliciesPassed": 1,
+        "separatistPoliciesPassed": 0,
+        "viceChair": "Aapeli",
+        "state": "LEGISTLATIVE_SESSION",
+        "gamePlayers": 5,
+    },
+    "type": "STATUS_UPDATE"
+}
 
 class GameScreen extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      data: ""
+      data: testStateElectionResults.data
     };
   }
 
   render() {
-    let state = JSON.stringify(this.state.data, null, 4);
     return (
       <div className={styles.container}>
-        <span style={{backgroundColor: "white"}}>{state}</span>
+        <GamePlayerColumn
+          players={this.state.data.players}
+          electionResults={this.state.data.electionResults}
+        />
+      <div className={styles.gameScreenRightWrapper}>
+          <GamePolicies
+            loyalistPoliciesPassed={this.state.data.loyalistPoliciesPassed}
+            separatistPoliciesPassed={this.state.data.separatistPoliciesPassed}
+          />
+          <GameRoleInfo
+            supremeChancellor={this.state.data.supremeChancellor}
+            viceChair={this.state.data.viceChair}
+          />
+        </div>
       </div>
     );
   }

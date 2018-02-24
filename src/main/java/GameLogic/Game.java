@@ -152,6 +152,7 @@ public class Game {
         json.put("electionResults", electionResults);
         json.put("players", playerManager.getPlayerNames());
         json.put("cardsInDeck", this.getPolicyDeck().getDeckCardsCount());
+        json.put("state", this.getGameStateType().toString());
         
         return json;
     }
