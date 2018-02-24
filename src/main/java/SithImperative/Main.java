@@ -5,8 +5,8 @@ import GameLogic.Game;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import GameMessagingInterface.GamePlayerWebSocketInterface;
 import SocketInterface.GameWebSocketHandler;
-import SocketInterface.PlayerWebSocketHandler;
 import spark.ModelAndView;
 import static spark.Spark.*;
 
@@ -24,7 +24,7 @@ public class Main {
         // Init spark and websockets
         port(getHerokuAssignedPort());
         staticFiles.location("/public");
-        webSocket("/players", PlayerWebSocketHandler.class);
+        webSocket("/players", GamePlayerWebSocketInterface.class);
         webSocket("/games", GameWebSocketHandler.class);
         init();
 

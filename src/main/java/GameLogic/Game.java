@@ -5,6 +5,8 @@
  */
 package GameLogic;
 
+import GameMessagingInterface.GameMessageService;
+import GameMessagingInterface.GamePlayerMessageActions;
 import GameStates.State;
 import GameStates.GameState;
 import GameStates.StateFactory;
@@ -23,24 +25,23 @@ public class Game {
     private StateFactory stateFactory;
     private PlayerManager playerManager;
     private GameState gameState;
-
+    private GameMessageService gameMessageService;
     private State gameStateType;
     private GameVariables gameVariables;
     private PolicyDeck policyDeck;
     private List<Session> gameListeners;
-
     private boolean gameStarted;
-    
+
     public Game(Integer numberOfPlayers) {
         
         this.gameListeners = new LinkedList<>();
         this.stateFactory = new StateFactory();
         this.gameVariables = new GameVariables();
         this.policyDeck = new PolicyDeck();
-        gameStarted = false;
-        
+        this.gameMessageService = new GameMessageService(this);
+        this.gameStarted = false;
         this.gameVariables.setGamePlayers(numberOfPlayers);
-        playerManager = new PlayerManager(this);
+        this.playerManager = new PlayerManager(this);
         this.changeState(State.GAME_START);
     }
     
@@ -59,6 +60,33 @@ public class Game {
     public void receiveData(String player, String data) {
         this.gameState.receiveData(player, data);
         GameWebSocketHandler.sendStatusUpdate(this.gameListeners, this.toJSON());
+    }
+
+    private boolean checkGameEndConditions() {
+        if (!gameStarted) {
+            return false;
+        }
+        if (this.gameVariables.getSeparatistPolicyCount() >= 6) {
+            return true;
+        }
+        if (this.gameVariables.getViceChair() != null) {
+            if (this.gameVariables.getViceChair().getRole().equals(Role.SHEEV_PALPATINE)
+                    && this.gameVariables.getSeparatistPolicyCount() >= 3
+                    && !this.gameState.equals(State.VOTE_ON_GOVERNMENT)
+                    && !this.gameState.equals(State.CALL_SPECIAL_ELECTION)) {
+                return true;
+            }
+        }
+        if (this.gameVariables.getLoyalistPolicyCount() >= 5) {
+            return true;
+        }
+        List<Player> palpatineInGame = this.playerManager.getPlayers().stream()
+                .filter(player -> player.getRole().equals(Role.SHEEV_PALPATINE))
+                .collect(Collectors.toList());
+        if (palpatineInGame.size() == 0) {
+            return true;
+        }
+        return false;
     }
     
     public PlayerManager getPlayerManager() {
@@ -93,32 +121,12 @@ public class Game {
         return gameStateType;
     }
 
+    public GamePlayerMessageActions getGamePlayerMessageActions() {
+        return this.gameMessageService.getGamePlayerMessageActions();
+    }
 
-    private boolean checkGameEndConditions() {
-        if (!gameStarted) {
-            return false;
-        }
-        if (this.gameVariables.getSeparatistPolicyCount() >= 6) {
-            return true;
-        }
-        if (this.gameVariables.getViceChair() != null) {
-            if (this.gameVariables.getViceChair().getRole().equals(Role.SHEEV_PALPATINE)
-                    && this.gameVariables.getSeparatistPolicyCount() >= 3
-                    && !this.gameState.equals(State.VOTE_ON_GOVERNMENT)
-                    && !this.gameState.equals(State.CALL_SPECIAL_ELECTION)) {
-                return true;
-            }
-        }
-        if (this.gameVariables.getLoyalistPolicyCount() >= 5) {
-            return true;
-        }
-        List<Player> palpatineInGame = this.playerManager.getPlayers().stream()
-                .filter(player -> player.getRole().equals(Role.SHEEV_PALPATINE))
-                .collect(Collectors.toList());
-        if (palpatineInGame.size() == 0) {
-            return true;
-        }
-        return false;
+    public GameMessageService getGameMessageService() {
+        return gameMessageService;
     }
 
     public JSONObject toJSON() {

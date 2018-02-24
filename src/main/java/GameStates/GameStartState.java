@@ -6,13 +6,10 @@
 package GameStates;
 
 import GameLogic.Game;
-import GameLogic.GameVariables;
 import GameLogic.Player;
 import GameLogic.PlayerManager;
-import SocketInterface.PlayerWebSocketActions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  *
@@ -35,8 +32,8 @@ public class GameStartState implements GameState {
     @Override
     public void receiveData(String player, String data) {
         PlayerManager playerManager = game.getPlayerManager();
-        Player newPlayer = playerManager.getPlayerByName(player);
-        PlayerWebSocketActions.initPlayer(newPlayer, newPlayer.getRole());
+        //Player newPlayer = playerManager.getPlayerByName(player);
+        //game.getGamePlayerMessageActions().initPlayer(newPlayer, newPlayer.getRole());
 
         Integer playersExpected = playerManager.getGamePlayers();
         System.out.println(playerManager.getPlayers().size());
@@ -44,7 +41,7 @@ public class GameStartState implements GameState {
         if (playerManager.getPlayers().size() == playersExpected) {
             Player supremeChancellor = playerManager.getRandomPlayer();
             game.getVariables().setSupremeChancellor(supremeChancellor);
-            PlayerWebSocketActions.setSpecialRole(supremeChancellor, IS_SUPREME_CHANCELLOR_TEXT);
+            game.getGamePlayerMessageActions().setSpecialRole(supremeChancellor, IS_SUPREME_CHANCELLOR_TEXT);
             playerManager.setPlayersIncludingExecuted(new ArrayList<>(playerManager.getPlayers()));
             game.setGameStarted();
             game.changeState(State.NOMINATE_VICE_CHAIR);

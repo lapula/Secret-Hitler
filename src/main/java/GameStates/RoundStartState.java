@@ -9,8 +9,7 @@ import GameLogic.Game;
 import GameLogic.GameVariables;
 import GameLogic.Player;
 import GameLogic.PlayerManager;
-import SocketInterface.PlayerWebSocketActions;
-import SocketInterface.PlayerWebSocketHandler;
+
 import java.util.HashMap;
 
 /**
@@ -55,8 +54,8 @@ public class RoundStartState implements GameState {
         gameVariables.setSenateVotesThisRound(0);
         gameVariables.setViceChair(null);
         gameVariables.setVetoedPolicies(null);
-        PlayerWebSocketActions.clearSpecialRoles(playerManager.getPlayers(), nextSupremeChancellor);
-        PlayerWebSocketActions.setSpecialRole(nextSupremeChancellor, INFORM_SUPREME_CHANCELLOR);
+        game.getGamePlayerMessageActions().clearSpecialRoles(playerManager.getPlayers(), nextSupremeChancellor);
+        game.getGamePlayerMessageActions().setSpecialRole(nextSupremeChancellor, INFORM_SUPREME_CHANCELLOR);
         
         System.out.println("Loyalist policies: " + gameVariables.getLoyalistPolicyCount());
         System.out.println("Separatist policies: " + gameVariables.getSeparatistPolicyCount());

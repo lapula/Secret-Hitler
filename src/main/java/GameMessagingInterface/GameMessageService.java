@@ -1,0 +1,146 @@
+package GameMessagingInterface;
+
+import GameLogic.Game;
+import GameLogic.Player;
+import org.eclipse.jetty.websocket.api.Session;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+
+public class GameMessageService {
+
+    private final static Logger LOGGER = Logger.getLogger(GameMessageService.class.getName());
+
+    private static final String REGISTER_PLAYER = "REGISTER_PLAYER";
+    private static final String QUERY_RESPONSE = "QUERY_RESPONSE";
+    private static final String INFORM_VICE_CHAIR = "You are the Vice Chair!";
+    private static final String INFORM_SUPREME_CHANCELLOR = "You are the Supreme Chancellor!";
+    private static final Integer REGISTER_ATTEMPTS = 10;
+
+    private Game game = null;
+    private GamePlayerMessageActions gamePlayerMessageActions = null;
+    private Map<String, JSONObject> pendingAckMessages;
+
+    public GameMessageService(Game game) {
+        this.game = game;
+        this.gamePlayerMessageActions = new GamePlayerMessageActions(this);
+        this.pendingAckMessages = new HashMap<>();
+    }
+
+    // MESSAGE RECEIVING
+
+    public void receiveMessage(Session user, Map<String, String> message) {
+        if (message.get("type").equals(REGISTER_PLAYER)) {
+            registerPlayer(message, user, REGISTER_ATTEMPTS);
+        } else if (message.get("type").equals(QUERY_RESPONSE)) {
+            queryResponse(message, message.get("playerName"));
+        }
+    }
+
+    private void registerPlayer(Map<String, String> message, Session user, Integer attempts) {
+        String playerName = message.get("playerName");
+        String gameName = message.get("gameName");
+        Player player = game.getPlayerManager().getPlayerByName(playerName);
+
+        if (player == null) {
+            Player newPlayer = game.getPlayerManager().addNewPlayer(gameName, playerName, user);
+            this.getGamePlayerMessageActions().initPlayer(newPlayer, newPlayer.getRole());
+            game.receiveData(playerName, null);
+        } else {
+            game.getPlayerManager().reconnectPlayer(playerName, user);
+            this.getGamePlayerMessageActions().initPlayer(player, player.getRole());
+
+            if (game.getVariables().getViceChair() != null) {
+                if (game.getVariables().getViceChair().getName().equals(playerName)) {
+                    this.getGamePlayerMessageActions().setSpecialRole(player, INFORM_VICE_CHAIR);
+                }
+            }
+            if (game.getVariables().getSupremeChancellor() != null) {
+                if (game.getVariables().getSupremeChancellor().getName().equals(playerName)) {
+                    this.getGamePlayerMessageActions().setSpecialRole(player, INFORM_SUPREME_CHANCELLOR);
+                }
+            }
+
+            //TODO if not required send just header / subheader
+            if (getPlayerPendingMessages(playerName) != null) {
+                LOGGER.info("RECONNECTED: " + player.getName() + " SENDING: " + getPlayerPendingMessages(playerName));
+                sendPlayerMessageRequiredResponse(player, getPlayerPendingMessages(playerName), attempts);
+            }
+        }
+    }
+
+    private void queryResponse(Map<String, String> message, String playerName) {
+        ackMessage(playerName);
+        String response = message.get("response");
+        game.receiveData(playerName, response);
+    }
+
+
+    // MESSAGE SENDING
+
+    protected void sendPlayerMessageRequiredResponse(Player target, JSONObject gameMessage, Integer attempts) {
+        if (attempts <= 0) {return;}
+        try {
+            LOGGER.info("TARGET: " + target.getName() + " SENT: " + gameMessage);
+            target.getSession().getRemote().sendString(gameMessage.toString());
+            addPlayerPendingMessage(target.getName(), gameMessage);
+        } catch (Exception ex) {
+            //delayedRetryMessageSending(target, gameMessage);
+            delayedRetryMessageSending(() -> sendPlayerMessageRequiredResponse(target, gameMessage, attempts - 1));
+        }
+    }
+
+    public void sendPlayerMessage(Player target, JSONObject gameMessage, Integer attempts) {
+        if (attempts <= 0) {return;}
+        try {
+            target.getSession().getRemote().sendString(gameMessage.toString());
+        } catch (Exception ex) {
+            System.out.println("GameMessage sending failed");
+            //delayedRetryMessageSending(target, gameMessage);
+            delayedRetryMessageSending(() -> sendPlayerMessage(target, gameMessage, attempts - 1));
+        }
+    }
+
+    public void sendGameScreenMessage() {
+
+    }
+
+    public GamePlayerMessageActions getGamePlayerMessageActions() {
+        return gamePlayerMessageActions;
+    }
+
+    private JSONObject getPlayerPendingMessages(String playerName) {
+        return this.pendingAckMessages.get(playerName);
+    }
+
+    private void ackMessage(String playerName) {
+        this.pendingAckMessages.put(playerName, null);
+    }
+
+    private void addPlayerPendingMessage(String playerName, JSONObject gameMessage) {
+        if (pendingAckMessages.get(playerName) != null) {
+            System.out.println("SOMETHING IS HORRIBLY WRONG");
+            System.out.println(pendingAckMessages.get(playerName));
+            System.out.println(gameMessage);
+            System.out.println("######");
+        } else {
+            this.pendingAckMessages.put(playerName, gameMessage);
+            LOGGER.info("ADD PENDING MESSAGE: " + playerName + " MESSAGE: " + gameMessage);
+        }
+    }
+
+    private void delayedRetryMessageSending(Runnable sendMessage) {
+
+        LOGGER.warning("FAILED, trying again in 5s");
+        try {
+            TimeUnit.SECONDS.sleep(5);
+            sendMessage.run();
+        } catch (InterruptedException e) {
+            LOGGER.severe("WAIT FAILED, MESSAGE LOST");
+        }
+    }
+}

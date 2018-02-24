@@ -104,7 +104,7 @@ class PlayerApp extends React.Component {
 
     webSocket.onmessage = function (msg) {
         let data = JSON.parse(msg.data)
-
+        console.log(data)
         if (data.type == "PLAYER_INIT") {
             component.setState({playerRole: data.role});
         } else if (data.type == "PLAYER_QUERY") {
@@ -154,6 +154,9 @@ class PlayerApp extends React.Component {
         "gameName": this.props.gameName,
         "response": responseKey
       }));
+      this.setState({
+        queryData: null
+      })
   }
 
 }

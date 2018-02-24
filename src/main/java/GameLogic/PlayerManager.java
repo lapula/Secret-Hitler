@@ -5,9 +5,6 @@
  */
 package GameLogic;
 
-import GameStates.State;
-import SocketInterface.PlayerWebSocketActions;
-import SocketInterface.PlayerWebSocketHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -37,10 +34,17 @@ public class PlayerManager {
         this.gamePlayers = game.getVariables().getGamePlayers();
         this.roleList = initRoles(gamePlayers);
     }
-    
-    public void addPlayer(Player player) {
+
+    //TODO game should have gameName
+    public Player addNewPlayer(String gameName, String playerName, Session user) {
+        Player player = new Player(playerName, gameName, user);
         player.setRole(this.getRole());
         players.add(player);
+        return player;
+    }
+
+    public void reconnectPlayer(String playerName, Session user) {
+        this.getPlayerByName(playerName).setSession(user);
     }
     
     public Player getNextPlayer(Player player) {

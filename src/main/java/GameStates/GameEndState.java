@@ -7,7 +7,6 @@ package GameStates;
 
 import GameLogic.Game;
 import GameLogic.Player;
-import SocketInterface.PlayerWebSocketActions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +26,7 @@ public class GameEndState implements GameState {
     
     @Override
     public void doAction() {
-        PlayerWebSocketActions.sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), new ArrayList<Player>(), new HashMap<String, String>(), HEADER, "", game.getGameStateType().toString());
+        game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), new ArrayList<Player>(), new HashMap<String, String>(), HEADER, "", game.getGameStateType().toString());
     }
 
     @Override

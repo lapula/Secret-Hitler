@@ -7,8 +7,6 @@ package GameStates;
 
 import GameLogic.Game;
 import GameLogic.Player;
-import SocketInterface.PlayerWebSocketActions;
-import SocketInterface.PlayerWebSocketHandler;
 
 /**
  *
@@ -28,7 +26,7 @@ public class PolicyPeekState implements GameState {
         Player supremeChancellor = game.getVariables().getSupremeChancellor();
         String topThree = game.getPolicyDeck().nextThreeToString();
         String policiesText = "The next policies are: " + topThree;
-        PlayerWebSocketActions.alertPlayer(supremeChancellor, HEADER, policiesText);
+        game.getGamePlayerMessageActions().alertPlayer(supremeChancellor, HEADER, policiesText);
         
         game.changeState(State.ROUND_START);
     }
