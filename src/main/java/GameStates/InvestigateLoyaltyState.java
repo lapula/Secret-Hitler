@@ -22,6 +22,9 @@ public class InvestigateLoyaltyState implements GameState {
 
     private static final String HEADER = "Investigation of loyalty!";
     private static final String SUB_HEADER = "Supreme Chancellor, who do you wish to investigate?";
+    private static final String EVENT_INVESTIGATION = "INVESTIGATION";
+    private static final String EVENT_INVESTIGATION_HEADER = "Investigation of loyalty: ";
+    private static final String EVENT_INVESTIGATION_SUBHEADER = "The acting Supreme Chancellor has received knowledge of a player's role.";
 
     Game game;
     public InvestigateLoyaltyState(Game game) {
@@ -55,6 +58,8 @@ public class InvestigateLoyaltyState implements GameState {
         String investigationInfo = "Player " + investigate.getName() + " is a " + investigateRole.toString() + "!";
         if (investigate != null) {
             game.getGamePlayerMessageActions().alertPlayer(supremeChancellor, HEADER, investigationInfo);
+            game.getGameScreenMessageActions().sendGameEvent(
+                    game.getGameListeners(), EVENT_INVESTIGATION, EVENT_INVESTIGATION_HEADER + investigate.getName(), EVENT_INVESTIGATION_SUBHEADER);
             game.changeState(State.ROUND_START);
         }
     }

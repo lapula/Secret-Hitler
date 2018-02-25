@@ -2,6 +2,7 @@ package GameMessagingInterface;
 
 import GameLogic.Game;
 import GameLogic.Player;
+import SithImperative.Main;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
 
@@ -15,25 +16,38 @@ public class GameMessageService {
 
     private final static Logger LOGGER = Logger.getLogger(GameMessageService.class.getName());
 
+    private static final String LISTEN_GAME = "LISTEN_GAME";
     private static final String REGISTER_PLAYER = "REGISTER_PLAYER";
     private static final String QUERY_RESPONSE = "QUERY_RESPONSE";
     private static final String INFORM_VICE_CHAIR = "You are the Vice Chair!";
     private static final String INFORM_SUPREME_CHANCELLOR = "You are the Supreme Chancellor!";
+
     private static final Integer REGISTER_ATTEMPTS = 10;
 
-    private Game game = null;
-    private GamePlayerMessageActions gamePlayerMessageActions = null;
+    private Game game;
+    private GamePlayerMessageActions gamePlayerMessageActions;
+
+    private GameScreenMessageActions gameScreenMessageActions;
     private Map<String, JSONObject> pendingAckMessages;
 
     public GameMessageService(Game game) {
         this.game = game;
         this.gamePlayerMessageActions = new GamePlayerMessageActions(this);
+        this.gameScreenMessageActions = new GameScreenMessageActions(this);
         this.pendingAckMessages = new HashMap<>();
     }
 
-    // MESSAGE RECEIVING
+    // MESSAGE RECEIVING GAMESCREEN
 
-    public void receiveMessage(Session user, Map<String, String> message) {
+    public void receiveGameScreenMessage(Session user, Map<String, String> message) {
+        if (message.get("type").equals(LISTEN_GAME)) {
+            this.game.addGameListener(user);
+        }
+    }
+
+    // MESSAGE RECEIVING PLAYER
+
+    public void receivePlayerMessage(Session user, Map<String, String> message) {
         if (message.get("type").equals(REGISTER_PLAYER)) {
             registerPlayer(message, user, REGISTER_ATTEMPTS);
         } else if (message.get("type").equals(QUERY_RESPONSE)) {
@@ -79,8 +93,19 @@ public class GameMessageService {
         game.receiveData(playerName, response);
     }
 
+    // MESSAGE SENDING GAMESCREEN
 
-    // MESSAGE SENDING
+    public void sendGameScreenMessage(Session listener, JSONObject gameScreenMessage, Integer attempts) {
+        if (attempts <= 0) {return;}
+        try {
+            listener.getRemote().sendString(gameScreenMessage.toString());
+        } catch (Exception ex) {
+            System.out.println("GameScreenMessage sending failed");
+            delayedRetryMessageSending(() -> sendGameScreenMessage(listener, gameScreenMessage, attempts - 1));
+        }
+    }
+
+    // MESSAGE SENDING PLAYER
 
     protected void sendPlayerMessageRequiredResponse(Player target, JSONObject gameMessage, Integer attempts) {
         if (attempts <= 0) {return;}
@@ -105,12 +130,12 @@ public class GameMessageService {
         }
     }
 
-    public void sendGameScreenMessage() {
-
-    }
-
     public GamePlayerMessageActions getGamePlayerMessageActions() {
         return gamePlayerMessageActions;
+    }
+
+    public GameScreenMessageActions getGameScreenMessageActions() {
+        return gameScreenMessageActions;
     }
 
     private JSONObject getPlayerPendingMessages(String playerName) {

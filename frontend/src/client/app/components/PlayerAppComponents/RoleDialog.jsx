@@ -4,17 +4,17 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import ReactFontFace from 'react-font-face'
 
-import starfont from '../resources/Starjedi.ttf';
 import styles from './playerapp-style.css';
-import republicLogo from '../resources/Republic_Emblem.png';
-import cisLogo from '../resources/CIS_emblem.png';
-import palpatineLogo from '../resources/palpatine.jpg';
+import starfont from '../../resources/Starjedi.ttf';
+import republicLogo from '../../resources/Republic_Emblem.png';
+import cisLogo from '../../resources/CIS_emblem.png';
+import palpatineLogo from '../../resources/palpatine.jpg';
 
 const ROLE_SEPARATIST = "Separatist";
 const ROLE_PALPATINE = "Sheev Palpatine";
 const ROLE_LOYALIST = "Loyalist";
 
-class Footer extends React.Component {
+class RoleDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -91,4 +91,4 @@ class Footer extends React.Component {
   }
 }
 
-export default Footer;
+export default RoleDialog;

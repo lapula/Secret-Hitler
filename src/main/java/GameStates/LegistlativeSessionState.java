@@ -24,6 +24,18 @@ public class LegistlativeSessionState implements GameState {
     private static final String LEGISTLATE_SUB_HEADER_SUPREME_CHANCELLOR = "Supreme Chancellor, discard one policy";
     private static final String LEGISTLATE_HEADER_VICE_CHAIR = "Legistlative session: Vice Chair";
     private static final String LEGISTLATE_SUB_HEADER_VICE_CHAIR = "Vice Chair, discard one policy";
+
+    private static final String EVENT_LEGISTLATION_PROCESS = "LEGISTLATION_PROCESS";
+    private static final String EVENT_LEGISTLATION_PROCESS_HEADER = "Silence!";
+    private static final String EVENT_LEGISTLATION_PROCESS_SUBHEADER = "The government is in session.";
+
+    private static final String EVENT_LEGISTLATION = "LEGISTLATION";
+    private static final String EVENT_LEGISTLATION_HEADER_SEPARATISTS = "Separatist policy enacted!";
+    private static final String EVENT_LEGISTLATION_SUBHEADER_SEPARATISTS = "This is a dark day for The Republic.";
+    private static final String EVENT_LEGISTLATION_HEADER_LOYALISTS = "Loyalist policy enacted!";
+    private static final String EVENT_LEGISTLATION_SUBHEADER_LOYALISTS = "There is still hope for democracy.";
+
+
     private static final String VETO_PROPOSAL = "Veto proposal";
 
 
@@ -43,6 +55,9 @@ public class LegistlativeSessionState implements GameState {
         Player legistlator = null;
         String header = "";
         String subheader = "";
+
+        game.getGameScreenMessageActions().sendGameEvent(
+                game.getGameListeners(), EVENT_LEGISTLATION_PROCESS, EVENT_LEGISTLATION_PROCESS_HEADER, EVENT_LEGISTLATION_PROCESS_SUBHEADER);
 
         //TODO fix map CHOICE
         Integer index = 1;
@@ -74,7 +89,6 @@ public class LegistlativeSessionState implements GameState {
         
         Policy discard = null;
 
-        //TODO fix frontend side of data
         if (policyIdMapper.get(data).equals(Policy.LOYALIST_POLICY.toString())) {
             discard = Policy.LOYALIST_POLICY;
         } else if (policyIdMapper.get(data).equals(Policy.SEPARATIST_POLICY.toString())) {
@@ -93,13 +107,17 @@ public class LegistlativeSessionState implements GameState {
             }
         }
 
-        //TODO is this communicated to the player?
         if (policies.size() == 1) {
             if (policies.get(0).equals(Policy.LOYALIST_POLICY)) {
                 game.getVariables().addLoyalistPolicy();
+                game.getGameScreenMessageActions().sendGameEvent(
+                        game.getGameListeners(), EVENT_LEGISTLATION, EVENT_LEGISTLATION_HEADER_LOYALISTS, EVENT_LEGISTLATION_SUBHEADER_LOYALISTS);
             } else {
                 game.getVariables().addSeparatistPolicy();
+                game.getGameScreenMessageActions().sendGameEvent(
+                        game.getGameListeners(), EVENT_LEGISTLATION, EVENT_LEGISTLATION_HEADER_SEPARATISTS, EVENT_LEGISTLATION_SUBHEADER_SEPARATISTS);
             }
+
             game.changeState(State.DETERMINE_EXECUTIVE_ACTION);
         } else {
             doAction();

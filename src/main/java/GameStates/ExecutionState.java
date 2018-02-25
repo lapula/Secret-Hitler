@@ -23,6 +23,9 @@ public class ExecutionState implements GameState {
     private static final String EXECUTION_SUB_HEADER = "Supreme Chancellor, who do you wish to execute?";
     private static final String EXECUTED_HEADER = "You are executed!";
     private static final String EXECUTED_SUB_HEADER = "You may not speak or reveal your role!";
+    private static final String EVENT_EXECUTION = "EXECUTION";
+    private static final String EVENT_EXECUTION_HEADER = "Execute order 66.";
+    private static final String EVENT_EXECUTION_SUBHEADER = "The acting Supreme Chancellor has assassinated a player.";
 
     Game game;
     public ExecutionState(Game game) {
@@ -51,6 +54,8 @@ public class ExecutionState implements GameState {
         if (execute != null) {
             game.getPlayerManager().getPlayers().remove(execute);
             game.getGamePlayerMessageActions().alertPlayer(execute, EXECUTED_HEADER, EXECUTED_SUB_HEADER);
+            game.getGameScreenMessageActions().sendGameEvent(
+                    game.getGameListeners(), EVENT_EXECUTION, EVENT_EXECUTION_HEADER, EVENT_EXECUTION_SUBHEADER);
             game.changeState(State.ROUND_START);
         }
     }

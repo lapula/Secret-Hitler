@@ -17,6 +17,7 @@ import java.util.Map;
  *
  * @author pulli
  */
+//TODO fix this
 public class CallSpecialElectionState implements GameState {
 
     private static final String SPECIAL_ELECTION = "Special election!";

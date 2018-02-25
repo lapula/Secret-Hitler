@@ -18,6 +18,8 @@ import java.util.Map;
  *
  * @author pulli
  */
+
+//TODO fix this
 public class VetoState implements GameState {
 
     private static final String VETO_PROPOSED_HEADER = "Veto proposed to the Supreme Chancellor";

@@ -25,6 +25,14 @@ public class VoteOnGovernmentState implements GameState {
     private static final String VOTE_HEADER = "Vote!";
     private static final String VOTE_SUB_HEADER = "Do you approve this government?";
 
+    private static final String EVENT_VOTE_FAIL = "VOTE_FAILED";
+    private static final String EVENT_VOTE_FAIL_HEADER = "Vote failed!";
+    private static final String EVENT_VOTE_FAIL_SUBHEADER = "The representatives were not able to form a government.";
+
+    private static final String EVENT_ATTEMPTS_USED = "ATTEMPTS_USED";
+    private static final String EVENT_ATTEMPTS_USED_HEADER = "Democracy failed!";
+    private static final String EVENT_ATTEMPTS_USED_SUBHEADER = "The vote has failed three times, the forces of fate will decide next policy.";
+
     private int attempt;
     private Game game;
     
@@ -75,14 +83,15 @@ public class VoteOnGovernmentState implements GameState {
             game.getGamePlayerMessageActions().setSpecialRole(game.getVariables().getViceChair(), INFORM_VICE_CHAIR);
             game.changeState(State.LEGISTLATIVE_SESSION);
         } else {
-
-            //TODO inform players about this
             if (game.getVariables().getSenateVotesThisRound() == 3) {
                 if (Math.random() > 0.5) {
                     game.getVariables().addSeparatistPolicy();
                 } else {
                     game.getVariables().addLoyalistPolicy();
                 }
+                game.getGameScreenMessageActions().sendGameEvent(
+                        game.getGameListeners(), EVENT_ATTEMPTS_USED, EVENT_ATTEMPTS_USED_HEADER, EVENT_ATTEMPTS_USED_SUBHEADER);
+
                 game.changeState(State.ROUND_START);
             } else {
                 game.getVariables().setViceChair(null);
@@ -91,10 +100,11 @@ public class VoteOnGovernmentState implements GameState {
                 game.getVariables().setSupremeChancellor(nextSupremeChancellor);
                 game.getGamePlayerMessageActions().clearSpecialRoles(game.getPlayerManager().getPlayers(), nextSupremeChancellor);
                 game.getGamePlayerMessageActions().setSpecialRole(nextSupremeChancellor, INFORM_SUPREME_CHANCELLOR);
+                game.getGameScreenMessageActions().sendGameEvent(
+                        game.getGameListeners(), EVENT_VOTE_FAIL, EVENT_VOTE_FAIL_HEADER, EVENT_VOTE_FAIL_SUBHEADER);
+
                 game.changeState(State.NOMINATE_VICE_CHAIR);
             }
-            
-            
         }
         
     }

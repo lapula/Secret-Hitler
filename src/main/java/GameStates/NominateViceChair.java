@@ -21,6 +21,10 @@ public class NominateViceChair implements GameState {
     private static final String HEADER = "The Supreme Chancellor is nominating his Vice Chair!";
     private static final String SUB_HEADER = "Supreme Chancellor, who do you wish to nominate?";
 
+    private static final String EVENT_NOMINATION = "NOMINATION";
+    private static final String EVENT_NOMINATION_HEADER = "A Vice Chair has been nominated!";
+    private static final String EVENT_NOMINATION_SUBHEADER = "Representatives will vote to determine legality of the government.";
+
     private Game game;
     public NominateViceChair(Game game) {
         this.game = game;
@@ -50,5 +54,8 @@ public class NominateViceChair implements GameState {
             game.getVariables().setViceChair(viceChair);
             game.changeState(State.VOTE_ON_GOVERNMENT);
         }
+
+        game.getGameScreenMessageActions().sendGameEvent(
+                game.getGameListeners(), EVENT_NOMINATION, EVENT_NOMINATION_HEADER, EVENT_NOMINATION_SUBHEADER);
     }
 }

@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
-import Paper from 'material-ui/Paper';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
+import textConstants from '../textConstants.jsx'
 import styles from './playerapp-style.css'
-import Footer from './Footer.jsx';
+import RoleDialog from './RoleDialog.jsx';
 import OptionList from './OptionList.jsx';
 
 
@@ -53,23 +52,23 @@ class PlayerApp extends React.Component {
   render() {
     return (
       <div className={styles.container}>
-          <div className={styles.specialRole}>{this.state.specialRole}</div>
-          {this.renderHeader()}
-          <OptionList
-            queryData={this.state.queryData}
-            webSocket={this.state.webSocket}
-            visible={this.state.hasWebsocketConnection}
-            sendQueryResponse={this.sendQueryResponse}
-          />
-          <Footer role={this.state.playerRole} />
-          <Dialog
-            title={this.state.dialogHeader}
-            actions={<FlatButton label="I see." primary={true} onTouchTap={this.handleDialogClose} />}
-            modal={true}
-            open={this.state.dialogOpen}
-          >
-            {this.state.dialogText}
-          </Dialog>
+        <div className={styles.specialRole}>{this.state.specialRole}</div>
+        {this.renderHeader()}
+        <OptionList
+          queryData={this.state.queryData}
+          webSocket={this.state.webSocket}
+          visible={this.state.hasWebsocketConnection}
+          sendQueryResponse={this.sendQueryResponse}
+        />
+        <RoleDialog role={this.state.playerRole} />
+        <Dialog
+          title={this.state.dialogHeader}
+          actions={<FlatButton label="I see." primary={true} onTouchTap={this.handleDialogClose} />}
+          modal={true}
+          open={this.state.dialogOpen}
+        >
+          {this.state.dialogText}
+        </Dialog>
       </div>
     );
   }
@@ -91,48 +90,48 @@ class PlayerApp extends React.Component {
     }, 10000);
 
     webSocket.onopen = function() {
-        component.setState({
-          hasWebsocketConnection: true
-        })
-        var message =  {
-          "type":"REGISTER_PLAYER",
-          "playerName": playerName,
-          "gameName": gameName
-        }
-        webSocket.send(JSON.stringify(message));
+      component.setState({
+        hasWebsocketConnection: true
+      })
+      var message =  {
+        "type":"REGISTER_PLAYER",
+        "playerName": playerName,
+        "gameName": gameName
+      }
+      webSocket.send(JSON.stringify(message));
     };
 
     webSocket.onmessage = function (msg) {
-        let data = JSON.parse(msg.data)
-        console.log(data)
-        if (data.type == "PLAYER_INIT") {
-            component.setState({playerRole: data.role});
-        } else if (data.type == "PLAYER_QUERY") {
-            component.setState({
-              queryData: data,
-              phase: data.header
-            });
-        } else if (data.type == "SET_SPECIAL_ROLE") {
+      let data = JSON.parse(msg.data)
+      console.log(data)
+      if (data.type == "PLAYER_INIT") {
+          component.setState({playerRole: data.role});
+      } else if (data.type == "PLAYER_QUERY") {
           component.setState({
-            specialRole: data.role
+            queryData: data,
+            phase: data.header
           });
-        } else if (data.type == "ALERT_PLAYER") {
-          component.setState({
-            dialogOpen: true,
-            dialogHeader: data.header,
-            dialogText: data.text
-          })
-        }
+      } else if (data.type == "SET_SPECIAL_ROLE") {
+        component.setState({
+          specialRole: data.role
+        });
+      } else if (data.type == "ALERT_PLAYER") {
+        component.setState({
+          dialogOpen: true,
+          dialogHeader: data.header,
+          dialogText: data.text
+        })
+      }
     };
 
     webSocket.onclose = function () {
       clearInterval(pingInterval);
-      var time = new Date();
-      var closeTime = time.getHours() + ":" + time.getMinutes();
+      let time = new Date();
+      let closeTime = time.getHours() + ":" + time.getMinutes();
       console.log("WebSocket connection closed at: " + closeTime);
       component.setState({
         hasWebsocketConnection: false
-      })
+      });
 
       setTimeout(function(){
         console.log("opening connection again")
@@ -148,15 +147,15 @@ class PlayerApp extends React.Component {
   }
 
   sendQueryResponse(responseKey) {
-      this.state.webSocket.send(JSON.stringify({
-        "type": "QUERY_RESPONSE",
-        "playerName": this.props.playerName,
-        "gameName": this.props.gameName,
-        "response": responseKey
-      }));
-      this.setState({
-        queryData: null
-      })
+    this.state.webSocket.send(JSON.stringify({
+      "type": "QUERY_RESPONSE",
+      "playerName": this.props.playerName,
+      "gameName": this.props.gameName,
+      "response": responseKey
+    }));
+    this.setState({
+      queryData: null
+    });
   }
 
 }

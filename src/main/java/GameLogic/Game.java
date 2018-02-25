@@ -7,10 +7,11 @@ package GameLogic;
 
 import GameMessagingInterface.GameMessageService;
 import GameMessagingInterface.GamePlayerMessageActions;
+import GameMessagingInterface.GameScreenMessageActions;
+import GameMessagingInterface.GameScreenWebSocketInterface;
 import GameStates.State;
 import GameStates.GameState;
 import GameStates.StateFactory;
-import SocketInterface.GameWebSocketHandler;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -53,13 +54,13 @@ public class Game {
         }
         this.gameStateType = state;
         this.gameState.doAction();
-        GameWebSocketHandler.sendStatusUpdate(this.gameListeners, this.toJSON());
+        this.getGameMessageService().getGameScreenMessageActions().sendStatusUpdate(this.gameListeners, this.toJSON());
 
    }
     
     public void receiveData(String player, String data) {
         this.gameState.receiveData(player, data);
-        GameWebSocketHandler.sendStatusUpdate(this.gameListeners, this.toJSON());
+        this.getGameMessageService().getGameScreenMessageActions().sendStatusUpdate(this.gameListeners, this.toJSON());
     }
 
     private boolean checkGameEndConditions() {
@@ -125,6 +126,10 @@ public class Game {
         return this.gameMessageService.getGamePlayerMessageActions();
     }
 
+    public GameScreenMessageActions getGameScreenMessageActions() {
+        return this.gameMessageService.getGameScreenMessageActions();
+    }
+
     public GameMessageService getGameMessageService() {
         return gameMessageService;
     }
@@ -149,10 +154,15 @@ public class Game {
         json.put("governmentVotesThisRound", gameVariables.getSenateVotesThisRound());
         json.put("loyalistPoliciesPassed", gameVariables.getLoyalistPolicyCount());
         json.put("separatistPoliciesPassed", gameVariables.getSeparatistPolicyCount());
-        json.put("electionResults", electionResults);
         json.put("players", playerManager.getPlayerNames());
         json.put("cardsInDeck", this.getPolicyDeck().getDeckCardsCount());
         json.put("state", this.getGameStateType().toString());
+
+        if (this.getPlayerManager().getPlayers().size() != this.getVariables().getElectionResults().size()) {
+            json.put("electionResults", "");
+        } else {
+            json.put("electionResults", electionResults);
+        }
         
         return json;
     }

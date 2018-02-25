@@ -19,23 +19,23 @@ class OptionList extends React.Component {
     }
 
     createListItem(key, text) {
-        let listClickEvent = this.handleClick.bind(this, key, text);
-        return (
-          <ListItem
-            className={styles.itemStyle}
-            primaryText={text}
-            key={key}
-            onClick={listClickEvent}
-          />
-        )
+      let listClickEvent = this.handleClick.bind(this, key, text);
+      return (
+        <ListItem
+          className={styles.itemStyle}
+          primaryText={text}
+          key={key}
+          onClick={listClickEvent}
+        />
+      );
     }
 
     handleClick(responseKey, text, elem) {
-        this.props.sendQueryResponse(responseKey)
-        this.setState({
-          choices: null,
-          previousChoice: text
-        });
+      this.props.sendQueryResponse(responseKey)
+      this.setState({
+        choices: null,
+        previousChoice: text
+      });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -63,32 +63,31 @@ class OptionList extends React.Component {
     }
 
     render() {
-
-        if (!this.props.visible) {
-          return null;
-        } else if (this.state.choices) {
-          return(
-              <div className={styles.listContainer}>
-                  <List className={styles.list}>
-                    <Paper className={styles.listPaper} zDepth={4}>
-                      <Subheader className={styles.subheader}>{this.state.subheader}</Subheader>
-                      {this.getChoicesArray()}
-                    </Paper>
-                  </List>
-              </div>
-          )
-        } else if (this.state.previousChoice) {
-          return (
-            <div className={styles.listContainer}>
+      if (!this.props.visible) {
+        return null;
+      } else if (this.state.choices) {
+        return(
+          <div className={styles.listContainer}>
+            <List className={styles.list}>
               <Paper className={styles.listPaper} zDepth={4}>
-                <Subheader className={styles.subheader}>{this.state.previousSubheader}</Subheader>
-                <div className={styles.previousChoice}>You chose: {this.state.previousChoice}</div>
+                <Subheader className={styles.subheader}>{this.state.subheader}</Subheader>
+                {this.getChoicesArray()}
               </Paper>
-            </div>
-          );
-        } else {
-          return (<div className={styles.listContainer}></div>);
-        }
+            </List>
+          </div>
+        );
+      } else if (this.state.previousChoice) {
+        return (
+          <div className={styles.listContainer}>
+            <Paper className={styles.listPaper} zDepth={4}>
+              <Subheader className={styles.subheader}>{this.state.previousSubheader}</Subheader>
+              <div className={styles.previousChoice}>You chose: {this.state.previousChoice}</div>
+            </Paper>
+          </div>
+        );
+      } else {
+        return (<div className={styles.listContainer}></div>);
+      }
     }
 }
 

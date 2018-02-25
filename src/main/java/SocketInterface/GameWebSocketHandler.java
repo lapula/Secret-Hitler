@@ -15,7 +15,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
-
+/*
 
 @WebSocket
 public class GameWebSocketHandler {
@@ -51,6 +51,7 @@ public class GameWebSocketHandler {
             Game game = new Game(Integer.parseInt(gamePlayers));
             Main.games.put(gameName, game);
             game.getGameListeners().add(user);
+            sendStatusUpdate(game.getGameListeners(), game.toJSON());
         } else if (type.equals(POLL)) {
             Game game = Main.games.get(gameName);
             //sendStatusUpdate(Main.games.get(gameName).getGameListeners(), game.toJSON());
@@ -71,4 +72,4 @@ public class GameWebSocketHandler {
             }
         });
     }
-}
+}*/

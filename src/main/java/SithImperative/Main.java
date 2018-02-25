@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import GameMessagingInterface.GamePlayerWebSocketInterface;
-import SocketInterface.GameWebSocketHandler;
+import GameMessagingInterface.GameScreenWebSocketInterface;
 import spark.ModelAndView;
 import static spark.Spark.*;
 
@@ -25,7 +25,7 @@ public class Main {
         port(getHerokuAssignedPort());
         staticFiles.location("/public");
         webSocket("/players", GamePlayerWebSocketInterface.class);
-        webSocket("/games", GameWebSocketHandler.class);
+        webSocket("/games", GameScreenWebSocketInterface.class);
         init();
 
         // Main app path

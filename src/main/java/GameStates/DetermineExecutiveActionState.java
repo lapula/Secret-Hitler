@@ -12,7 +12,7 @@ import GameLogic.Game;
  * @author pulli
  */
 public class DetermineExecutiveActionState implements GameState {
-    
+
     Game game;
     public DetermineExecutiveActionState(Game game) {
         this.game = game;

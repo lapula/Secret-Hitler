@@ -2,11 +2,10 @@ import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 
-import styles from './playerapp-style.css'
-import PlayerApp from './PlayerApp.jsx'
+import textConstants from './textConstants.jsx'
+import styles from './PlayerAppComponents/playerapp-style.css'
+import PlayerApp from './PlayerAppComponents/PlayerApp.jsx'
 
 
 class RegisterPlayer extends React.Component {
@@ -42,11 +41,11 @@ class RegisterPlayer extends React.Component {
             <Paper className={styles.paper} zDepth={2}>
               <h1>Join game</h1>
               <TextField
-                  floatingLabelText="Player name"
+                  floatingLabelText={textConstants.playerName}
                   ref="playerName"
                 /><br />
               <TextField
-                    floatingLabelText="Game name"
+                    floatingLabelText={textConstants.gameName}
                     ref="gameName"
                     onKeyPress={this.handleKeyPress}
               /><br />
@@ -59,7 +58,6 @@ class RegisterPlayer extends React.Component {
       return (<PlayerApp playerName={this.state.playerName} gameName={this.state.gameName}/>);
     }
   }
-
 }
 
 export default RegisterPlayer;

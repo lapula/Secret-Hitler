@@ -11,6 +11,7 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,26 +19,22 @@ import java.util.stream.Collectors;
 
 
 @WebSocket
-public class GamePlayerWebSocketInterface {
+public class GameScreenWebSocketInterface {
 
     // Day in ms
     private static final Long TIMEOUT_MS = 1000l * 60l * 60l * 24l;
-    private static final String PING = "PING";
-
+    private static final String POLL = "POLL";
+    private static final String CREATE_GAME = "CREATE_GAME";
+    
     @OnWebSocketConnect
     public void onConnect(Session user) throws Exception {
-        user.setIdleTimeout(10000l);
-        System.out.println("Player connected to server");
+        user.setIdleTimeout(TIMEOUT_MS);
+        System.out.println("Game connected to server");
     }
 
     @OnWebSocketClose
     public void onClose(Session user, int statusCode, String reason) {
-        Main.games.values().forEach(game -> {
-            if (game.getPlayerManager().getPlayerSession(user) != null) {
-                game.getPlayerManager().getPlayerSession(user).setSession(null);
-                System.out.println("Nulled player connection!");
-            }
-        });
+        System.out.println("closed game listener");
     }
 
     @OnWebSocketMessage
@@ -47,22 +44,24 @@ public class GamePlayerWebSocketInterface {
                 e -> e.getKey(),
                 e -> e.getValue().toString()
         ));
+
         Game game = Main.games.get(messageMap.get("gameName"));
 
-        if (messageMap.get("type").equals(PING)) {
-            ping(user);
+        if (messageMap.get("type").equals(CREATE_GAME)) {
+            createGame(user, messageMap);
+        } else if (messageMap.get("type").equals(POLL)) {
+            //sendStatusUpdate(Main.games.get(gameName).getGameListeners(), game.toJSON());
         } else {
-            game.getGameMessageService().receivePlayerMessage(user, messageMap);
+            game.getGameMessageService().receiveGameScreenMessage(user, messageMap);
         }
     }
 
-    private void ping(Session user) {
-        JSONObject mainObj = new JSONObject();
-        mainObj.put("type", "PONG");
-        try {
-            user.getRemote().sendString(mainObj.toString());
-        } catch (IOException ex) {
-            Logger.getLogger(GamePlayerWebSocketInterface.class.getName()).log(Level.SEVERE, "Ping failed.", ex);
-        }
+    private void createGame(Session user, Map<String, String> message) {
+        Game game = new Game(Integer.parseInt(message.get("gamePlayers")));
+        Main.games.put(message.get("gameName"), game);
+        game.getGameListeners().add(user);
+        game.getGameMessageService().getGameScreenMessageActions().sendStatusUpdate(game.getGameListeners(), game.toJSON());
     }
+    
+
 }

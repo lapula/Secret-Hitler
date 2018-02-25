@@ -3,8 +3,9 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 
+import textConstants from './textConstants.jsx'
 import styles from './general-style.css';
-import GameScreen from './GameScreen.jsx';
+import GameScreen from './GameScreenComponents/GameScreen.jsx';
 
 class RegisterGame extends React.Component {
   constructor(props, context) {
@@ -32,18 +33,18 @@ class RegisterGame extends React.Component {
   }
 
   renderHeader() {
-    return (this.props.createNewGame ? <h1>Create game</h1> : <h1>Register game screen</h1>);
+    return (this.props.createNewGame ? <h1>{textConstants.createGame}</h1> : <h1>{textConstants.openGameScreen}</h1>);
   }
 
   renderPlayersNumber() {
     if (this.props.createNewGame) {
       return (
           <TextField
-                floatingLabelText="Number of players"
+                floatingLabelText={textConstants.numberOfPlayers}
                 ref="gamePlayers"
                 onKeyPress={this.handleKeyPress}
           />
-      )
+      );
     }
     return "";
   }
@@ -59,11 +60,11 @@ class RegisterGame extends React.Component {
           <Paper className={styles.paper} zDepth={2}>
             {this.renderHeader()}
             <TextField
-                floatingLabelText="Game name"
+                floatingLabelText={textConstants.gameName}
                 ref="gameName"
               />
             {this.renderPlayersNumber()}
-            <RaisedButton label="Create game!" primary={true} className={styles.formButton} onTouchTap={this.handleSubmit} />
+            <RaisedButton label={textConstants.createGame} primary={true} className={styles.formButton} onTouchTap={this.handleSubmit} />
         </Paper>
       </div>
     </div>
