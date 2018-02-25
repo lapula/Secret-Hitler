@@ -23,7 +23,7 @@ public class GameScreenWebSocketInterface {
 
     // Day in ms
     private static final Long TIMEOUT_MS = 1000l * 60l * 60l * 24l;
-    private static final String POLL = "POLL";
+    private static final String PING = "PING";
     private static final String CREATE_GAME = "CREATE_GAME";
     
     @OnWebSocketConnect
@@ -49,7 +49,7 @@ public class GameScreenWebSocketInterface {
 
         if (messageMap.get("type").equals(CREATE_GAME)) {
             createGame(user, messageMap);
-        } else if (messageMap.get("type").equals(POLL)) {
+        } else if (messageMap.get("type").equals(PING)) {
             //sendStatusUpdate(Main.games.get(gameName).getGameListeners(), game.toJSON());
         } else {
             game.getGameMessageService().receiveGameScreenMessage(user, messageMap);

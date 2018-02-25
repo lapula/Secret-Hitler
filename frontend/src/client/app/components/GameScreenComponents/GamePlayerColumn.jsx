@@ -1,13 +1,19 @@
 import React, {Component} from 'react';
 
+import textConstants from '../textConstants.jsx'
 import styles from './gamescreen-style.css';
-
-const SUPREME_CHANCELLOR = "Supreme Chancellor";
-const VICE_CHAIR = "Vice Chair";
 
 class GamePlayerColumn extends React.Component {
   constructor(props, context) {
     super(props, context);
+  }
+
+  addPlayerToken(player) {
+    if (player == this.props.supremeChancellor) {
+      return (<div className={styles.playerColumnToken}>{textConstants.supremeChancellor}</div>)
+    } else if (player == this.props.viceChair) {
+      return (<div className={styles.playerColumnToken}>{textConstants.viceChair}</div>)
+    }
   }
 
   playerList() {
@@ -33,14 +39,6 @@ class GamePlayerColumn extends React.Component {
       );
     });
     return players;
-  }
-
-  addPlayerToken(player) {
-    if (player == this.props.supremeChancellor) {
-      return (<div className={styles.playerColumnToken}>{SUPREME_CHANCELLOR}</div>)
-    } else if (player == this.props.viceChair) {
-      return (<div className={styles.playerColumnToken}>{VICE_CHAIR}</div>)
-    }
   }
 
   renderList() {

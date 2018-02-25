@@ -6,46 +6,12 @@ import GamePolicies from './GamePolicies.jsx';
 import GameGeneralInfo from './GameGeneralInfo.jsx';
 import GameEvent from './GameEvent.jsx';
 
-const testStateElectionResults = {
-  "data": {
-        "supremeChancellor": "Bert",
-        "cardsInDeck": 11,
-        "governmentVotesThisRound": 2,
-        "electionResults": {
-            "Aapeli": "YES",
-            "Bert": "NO",
-            "Cecilia": "YES",
-            "David": "YES",
-            "Eemeli": "NO"
-        },
-        "players": [
-          "Aapeli",
-          "Bert",
-          "Cecilia",
-          "David",
-          "Eemeli"
-        ],
-        "loyalistPoliciesPassed": 2,
-        "separatistPoliciesPassed": 3,
-        "viceChair": "Aapeli",
-        "state": "LEGISTLATIVE_SESSION",
-        "gamePlayers": 5,
-    },
-    "type": "STATUS_UPDATE"
-}
-
-const testGameEvent = {
-  eventType: "VOTE_FAILED",
-  header: "Vote failed!",
-  subheader: "The representatives were not able to form a government.",
-  type: "GAME_EVENT"
-}
-
-/*
-this.state = {
-  statusUpdateData: testStateElectionResults.data,
-  gameEvent: testGameEvent
-};*/
+const CREATE_GAME = "CREATE_GAME";
+const LISTEN_GAME = "LISTEN_GAME";
+const STATUS_UPDATE = "STATUS_UPDATE";
+const GAME_EVENT = "GAME_EVENT";
+const PING = "PING";
+const PING_INTERVAL = 10000;
 
 class GameScreen extends React.Component {
   constructor(props, context) {
@@ -89,7 +55,7 @@ class GameScreen extends React.Component {
   componentWillMount() {
     var component = this;
     var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/games");
-    const type = component.props.createGame ? "CREATE_GAME" : "LISTEN_GAME";
+    const type = component.props.createGame ? CREATE_GAME : LISTEN_GAME;
 
     webSocket.onopen = function() {
       var message =  {
@@ -100,19 +66,20 @@ class GameScreen extends React.Component {
       webSocket.send(JSON.stringify(message));
 
       setInterval(function(){
-          webSocket.send(JSON.stringify({
-            "type":"POLL",
-            "gameName": component.props.gameName
-          }));
-      }, 5000);
+        webSocket.send(JSON.stringify({
+          "type": PING,
+          "gameName": component.props.gameName
+        }));
+      }, PING_INTERVAL);
     };
 
     webSocket.onmessage = function (msg) {
-      let message = JSON.parse(msg.data)
+      const message = JSON.parse(msg.data)
       console.log(message);
-      if (message.type == "STATUS_UPDATE") {
+
+      if (message.type == STATUS_UPDATE) {
         component.setState({statusUpdateData: message.data});
-      } else if (message.type == "GAME_EVENT") {
+      } else if (message.type == GAME_EVENT) {
         component.setState({gameEvent: message});
       }
     };
@@ -120,7 +87,7 @@ class GameScreen extends React.Component {
     webSocket.onclose = function () {
       var time = new Date();
       var closeTime = time.getHours() + ":" + time.getMinutes();
-      alert("WebSocket connection closed at: " + closeTime);
+      console.log("WebSocket connection closed at: " + closeTime);
     };
   }
 

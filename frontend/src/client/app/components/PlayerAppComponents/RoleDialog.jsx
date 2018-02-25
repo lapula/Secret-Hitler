@@ -4,6 +4,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import ReactFontFace from 'react-font-face'
 
+import textConstants from '../textConstants.jsx'
 import styles from './playerapp-style.css';
 import starfont from '../../resources/Starjedi.ttf';
 import republicLogo from '../../resources/Republic_Emblem.png';
@@ -19,7 +20,7 @@ class RoleDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: true
+      open: false
     };
     this.handleRequestClose = this.handleRequestClose.bind(this);
     this.handleTouchTap = this.handleTouchTap.bind(this);
@@ -49,14 +50,14 @@ class RoleDialog extends React.Component {
   }
 
   componentDidMount() {
-    window.dispatchEvent(new Event('resize'))
+    //window.dispatchEvent(new Event('resize'))
   }
 
   render() {
 
     const roleDialog = (
       <FlatButton
-        label="Understood!"
+        label={textConstants.confirmRole}
         primary={true}
         onTouchTap={this.handleRequestClose}
       />
@@ -66,7 +67,7 @@ class RoleDialog extends React.Component {
       <footer className={styles.roleDialog}>
         <Dialog
           open={this.state.open}
-          title="Your role is:"
+          title={textConstants.yourRoleIs}
           actions={roleDialog}
           onRequestClose={this.handleRequestClose}
           style={{textAlign: "center"}}

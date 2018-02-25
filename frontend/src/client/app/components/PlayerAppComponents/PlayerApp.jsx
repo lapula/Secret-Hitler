@@ -8,14 +8,23 @@ import styles from './playerapp-style.css'
 import RoleDialog from './RoleDialog.jsx';
 import OptionList from './OptionList.jsx';
 
+const PING = "PING";
+const REGISTER_PLAYER = "REGISTER_PLAYER";
+const PLAYER_INIT = "PLAYER_INIT";
+const PLAYER_QUERY = "PLAYER_QUERY";
+const SET_SPECIAL_ROLE = "SET_SPECIAL_ROLE";
+const ALERT_PLAYER = "ALERT_PLAYER";
+const QUERY_RESPONSE = "QUERY_RESPONSE";
+const PING_INTERVAL = 10000;
+const RECONNECT_DELAY = 3000;
 
 class PlayerApp extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
       hasWebsocketConnection: false,
-      phase: "Game is starting...",
-      playerRole: "Not assigned yet.",
+      phase: textConstants.gameStarting,
+      playerRole: textConstants.roleNotAssigned,
       queryData: null,
       specialRole: "",
       dialogOpen: false,
@@ -42,7 +51,7 @@ class PlayerApp extends React.Component {
     if (!this.state.hasWebsocketConnection) {
       header = (
         <div className={styles.connectingContainer}>
-            <h1 className={styles.header}>Connecting...</h1>
+            <h1 className={styles.header}>{textConstants.connecting}</h1>
         </div>
       )
     }
@@ -63,7 +72,7 @@ class PlayerApp extends React.Component {
         <RoleDialog role={this.state.playerRole} />
         <Dialog
           title={this.state.dialogHeader}
-          actions={<FlatButton label="I see." primary={true} onTouchTap={this.handleDialogClose} />}
+          actions={<FlatButton label={textConstants.confirmAlert} primary={true} onTouchTap={this.handleDialogClose} />}
           modal={true}
           open={this.state.dialogOpen}
         >
@@ -81,20 +90,20 @@ class PlayerApp extends React.Component {
     var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/players");
     component.setState({webSocket: webSocket});
 
-    var pingInterval = setInterval(function(){
-        webSocket.send(JSON.stringify({
-          "type":"PING",
-          "playerName": playerName,
-          "gameName": gameName
-        }));
-    }, 10000);
+    let pingInterval = setInterval(() => {
+      webSocket.send(JSON.stringify({
+        "type": PING,
+        "playerName": playerName,
+        "gameName": gameName
+      }));
+    }, PING_INTERVAL);
 
     webSocket.onopen = function() {
       component.setState({
         hasWebsocketConnection: true
       })
-      var message =  {
-        "type":"REGISTER_PLAYER",
+      let message =  {
+        "type": REGISTER_PLAYER,
         "playerName": playerName,
         "gameName": gameName
       }
@@ -102,53 +111,52 @@ class PlayerApp extends React.Component {
     };
 
     webSocket.onmessage = function (msg) {
-      let data = JSON.parse(msg.data)
+      let data = JSON.parse(msg.data);
       console.log(data)
-      if (data.type == "PLAYER_INIT") {
-          component.setState({playerRole: data.role});
-      } else if (data.type == "PLAYER_QUERY") {
-          component.setState({
-            queryData: data,
-            phase: data.header
-          });
-      } else if (data.type == "SET_SPECIAL_ROLE") {
+
+      if (data.type == PLAYER_INIT) {
+        component.setState({playerRole: data.role});
+      } else if (data.type == PLAYER_QUERY) {
+        component.setState({
+          queryData: data,
+          phase: data.header
+        });
+      } else if (data.type == SET_SPECIAL_ROLE) {
         component.setState({
           specialRole: data.role
         });
-      } else if (data.type == "ALERT_PLAYER") {
+      } else if (data.type == ALERT_PLAYER) {
         component.setState({
           dialogOpen: true,
           dialogHeader: data.header,
           dialogText: data.text
-        })
+        });
       }
     };
 
     webSocket.onclose = function () {
+      const time = new Date();
+      console.log("WebSocket connection closed at: " + time.getHours() + ":" + time.getMinutes());
+
       clearInterval(pingInterval);
-      let time = new Date();
-      let closeTime = time.getHours() + ":" + time.getMinutes();
-      console.log("WebSocket connection closed at: " + closeTime);
       component.setState({
         hasWebsocketConnection: false
       });
 
       setTimeout(function(){
-        console.log("opening connection again")
+        console.log("Attempting to reopen websocket.")
         component.initSocketConnection(elem, playerName, gameName);
-      }, 3000);
-
-
+      }, RECONNECT_DELAY);
     };
 
     webSocket.onerror = function(err) {
-        console.log("Error: " + err);
+        console.log("Socket error: " + err);
     };
   }
 
   sendQueryResponse(responseKey) {
     this.state.webSocket.send(JSON.stringify({
-      "type": "QUERY_RESPONSE",
+      "type": QUERY_RESPONSE,
       "playerName": this.props.playerName,
       "gameName": this.props.gameName,
       "response": responseKey
