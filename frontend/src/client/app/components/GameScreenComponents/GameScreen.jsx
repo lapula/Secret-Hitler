@@ -46,6 +46,7 @@ class GameScreen extends React.Component {
           <GamePolicies
             loyalistPoliciesPassed={this.state.statusUpdateData.loyalistPoliciesPassed}
             separatistPoliciesPassed={this.state.statusUpdateData.separatistPoliciesPassed}
+            gamePlayers={this.state.statusUpdateData.gamePlayers}
           />
         </div>
       </div>

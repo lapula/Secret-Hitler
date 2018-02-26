@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 
+import {separatistPowers} from '../constants.jsx'
 import styles from './gamescreen-style.css';
 import republicLogo from '../../resources/Republic_Emblem.png';
 import cisLogo from '../../resources/CIS_emblem.png';
@@ -32,13 +33,25 @@ class GamePolicies extends React.Component {
     })
   }
 
-  renderCards(amount, activeKeys, image) {
+  getSeparatistPower(index) {
+    let powers = separatistPowers.fiveSixPlayers;
+    if (this.props.gamePlayers >= 9) {
+      powers = separatistPowers.nineTenPlayers;
+    } else if (this.props.gamePlayers >= 7)  {
+      powers = separatistPowers.sevenEightPlayers;
+    }
+    return powers[index];
+  }
+
+  renderCards(amount, activeKeys, image, isSeparatist) {
     let cards = Array.from(new Array(amount),(val,index) => {
       return (<GamePolicyCard
         key={index}
         cardKey={index}
         activeKeys={activeKeys}
         cardImage={image}
+        separatistPower={this.getSeparatistPower(index)}
+        isSeparatist={isSeparatist}
       />)
     });
     return cards;
@@ -49,10 +62,10 @@ class GamePolicies extends React.Component {
       <div className={styles.gamePoliciesWrapper}>
         <div className={styles.policiesView}>
           <div className={styles.policyCardWrapper}>
-            {this.renderCards(5, this.state.loyalistActiveKeys, republicLogo)}
+            {this.renderCards(5, this.state.loyalistActiveKeys, republicLogo, false)}
           </div>
           <div className={styles.policyCardWrapper}>
-            {this.renderCards(6, this.state.separatistActiveKeys, cisLogo)}
+            {this.renderCards(6, this.state.separatistActiveKeys, cisLogo, true)}
           </div>
         </div>
       </div>

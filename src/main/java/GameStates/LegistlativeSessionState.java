@@ -29,9 +29,10 @@ public class LegistlativeSessionState implements GameState {
     private static final String EVENT_LEGISTLATION_PROCESS_HEADER = "Silence!";
     private static final String EVENT_LEGISTLATION_PROCESS_SUBHEADER = "The government is in session.";
 
-    private static final String EVENT_LEGISTLATION = "LEGISTLATION";
+    private static final String EVENT_LEGISTLATION_SEPARATISTS = "LEGISTLATION_SEPARATISTS";
     private static final String EVENT_LEGISTLATION_HEADER_SEPARATISTS = "Separatist policy enacted!";
     private static final String EVENT_LEGISTLATION_SUBHEADER_SEPARATISTS = "This is a dark day for The Republic.";
+    private static final String EVENT_LEGISTLATION_LOYALISTS = "LEGISTLATION_LOYALISTS";
     private static final String EVENT_LEGISTLATION_HEADER_LOYALISTS = "Loyalist policy enacted!";
     private static final String EVENT_LEGISTLATION_SUBHEADER_LOYALISTS = "There is still hope for democracy.";
 
@@ -111,11 +112,11 @@ public class LegistlativeSessionState implements GameState {
             if (policies.get(0).equals(Policy.LOYALIST_POLICY)) {
                 game.getVariables().addLoyalistPolicy();
                 game.getGameScreenMessageActions().sendGameEvent(
-                        game.getGameListeners(), EVENT_LEGISTLATION, EVENT_LEGISTLATION_HEADER_LOYALISTS, EVENT_LEGISTLATION_SUBHEADER_LOYALISTS);
+                        game.getGameListeners(), EVENT_LEGISTLATION_LOYALISTS, EVENT_LEGISTLATION_HEADER_LOYALISTS, EVENT_LEGISTLATION_SUBHEADER_LOYALISTS);
             } else {
                 game.getVariables().addSeparatistPolicy();
                 game.getGameScreenMessageActions().sendGameEvent(
-                        game.getGameListeners(), EVENT_LEGISTLATION, EVENT_LEGISTLATION_HEADER_SEPARATISTS, EVENT_LEGISTLATION_SUBHEADER_SEPARATISTS);
+                        game.getGameListeners(), EVENT_LEGISTLATION_SEPARATISTS, EVENT_LEGISTLATION_HEADER_SEPARATISTS, EVENT_LEGISTLATION_SUBHEADER_SEPARATISTS);
             }
 
             game.changeState(State.DETERMINE_EXECUTIVE_ACTION);

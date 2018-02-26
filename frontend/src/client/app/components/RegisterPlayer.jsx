@@ -3,7 +3,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 
-import textConstants from './textConstants.jsx'
+import {textConstants} from './constants.jsx'
 import styles from './PlayerAppComponents/playerapp-style.css'
 import PlayerApp from './PlayerAppComponents/PlayerApp.jsx'
 

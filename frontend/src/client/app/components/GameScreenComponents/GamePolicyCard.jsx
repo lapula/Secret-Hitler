@@ -12,7 +12,14 @@ class GamePolicyCard extends React.Component {
       return (
         <div className={styles.policyCard}>
           <img src={this.props.cardImage} className={styles.policyCardImage}/>
-        </div>);
+        </div>
+      );
+    } else {
+      if (this.props.isSeparatist && this.props.separatistPower != null) {
+        return (
+          <div className={styles.policyCardPowersText}>{this.props.separatistPower}</div>
+        );
+      }
     }
   }
 

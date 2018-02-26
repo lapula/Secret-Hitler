@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import AppBar from 'material-ui/AppBar';
 
-import textConstants from './textConstants.jsx'
+import {textConstants} from './constants.jsx'
 import styles from './general-style.css';
 import RegisterPlayer from './RegisterPlayer.jsx';
 import RegisterGame from './RegisterGame.jsx';

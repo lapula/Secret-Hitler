@@ -106,7 +106,6 @@ public class VoteOnGovernmentState implements GameState {
                 game.changeState(State.NOMINATE_VICE_CHAIR);
             }
         }
-        
     }
     
 }

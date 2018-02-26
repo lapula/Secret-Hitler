@@ -3,7 +3,7 @@ import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-import textConstants from '../textConstants.jsx'
+import {textConstants} from '../constants.jsx'
 import styles from './playerapp-style.css'
 import RoleDialog from './RoleDialog.jsx';
 import OptionList from './OptionList.jsx';

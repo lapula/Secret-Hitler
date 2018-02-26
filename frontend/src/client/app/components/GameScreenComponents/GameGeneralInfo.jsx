@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import textConstants from '../textConstants.jsx'
+import {textConstants} from '../constants.jsx'
 import styles from './gamescreen-style.css';
 
 class GameGeneralInfo extends React.Component {

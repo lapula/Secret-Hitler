@@ -1,11 +1,19 @@
 import React, {Component} from 'react';
 
+import {eventImageMap} from '../constants.jsx'
 import styles from './gamescreen-style.css';
-import senateGray from '../../resources/Senate_gray.jpg';
 
 class GameEvent extends React.Component {
   constructor(props, context) {
     super(props, context);
+  }
+
+  getBackgroundImage() {
+    if (eventImageMap[this.props.gameEvent.eventType] != null) {
+      return eventImageMap[this.props.gameEvent.eventType];
+    } else {
+      return eventImageMap.generic;
+    }
   }
 
   render() {
@@ -23,7 +31,7 @@ class GameEvent extends React.Component {
       <div className={styles.gameEventWrapper}>
         <div className={styles.gameEventDisplay}>
           <div className={styles.gameEventBackground}>
-            <div className={styles.gameEventImage} style={{backgroundImage: `url(${senateGray})`}}>
+            <div className={styles.gameEventImage} style={{backgroundImage: `url(${this.getBackgroundImage()})`}}>
               <div className={styles.gameEventHeader}>{this.props.gameEvent.header}</div>
               <div className={styles.gameEventSubheader}>{this.props.gameEvent.subheader}</div>
             </div>

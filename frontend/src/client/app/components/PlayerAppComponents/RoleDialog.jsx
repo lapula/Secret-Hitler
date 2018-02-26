@@ -4,7 +4,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import ReactFontFace from 'react-font-face'
 
-import textConstants from '../textConstants.jsx'
+import {textConstants} from '../constants.jsx'
 import styles from './playerapp-style.css';
 import starfont from '../../resources/Starjedi.ttf';
 import republicLogo from '../../resources/Republic_Emblem.png';
