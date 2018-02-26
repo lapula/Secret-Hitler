@@ -10,7 +10,8 @@ class GameEvent extends React.Component {
 
   getBackgroundImage() {
     if (eventImageMap[this.props.gameEvent.eventType] != null) {
-      return eventImageMap[this.props.gameEvent.eventType];
+      return eventImageMap.generic;
+      //return eventImageMap[this.props.gameEvent.eventType];
     } else {
       return eventImageMap.generic;
     }

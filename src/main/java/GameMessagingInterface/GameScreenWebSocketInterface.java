@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class GameScreenWebSocketInterface {
 
     // Day in ms
-    private static final Long TIMEOUT_MS = 1000l * 60l * 60l * 24l;
+    private static final Long TIMEOUT_MS = 1000l * 60l * 60l;
     private static final String PING = "PING";
     private static final String CREATE_GAME = "CREATE_GAME";
     

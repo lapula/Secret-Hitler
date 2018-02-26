@@ -8,10 +8,8 @@ package GameStates;
 import GameLogic.Game;
 import GameLogic.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -25,7 +23,7 @@ public class ExecutionState implements GameState {
     private static final String EXECUTED_SUB_HEADER = "You may not speak or reveal your role!";
     private static final String EVENT_EXECUTION = "EXECUTION";
     private static final String EVENT_EXECUTION_HEADER = "Execute order 66.";
-    private static final String EVENT_EXECUTION_SUBHEADER = "The acting Supreme Chancellor has assassinated a player.";
+    private static final String EVENT_EXECUTION_SUBHEADER = "The acting Supreme Chancellor has assassinated %s!";
 
     Game game;
     public ExecutionState(Game game) {
@@ -35,28 +33,21 @@ public class ExecutionState implements GameState {
     @Override
     public void doAction() {
         Player supremeChancellor = game.getVariables().getSupremeChancellor();
-        Map<String, String> choices = new HashMap<>();
-        
-        game.getPlayerManager().getPlayers().forEach(player -> {
-            if (!player.getName().equals(supremeChancellor.getName())) {
-                choices.put(player.getName(), player.getName());
-            }
-        });
-        
-        List<Player> target = new ArrayList<>();
-        target.add(supremeChancellor);
-        game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), target, choices, EXECUTION_HEADER, EXECUTION_SUB_HEADER, game.getGameStateType().toString());
+        Map<String, String> choices = game.getPlayerManager().getPlayers().stream()
+                .filter(player -> !player.getName().equals(supremeChancellor.getName()))
+                .collect(Collectors.toMap(Player::getName, Player::getName));
+
+        game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), Arrays.asList(supremeChancellor), choices, EXECUTION_HEADER, EXECUTION_SUB_HEADER, game.getGameStateType().toString());
     }
 
     @Override
     public void receiveData(String player, String data) {
         Player execute = game.getPlayerManager().getPlayerByName(data);
-        if (execute != null) {
-            game.getPlayerManager().getPlayers().remove(execute);
-            game.getGamePlayerMessageActions().alertPlayer(execute, EXECUTED_HEADER, EXECUTED_SUB_HEADER);
-            game.getGameScreenMessageActions().sendGameEvent(
-                    game.getGameListeners(), EVENT_EXECUTION, EVENT_EXECUTION_HEADER, EVENT_EXECUTION_SUBHEADER);
-            game.changeState(State.ROUND_START);
-        }
+        game.getPlayerManager().getPlayers().remove(execute);
+        game.getGamePlayerMessageActions().alertPlayer(execute, EXECUTED_HEADER, EXECUTED_SUB_HEADER);
+        String executionSubheader = String.format(EVENT_EXECUTION_SUBHEADER, execute.getName());
+        game.getGameScreenMessageActions().sendGameEvent(
+                game.getGameListeners(), EVENT_EXECUTION, EVENT_EXECUTION_HEADER, executionSubheader);
+        game.changeState(State.ROUND_START);
     }
 }

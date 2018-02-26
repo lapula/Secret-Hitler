@@ -46,6 +46,11 @@ public class GamePlayerMessageActions {
         jsonTargetMessage.put("subheader", subheader);
         jsonTargetMessage.put("choices", jsonChoices);
 
+
+
+        targets.forEach(target -> System.out.println(target.getName()));
+
+
         targets.forEach(target -> {
             gameMessageService.sendPlayerMessageRequiredResponse(target, jsonTargetMessage, RESPONSE_MESSAGE_SEND_ATTEMPTS);
         });

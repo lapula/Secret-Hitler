@@ -23,23 +23,26 @@ public class DetermineExecutiveActionState implements GameState {
         
         int gamePlayers = game.getVariables().getGamePlayers();
         int separatistPolicies = game.getVariables().getSeparatistPolicyCount();
-        
-        if (separatistPolicies >= 4) {
+        boolean hasPower = game.getVariables().isLastPolicyPassedSeparatist();
+
+        if (separatistPolicies == 0 || !hasPower) {
+            game.changeState(State.ROUND_START);
+        } else if (separatistPolicies >= 4) {
             game.changeState(State.EXECUTION);
         } else if (separatistPolicies == 3) {
-            if (gamePlayers > 3) { //6
+            if (gamePlayers > 6) { //>6
                 game.changeState(State.CALL_SPECIAL_ELECTION);
             } else {
                 game.changeState(State.POLICY_PEEK);
             }
         } else if (separatistPolicies == 2) {
-            if (gamePlayers > 3) { //6
+            if (gamePlayers > 6) { //>6
                 game.changeState(State.INVESTIGATE_LOYALTY);
             } else {
                 game.changeState(State.ROUND_START);
             }
         } else if (separatistPolicies == 1) {
-            if (gamePlayers > 3) {//8
+            if (gamePlayers > 8) {//>8
                 game.changeState(State.INVESTIGATE_LOYALTY);
             } else {
                 game.changeState(State.ROUND_START);

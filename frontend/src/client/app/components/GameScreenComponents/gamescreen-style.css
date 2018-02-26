@@ -19,6 +19,7 @@
   flex-direction: column;
   justify-content: space-around;
   border-right: 5px white solid;
+  overflow-y: scroll;
 }
 
 .playerColumnYes {
@@ -62,7 +63,6 @@
   height: 100%;
   flex-direction: column;
   flex: 3;
-  border-top: 5px solid white;
 }
 
 .policiesView {
@@ -77,19 +77,24 @@
   margin: 10px;
   display: flex;
   justify-content: space-evenly;
+  border: 5px solid gray;
+  padding: 10px;
 }
 
 .policyCardSlot {
-  border-radius: 10px;
-  margin: 10px;
-  border: 5px solid white;
+  border-right: 2px solid white;
+  width: 100%;
+}
+
+.policyCardSlotLast {
   width: 100%;
 }
 
 .policyCard {
-  width: 100%;
   height: 100%;
-  background-color: rgba(255,255,255,0.3);
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: rgba(255,255,255,0.5);
 }
 
 .policyCardImage {

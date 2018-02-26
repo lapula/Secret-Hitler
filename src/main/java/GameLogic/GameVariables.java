@@ -18,10 +18,13 @@ public class GameVariables {
     private Map<String, String> electionResults;
     private Player supremeChancellor;
     private Player viceChair;
+    private Player previousViceChair;
+    private Player previousSupremeChancellor;
     private int gamePlayers;
     private int senateVotesThisRound;
     private int loyalistPoliciesPassed;
     private int separatistPoliciesPassed;
+    private boolean lastPolicyPassedSeparatist;
     private int specialElectionPhase;
     private Player specialElectionSupremeChancellor;
     private Player supremeChancellorBeforeSpecialElection;
@@ -35,6 +38,7 @@ public class GameVariables {
         this.loyalistPoliciesPassed = 0;
         this.separatistPoliciesPassed = 0;
         this.specialElectionPhase = 0;
+        this.lastPolicyPassedSeparatist = false;
     }
 
     public Map<String, String> getElectionResults() {
@@ -83,6 +87,7 @@ public class GameVariables {
     
     public void addLoyalistPolicy() {
         this.loyalistPoliciesPassed++;
+        this.lastPolicyPassedSeparatist = false;
     }
     
     public int getLoyalistPolicyCount() {
@@ -95,6 +100,7 @@ public class GameVariables {
     
     public void addSeparatistPolicy() {
         this.separatistPoliciesPassed++;
+        this.lastPolicyPassedSeparatist = true;
     }
     
     public List<Policy> getVetoedPolicies() {
@@ -127,5 +133,45 @@ public class GameVariables {
 
     public void setSpecialElectionPhase(int specialElectionPhase) {
         this.specialElectionPhase = specialElectionPhase;
+    }
+
+    public void setPreviousViceChair(Player previousViceChair) {
+        this.previousViceChair = previousViceChair;
+    }
+
+    public void setPreviousSupremeChancellor(Player previousSupremeChancellor) {
+        this.previousSupremeChancellor = previousSupremeChancellor;
+    }
+
+    public boolean isLastPolicyPassedSeparatist() {
+        return lastPolicyPassedSeparatist;
+    }
+
+    public String getPreviousViceChairName() {
+        if (previousViceChair != null) {
+            return previousViceChair.getName();
+        }
+        return "";
+    }
+
+    public String getPreviousSupremeChancellorName() {
+        if (previousSupremeChancellor != null) {
+            return previousSupremeChancellor.getName();
+        }
+        return "";
+    }
+
+    public String getSupremeChancellorName() {
+        if (supremeChancellor != null) {
+            return supremeChancellor.getName();
+        }
+        return "";
+    }
+
+    public String getViceChairName() {
+        if (viceChair != null) {
+            return viceChair.getName();
+        }
+        return "";
     }
 }

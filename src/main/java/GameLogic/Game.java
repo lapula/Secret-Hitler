@@ -47,12 +47,12 @@ public class Game {
     }
     
     public void changeState(State state) {
+        this.gameStateType = state;
         if (checkGameEndConditions()) {
             this.gameState = this.stateFactory.getGameState(this, State.GAME_END);
         } else {
             this.gameState =  this.stateFactory.getGameState(this, state);
         }
-        this.gameStateType = state;
         this.gameState.doAction();
         this.getGameMessageService().getGameScreenMessageActions().sendStatusUpdate(this.gameListeners, this.toJSON());
 
@@ -72,7 +72,7 @@ public class Game {
         }
         if (this.gameVariables.getViceChair() != null) {
             if (this.gameVariables.getViceChair().getRole().equals(Role.SHEEV_PALPATINE)
-                    && this.gameVariables.getSeparatistPolicyCount() >= 3
+                    && this.gameVariables.getSeparatistPolicyCount() >= 4
                     && !this.gameState.equals(State.VOTE_ON_GOVERNMENT)
                     && !this.gameState.equals(State.CALL_SPECIAL_ELECTION)) {
                 return true;
@@ -136,20 +136,10 @@ public class Game {
 
     public JSONObject toJSON() {
 
-        String supremeChancellorName = "";
-        String viceChairName = "";
         JSONObject electionResults = new JSONObject(gameVariables.getElectionResults());
-
-        if (gameVariables.getSupremeChancellor() != null) {
-            supremeChancellorName = gameVariables.getSupremeChancellor().getName();
-        }
-        if (gameVariables.getViceChair() != null) {
-            viceChairName = gameVariables.getViceChair().getName();
-        }
-        System.out.println(playerManager.getPlayers().toString());
         JSONObject json = new JSONObject();
-        json.put("supremeChancellor", supremeChancellorName);
-        json.put("viceChair", viceChairName);
+        json.put("supremeChancellor", gameVariables.getSupremeChancellorName());
+        json.put("viceChair", gameVariables.getViceChairName());
         json.put("gamePlayers", gameVariables.getGamePlayers());
         json.put("governmentVotesThisRound", gameVariables.getSenateVotesThisRound());
         json.put("loyalistPoliciesPassed", gameVariables.getLoyalistPolicyCount());

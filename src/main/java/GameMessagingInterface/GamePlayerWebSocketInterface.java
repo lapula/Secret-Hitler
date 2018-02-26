@@ -21,12 +21,12 @@ import java.util.stream.Collectors;
 public class GamePlayerWebSocketInterface {
 
     // Day in ms
-    private static final Long TIMEOUT_MS = 1000l * 60l * 60l * 24l;
+    private static final Long TIMEOUT_MS = 1000l * 60l * 60l;
     private static final String PING = "PING";
 
     @OnWebSocketConnect
     public void onConnect(Session user) throws Exception {
-        user.setIdleTimeout(10000l);
+        user.setIdleTimeout(TIMEOUT_MS);
         System.out.println("Player connected to server");
     }
 
@@ -49,7 +49,10 @@ public class GamePlayerWebSocketInterface {
         ));
         Game game = Main.games.get(messageMap.get("gameName"));
 
-        if (messageMap.get("type").equals(PING)) {
+        if (game == null) {
+            System.out.println("PLAYER TRIED TO CONNECT BUT GAME NOT FOUND");
+            user.close();
+        } else if (messageMap.get("type").equals(PING)) {
             ping(user);
         } else {
             game.getGameMessageService().receivePlayerMessage(user, messageMap);

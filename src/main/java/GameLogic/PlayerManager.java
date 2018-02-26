@@ -6,6 +6,7 @@
 package GameLogic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import org.eclipse.jetty.websocket.api.Session;
@@ -30,6 +31,7 @@ public class PlayerManager {
     
     public PlayerManager(Game game) {
         this.players = new ArrayList<>();
+        this.playersIncludingExecuted = new ArrayList<>();
         this.game = game;
         this.gamePlayers = game.getVariables().getGamePlayers();
         this.roleList = initRoles(gamePlayers);
@@ -40,6 +42,7 @@ public class PlayerManager {
         Player player = new Player(playerName, gameName, user);
         player.setRole(this.getRole());
         players.add(player);
+        playersIncludingExecuted.add(player);
         return player;
     }
 
@@ -112,17 +115,17 @@ public class PlayerManager {
         
         switch(gamePlayers) {
         case 5 :
-            loyalists = 3;
+            loyalists = 3;break;
         case 6 :
-            loyalists = 4;
+            loyalists = 4;break;
         case 7 :
-            loyalists = 4;
+            loyalists = 4;break;
         case 8 :
-            loyalists = 4;
+            loyalists = 4;break;
         case 9 :
-            loyalists = 4;
+            loyalists = 4;break;
         case 10 :
-            loyalists = 4;
+            loyalists = 4;break;
         default :
             loyalists = 1;
      }
@@ -139,7 +142,9 @@ public class PlayerManager {
      for (int i = 0; i < loyalists; i++) {
          roles.add(Role.LOYALIST);
      }
-        
+
+     Collections.shuffle(roles);
+
      return roles;
     }
     

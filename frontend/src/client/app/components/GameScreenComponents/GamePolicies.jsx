@@ -52,6 +52,7 @@ class GamePolicies extends React.Component {
         cardImage={image}
         separatistPower={this.getSeparatistPower(index)}
         isSeparatist={isSeparatist}
+        isLast={amount == (index + 1)}
       />)
     });
     return cards;

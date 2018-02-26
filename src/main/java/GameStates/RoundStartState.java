@@ -31,12 +31,14 @@ public class RoundStartState implements GameState {
         PlayerManager playerManager = game.getPlayerManager();
         
         Player nextSupremeChancellor;
+        Player supremeChancellor;
         if (gameVariables.getSpecialElectionPhase() == 1) {
             gameVariables.setSpecialElectionPhase(2);
             nextSupremeChancellor = gameVariables.getSpecialElectionSupremeChancellor();
         } else if (gameVariables.getSpecialElectionPhase() == 2) {
-            Player supremeChancellor = gameVariables.getSupremeChancellorBeforeSpecialElection();
-            if (!playerManager.getPlayers().contains(supremeChancellor)) {
+            supremeChancellor = gameVariables.getSupremeChancellorBeforeSpecialElection();
+
+            /*if (!playerManager.getPlayers().contains(supremeChancellor)) {
                 int index = playerManager.getPlayersIncludingExecuted().indexOf(supremeChancellor);
                 if (index == playerManager.getPlayersIncludingExecuted().size() - 1) {
                     index = -1;
@@ -44,11 +46,17 @@ public class RoundStartState implements GameState {
                 supremeChancellor = playerManager.getPlayersIncludingExecuted().get(index + 1);
             }
             nextSupremeChancellor = playerManager.getNextPlayer(supremeChancellor);
+            */
+            nextSupremeChancellor = playerManager.getNextPlayer(supremeChancellor);
             gameVariables.setSpecialElectionPhase(0);
         } else {
-            Player supremeChancellor = gameVariables.getSupremeChancellor();
+            supremeChancellor = gameVariables.getSupremeChancellor();
             nextSupremeChancellor = playerManager.getNextPlayer(supremeChancellor);
         }
+        gameVariables.setPreviousViceChair(null);
+        gameVariables.setPreviousViceChair(game.getVariables().getViceChair());
+        gameVariables.setPreviousSupremeChancellor(null);
+        gameVariables.setPreviousSupremeChancellor(game.getVariables().getSupremeChancellor());
         gameVariables.setSupremeChancellor(nextSupremeChancellor);
         gameVariables.setElectionResults(new HashMap<>());
         gameVariables.setSenateVotesThisRound(0);
@@ -56,9 +64,6 @@ public class RoundStartState implements GameState {
         gameVariables.setVetoedPolicies(null);
         game.getGamePlayerMessageActions().clearSpecialRoles(playerManager.getPlayers(), nextSupremeChancellor);
         game.getGamePlayerMessageActions().setSpecialRole(nextSupremeChancellor, INFORM_SUPREME_CHANCELLOR);
-        
-        System.out.println("Loyalist policies: " + gameVariables.getLoyalistPolicyCount());
-        System.out.println("Separatist policies: " + gameVariables.getSeparatistPolicyCount());
         
         game.changeState(State.NOMINATE_VICE_CHAIR);
     }

@@ -25,7 +25,7 @@ class GamePolicyCard extends React.Component {
 
   render() {
     return (
-      <div className={styles.policyCardSlot}>{this.renderCard()}</div>
+      <div className={this.props.isLast ? styles.policyCardSlotLast : styles.policyCardSlot}>{this.renderCard()}</div>
     );
   }
 }

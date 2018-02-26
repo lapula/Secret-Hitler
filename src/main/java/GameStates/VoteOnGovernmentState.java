@@ -8,8 +8,11 @@ package GameStates;
 import GameLogic.Game;
 import GameLogic.Player;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
+
 /**
  *
  * @author pulli
@@ -43,10 +46,7 @@ public class VoteOnGovernmentState implements GameState {
     
     @Override
     public void doAction() {
-        
         game.getVariables().setElectionResults(new HashMap<>());
-        
-        // increase government formation attempt counter
         game.getVariables().setSenateVotesThisRound(game.getVariables().getSenateVotesThisRound() + 1);
         
         Map<String, String> choices = new HashMap<>();
@@ -60,52 +60,45 @@ public class VoteOnGovernmentState implements GameState {
     public void receiveData(String player, String data) {
         game.getVariables().addVote(player, data);
         if (game.getVariables().getElectionResults().size() == game.getPlayerManager().getPlayers().size()) {
-            handleElectionResults();
-        }
-    }
-    
-    private void handleElectionResults() {
-        
-        int yesVotes = 0;
-        int noVotes = 0;
-        
-        for (String result : game.getVariables().getElectionResults().values()) {
-            if (result.equals(YES)) {
-                yesVotes++;
-            } else if (result.equals(NO)) {
-                noVotes++;
-            }
-        }
-        
-        boolean governmentFormed = yesVotes > noVotes;
-        
-        if (governmentFormed) {
-            game.getGamePlayerMessageActions().setSpecialRole(game.getVariables().getViceChair(), INFORM_VICE_CHAIR);
-            game.changeState(State.LEGISTLATIVE_SESSION);
-        } else {
-            if (game.getVariables().getSenateVotesThisRound() == 3) {
-                if (Math.random() > 0.5) {
-                    game.getVariables().addSeparatistPolicy();
-                } else {
-                    game.getVariables().addLoyalistPolicy();
-                }
-                game.getGameScreenMessageActions().sendGameEvent(
-                        game.getGameListeners(), EVENT_ATTEMPTS_USED, EVENT_ATTEMPTS_USED_HEADER, EVENT_ATTEMPTS_USED_SUBHEADER);
 
-                game.changeState(State.ROUND_START);
+            Collection<String> votes = game.getVariables().getElectionResults().values();
+            long yesVotes = votes.stream().filter(v -> v.equals(YES)).count();
+            long noVotes = votes.stream().filter(v -> v.equals(NO)).count();
+            boolean governmentFormed = yesVotes > noVotes;
+
+            if (governmentFormed) {
+                game.getGamePlayerMessageActions().setSpecialRole(game.getVariables().getViceChair(), INFORM_VICE_CHAIR);
+                game.changeState(State.LEGISTLATIVE_SESSION);
+            } else if (game.getVariables().getSenateVotesThisRound() == 3) {
+                assignRandomPolicyStartNewRound();
             } else {
-                game.getVariables().setViceChair(null);
-                Player supremeChancellor = game.getVariables().getSupremeChancellor();
-                Player nextSupremeChancellor = game.getPlayerManager().getNextPlayer(supremeChancellor);
-                game.getVariables().setSupremeChancellor(nextSupremeChancellor);
-                game.getGamePlayerMessageActions().clearSpecialRoles(game.getPlayerManager().getPlayers(), nextSupremeChancellor);
-                game.getGamePlayerMessageActions().setSpecialRole(nextSupremeChancellor, INFORM_SUPREME_CHANCELLOR);
-                game.getGameScreenMessageActions().sendGameEvent(
-                        game.getGameListeners(), EVENT_VOTE_FAIL, EVENT_VOTE_FAIL_HEADER, EVENT_VOTE_FAIL_SUBHEADER);
-
-                game.changeState(State.NOMINATE_VICE_CHAIR);
+                startNewNomination();
             }
         }
     }
-    
+
+    private void assignRandomPolicyStartNewRound() {
+        if (Math.random() > 0.5) {
+            game.getVariables().addSeparatistPolicy();
+        } else {
+            game.getVariables().addLoyalistPolicy();
+        }
+        game.getGameScreenMessageActions().sendGameEvent(
+                game.getGameListeners(), EVENT_ATTEMPTS_USED, EVENT_ATTEMPTS_USED_HEADER, EVENT_ATTEMPTS_USED_SUBHEADER);
+
+        game.changeState(State.ROUND_START);
+    }
+
+    private void startNewNomination() {
+        game.getVariables().setViceChair(null);
+        Player supremeChancellor = game.getVariables().getSupremeChancellor();
+        Player nextSupremeChancellor = game.getPlayerManager().getNextPlayer(supremeChancellor);
+        game.getVariables().setSupremeChancellor(nextSupremeChancellor);
+        game.getGamePlayerMessageActions().clearSpecialRoles(game.getPlayerManager().getPlayers(), nextSupremeChancellor);
+        game.getGamePlayerMessageActions().setSpecialRole(nextSupremeChancellor, INFORM_SUPREME_CHANCELLOR);
+        game.getGameScreenMessageActions().sendGameEvent(
+                game.getGameListeners(), EVENT_VOTE_FAIL, EVENT_VOTE_FAIL_HEADER, EVENT_VOTE_FAIL_SUBHEADER);
+
+        game.changeState(State.NOMINATE_VICE_CHAIR);
+    }
 }

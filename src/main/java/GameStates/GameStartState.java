@@ -32,12 +32,8 @@ public class GameStartState implements GameState {
     @Override
     public void receiveData(String player, String data) {
         PlayerManager playerManager = game.getPlayerManager();
-        //Player newPlayer = playerManager.getPlayerByName(player);
-        //game.getGamePlayerMessageActions().initPlayer(newPlayer, newPlayer.getRole());
-
         Integer playersExpected = playerManager.getGamePlayers();
-        System.out.println(playerManager.getPlayers().size());
-        System.out.println(playersExpected);
+
         if (playerManager.getPlayers().size() == playersExpected) {
             Player supremeChancellor = playerManager.getRandomPlayer();
             game.getVariables().setSupremeChancellor(supremeChancellor);

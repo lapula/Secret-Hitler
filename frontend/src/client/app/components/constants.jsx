@@ -27,12 +27,13 @@ const textConstants = {
   viceChair: "Vice Chair",
 }
 
+const POLICY_PEEK = "The Supreme Chancellor receives knowledge of the next three policy cards.";
 const INVESTIGATE = "The Supreme Chancellor investigates a player's role.";
 const SPECIAL_ELECTION = "The Supreme Chancellor nominates the next Supreme Chancellor.";
 const EXECUTION = "The Supreme Chancellor must execute a player."
 const EXECUTION_VETO = EXECUTION + "\n\n" + "The Vice Chair may veto policies.";
 
-const fiveSix = [null, null, INVESTIGATE, EXECUTION, EXECUTION_VETO]
+const fiveSix = [null, null, POLICY_PEEK, EXECUTION, EXECUTION_VETO]
 const sevenEight = [null, INVESTIGATE, SPECIAL_ELECTION, EXECUTION, EXECUTION_VETO]
 const nineTen = [INVESTIGATE, INVESTIGATE, SPECIAL_ELECTION, EXECUTION, EXECUTION_VETO]
 

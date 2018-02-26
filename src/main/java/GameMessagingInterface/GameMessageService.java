@@ -60,31 +60,43 @@ public class GameMessageService {
         String gameName = message.get("gameName");
         Player player = game.getPlayerManager().getPlayerByName(playerName);
 
-        if (player == null) {
-            Player newPlayer = game.getPlayerManager().addNewPlayer(gameName, playerName, user);
-            this.getGamePlayerMessageActions().initPlayer(newPlayer, newPlayer.getRole());
-            game.receiveData(playerName, null);
-        } else {
-            game.getPlayerManager().reconnectPlayer(playerName, user);
-            this.getGamePlayerMessageActions().initPlayer(player, player.getRole());
+        if (checkConnectionValidity(playerName)) {
+            if (player == null) {
+                Player newPlayer = game.getPlayerManager().addNewPlayer(gameName, playerName, user);
+                this.getGamePlayerMessageActions().initPlayer(newPlayer, newPlayer.getRole());
+                game.receiveData(playerName, null);
+            } else {
+                game.getPlayerManager().reconnectPlayer(playerName, user);
+                this.getGamePlayerMessageActions().initPlayer(player, player.getRole());
 
-            if (game.getVariables().getViceChair() != null) {
-                if (game.getVariables().getViceChair().getName().equals(playerName)) {
+                if (game.getVariables().getViceChairName().equals(playerName)) {
                     this.getGamePlayerMessageActions().setSpecialRole(player, INFORM_VICE_CHAIR);
                 }
-            }
-            if (game.getVariables().getSupremeChancellor() != null) {
-                if (game.getVariables().getSupremeChancellor().getName().equals(playerName)) {
+                if (game.getVariables().getSupremeChancellorName().equals(playerName)) {
                     this.getGamePlayerMessageActions().setSpecialRole(player, INFORM_SUPREME_CHANCELLOR);
                 }
-            }
 
-            //TODO if not required send just header / subheader
-            if (getPlayerPendingMessages(playerName) != null) {
-                LOGGER.info("RECONNECTED: " + player.getName() + " SENDING: " + getPlayerPendingMessages(playerName));
-                sendPlayerMessageRequiredResponse(player, getPlayerPendingMessages(playerName), attempts);
+                if (getPlayerPendingMessages(playerName) != null) {
+                    LOGGER.info("RECONNECTED: " + player.getName() + " SENDING: " + getPlayerPendingMessages(playerName));
+                    sendPlayerMessageRequiredResponse(player, getPlayerPendingMessages(playerName), attempts);
+                }
+            }
+        } else {
+            System.out.println("PLAYER ALREADY CONNECTED");
+            user.close();
+        }
+    }
+
+    private boolean checkConnectionValidity(String playerName) {
+        Player p = this.game.getPlayerManager().getPlayerByName(playerName);
+        if (p != null) {
+            if (p.getSession() != null) {
+                //TODO fix this
+                return true;
+                //return false;
             }
         }
+        return true;
     }
 
     private void queryResponse(Map<String, String> message, String playerName) {
@@ -110,11 +122,15 @@ public class GameMessageService {
     protected void sendPlayerMessageRequiredResponse(Player target, JSONObject gameMessage, Integer attempts) {
         if (attempts <= 0) {return;}
         try {
+            System.out.println(target);
             LOGGER.info("TARGET: " + target.getName() + " SENT: " + gameMessage);
+
             target.getSession().getRemote().sendString(gameMessage.toString());
             addPlayerPendingMessage(target.getName(), gameMessage);
         } catch (Exception ex) {
             //delayedRetryMessageSending(target, gameMessage);
+            System.out.println("playerMessageRR sending failed");
+            ex.printStackTrace();
             delayedRetryMessageSending(() -> sendPlayerMessageRequiredResponse(target, gameMessage, attempts - 1));
         }
     }
@@ -124,7 +140,7 @@ public class GameMessageService {
         try {
             target.getSession().getRemote().sendString(gameMessage.toString());
         } catch (Exception ex) {
-            System.out.println("GameMessage sending failed");
+            System.out.println("playerMessage sending failed");
             //delayedRetryMessageSending(target, gameMessage);
             delayedRetryMessageSending(() -> sendPlayerMessage(target, gameMessage, attempts - 1));
         }
@@ -147,11 +163,10 @@ public class GameMessageService {
     }
 
     private void addPlayerPendingMessage(String playerName, JSONObject gameMessage) {
-        if (pendingAckMessages.get(playerName) != null) {
-            System.out.println("SOMETHING IS HORRIBLY WRONG");
+        if (!gameMessage.equals(pendingAckMessages.get(playerName))) {
+            LOGGER.severe("MESSAGE LOST EARLIER");
             System.out.println(pendingAckMessages.get(playerName));
             System.out.println(gameMessage);
-            System.out.println("######");
         } else {
             this.pendingAckMessages.put(playerName, gameMessage);
             LOGGER.info("ADD PENDING MESSAGE: " + playerName + " MESSAGE: " + gameMessage);
@@ -160,7 +175,7 @@ public class GameMessageService {
 
     private void delayedRetryMessageSending(Runnable sendMessage) {
 
-        LOGGER.warning("FAILED, trying again in 5s");
+        LOGGER.warning("FAILED, trying again in 3s");
         try {
             TimeUnit.SECONDS.sleep(5);
             sendMessage.run();

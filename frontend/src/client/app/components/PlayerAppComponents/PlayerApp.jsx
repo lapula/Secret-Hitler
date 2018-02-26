@@ -150,7 +150,8 @@ class PlayerApp extends React.Component {
     };
 
     webSocket.onerror = function(err) {
-        console.log("Socket error: " + err);
+        console.log("Socket error: ");
+        console.log(err);
     };
   }
 
