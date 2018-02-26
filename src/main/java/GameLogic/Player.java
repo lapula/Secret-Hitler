@@ -11,7 +11,7 @@ import org.eclipse.jetty.websocket.api.Session;
  *
  * @author pulli
  */
-public class Player {
+public class Player implements Comparable<Player> {
     
     private String name;
     private String gameName;
@@ -57,4 +57,10 @@ public class Player {
     public void setSession(Session session) {
         this.session = session;
     }
+
+    public int compareTo(Player comparePlayer) {
+
+        return this.getName().compareTo(comparePlayer.getName());
+    }
+
 }

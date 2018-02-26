@@ -36,7 +36,6 @@ public class NominateViceChair implements GameState {
         String previousViceChairName = game.getVariables().getPreviousViceChairName();
         String previousSupremeChancellorName = game.getVariables().getPreviousSupremeChancellorName();
 
-        //TODO doesn't work after failed government votes
         Map<String, String> choices = game.getPlayerManager().getPlayers().stream()
                 .filter(player -> !player.getName().equals(supremeChancellor.getName())
                         && !player.getName().equals(previousViceChairName)

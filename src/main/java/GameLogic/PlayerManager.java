@@ -43,6 +43,7 @@ public class PlayerManager {
         player.setRole(this.getRole());
         players.add(player);
         playersIncludingExecuted.add(player);
+        Collections.sort(players);
         return player;
     }
 
@@ -71,6 +72,7 @@ public class PlayerManager {
         for (int i = 0; i < players.size(); i++) {
             names.add(players.get(i).getName());
         }
+        Collections.sort(names);
         return names;
     }
     

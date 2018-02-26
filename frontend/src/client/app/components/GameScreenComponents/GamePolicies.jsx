@@ -63,9 +63,11 @@ class GamePolicies extends React.Component {
       <div className={styles.gamePoliciesWrapper}>
         <div className={styles.policiesView}>
           <div className={styles.policyCardWrapper}>
+            /*<div>Loyalists</div>*/
             {this.renderCards(5, this.state.loyalistActiveKeys, republicLogo, false)}
           </div>
           <div className={styles.policyCardWrapper}>
+            /*<div>Separatists</div>*/
             {this.renderCards(6, this.state.separatistActiveKeys, cisLogo, true)}
           </div>
         </div>

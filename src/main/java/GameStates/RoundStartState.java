@@ -37,26 +37,12 @@ public class RoundStartState implements GameState {
             nextSupremeChancellor = gameVariables.getSpecialElectionSupremeChancellor();
         } else if (gameVariables.getSpecialElectionPhase() == 2) {
             supremeChancellor = gameVariables.getSupremeChancellorBeforeSpecialElection();
-
-            /*if (!playerManager.getPlayers().contains(supremeChancellor)) {
-                int index = playerManager.getPlayersIncludingExecuted().indexOf(supremeChancellor);
-                if (index == playerManager.getPlayersIncludingExecuted().size() - 1) {
-                    index = -1;
-                }
-                supremeChancellor = playerManager.getPlayersIncludingExecuted().get(index + 1);
-            }
-            nextSupremeChancellor = playerManager.getNextPlayer(supremeChancellor);
-            */
             nextSupremeChancellor = playerManager.getNextPlayer(supremeChancellor);
             gameVariables.setSpecialElectionPhase(0);
         } else {
             supremeChancellor = gameVariables.getSupremeChancellor();
             nextSupremeChancellor = playerManager.getNextPlayer(supremeChancellor);
         }
-        gameVariables.setPreviousViceChair(null);
-        gameVariables.setPreviousViceChair(game.getVariables().getViceChair());
-        gameVariables.setPreviousSupremeChancellor(null);
-        gameVariables.setPreviousSupremeChancellor(game.getVariables().getSupremeChancellor());
         gameVariables.setSupremeChancellor(nextSupremeChancellor);
         gameVariables.setElectionResults(new HashMap<>());
         gameVariables.setSenateVotesThisRound(0);

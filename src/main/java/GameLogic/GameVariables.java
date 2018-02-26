@@ -18,8 +18,8 @@ public class GameVariables {
     private Map<String, String> electionResults;
     private Player supremeChancellor;
     private Player viceChair;
-    private Player previousViceChair;
-    private Player previousSupremeChancellor;
+    private String previousViceChairName;
+    private String previousSupremeChancellorName;
     private int gamePlayers;
     private int senateVotesThisRound;
     private int loyalistPoliciesPassed;
@@ -39,6 +39,8 @@ public class GameVariables {
         this.separatistPoliciesPassed = 0;
         this.specialElectionPhase = 0;
         this.lastPolicyPassedSeparatist = false;
+        this.previousSupremeChancellorName = "";
+        this.previousViceChairName = "";
     }
 
     public Map<String, String> getElectionResults() {
@@ -135,12 +137,12 @@ public class GameVariables {
         this.specialElectionPhase = specialElectionPhase;
     }
 
-    public void setPreviousViceChair(Player previousViceChair) {
-        this.previousViceChair = previousViceChair;
+    public void setPreviousViceChairName(String previousViceChairName) {
+        this.previousViceChairName = previousViceChairName;
     }
 
-    public void setPreviousSupremeChancellor(Player previousSupremeChancellor) {
-        this.previousSupremeChancellor = previousSupremeChancellor;
+    public void setPreviousSupremeChancellorName(String previousSupremeChancellorName) {
+        this.previousSupremeChancellorName = previousSupremeChancellorName;
     }
 
     public boolean isLastPolicyPassedSeparatist() {
@@ -148,17 +150,11 @@ public class GameVariables {
     }
 
     public String getPreviousViceChairName() {
-        if (previousViceChair != null) {
-            return previousViceChair.getName();
-        }
-        return "";
+        return previousViceChairName;
     }
 
     public String getPreviousSupremeChancellorName() {
-        if (previousSupremeChancellor != null) {
-            return previousSupremeChancellor.getName();
-        }
-        return "";
+        return previousSupremeChancellorName;
     }
 
     public String getSupremeChancellorName() {

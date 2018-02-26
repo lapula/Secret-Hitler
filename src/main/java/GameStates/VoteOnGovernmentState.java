@@ -67,6 +67,8 @@ public class VoteOnGovernmentState implements GameState {
             boolean governmentFormed = yesVotes > noVotes;
 
             if (governmentFormed) {
+                game.getVariables().setPreviousViceChairName(game.getVariables().getViceChair().getName());
+                game.getVariables().setPreviousSupremeChancellorName(game.getVariables().getSupremeChancellor().getName());
                 game.getGamePlayerMessageActions().setSpecialRole(game.getVariables().getViceChair(), INFORM_VICE_CHAIR);
                 game.changeState(State.LEGISTLATIVE_SESSION);
             } else if (game.getVariables().getSenateVotesThisRound() == 3) {
