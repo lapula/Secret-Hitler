@@ -8,8 +8,13 @@
   flex-grow: inherit;
 }
 
+.textWhite {
+  color: white !important;
+}
+
 .menuButton {
   margin: 12px;
+  color: white;
 }
 
 .menuButton button {

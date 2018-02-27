@@ -36,7 +36,7 @@ public class CallSpecialElectionState implements GameState {
         game.getGameScreenMessageActions().sendGameEvent(
                 game.getGameListeners(), EVENT_SPECIAL, EVENT_SPECIAL_HEADER, EVENT_SPECIAL_SUBHEADER);
 
-        Player supremeChancellor = game.getVariables().getSupremeChancellor();
+        Player supremeChancellor = game.getVariables().getSupremeChancellor().get();
         Map<String, String> choices = game.getPlayerManager().getPlayers().stream()
                 .filter(player -> !player.getName().equals(supremeChancellor.getName()))
                 .collect(Collectors.toMap(Player::getName, Player::getName));
@@ -46,7 +46,7 @@ public class CallSpecialElectionState implements GameState {
 
     @Override
     public void receiveData(String player, String data) {
-        Player supremeChancellor = game.getVariables().getSupremeChancellor();
+        Player supremeChancellor = game.getVariables().getSupremeChancellor().get();
         Player specialSupremeChancellor = game.getPlayerManager().getPlayerByName(data);
         if (specialSupremeChancellor != null) {
             game.getVariables().setSupremeChancellorBeforeSpecialElection(supremeChancellor);

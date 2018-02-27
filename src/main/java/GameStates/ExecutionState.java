@@ -32,7 +32,7 @@ public class ExecutionState implements GameState {
 
     @Override
     public void doAction() {
-        Player supremeChancellor = game.getVariables().getSupremeChancellor();
+        Player supremeChancellor = game.getVariables().getSupremeChancellor().get();
         Map<String, String> choices = game.getPlayerManager().getPlayers().stream()
                 .filter(player -> !player.getName().equals(supremeChancellor.getName()))
                 .collect(Collectors.toMap(Player::getName, Player::getName));

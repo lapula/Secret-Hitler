@@ -71,13 +71,10 @@ public class Game {
         if (this.gameVariables.getSeparatistPolicyCount() >= 6) {
             return true;
         }
-        if (this.gameVariables.getViceChair() != null) {
-            if (this.gameVariables.getViceChair().getRole().equals(Role.SHEEV_PALPATINE)
-                    && this.gameVariables.getSeparatistPolicyCount() >= 4
-                    && !this.gameState.equals(State.VOTE_ON_GOVERNMENT)
-                    && !this.gameState.equals(State.CALL_SPECIAL_ELECTION)) {
-                return true;
-            }
+        if (this.gameVariables.getViceChair().map(Player::getRole).orElse(Role.LOYALIST).equals(Role.SHEEV_PALPATINE)
+                && this.gameVariables.getSeparatistPolicyCount() >= 4
+                && this.gameState.equals(State.LEGISTLATIVE_SESSION)) {
+            return true;
         }
         if (this.gameVariables.getLoyalistPolicyCount() >= 5) {
             return true;
@@ -137,10 +134,12 @@ public class Game {
 
     public JSONObject toJSON() {
 
+        System.out.println(gameVariables.getSupremeChancellor());
+
         JSONObject electionResults = new JSONObject(gameVariables.getElectionResults());
         JSONObject json = new JSONObject();
-        json.put("supremeChancellor", gameVariables.getSupremeChancellorName());
-        json.put("viceChair", gameVariables.getViceChairName());
+        json.put("supremeChancellor", gameVariables.getSupremeChancellor().map(Player::getName).orElse(""));
+        json.put("viceChair", gameVariables.getViceChair().map(Player::getName).orElse(""));
         json.put("gamePlayers", gameVariables.getGamePlayers());
         json.put("governmentVotesThisRound", gameVariables.getSenateVotesThisRound());
         json.put("loyalistPoliciesPassed", gameVariables.getLoyalistPolicyCount());

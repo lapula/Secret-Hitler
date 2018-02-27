@@ -25,13 +25,15 @@ const textConstants = {
   governmentVotesThisRound: "Attempted government votes this round:",
   supremeChancellor: "Supreme Chancellor",
   viceChair: "Vice Chair",
+  separatistsLastSlot: "Separatists win if a policy card is placed here.",
+  loyalistsLastSlot: "Loyalists win if a policy card is placed here."
 }
 
 const POLICY_PEEK = "The Supreme Chancellor receives knowledge of the next three policy cards.";
 const INVESTIGATE = "The Supreme Chancellor investigates a player's role.";
 const SPECIAL_ELECTION = "The Supreme Chancellor nominates the next Supreme Chancellor.";
-const EXECUTION = "The Supreme Chancellor must execute a player."
-const EXECUTION_VETO = EXECUTION + "\n\n" + "The Vice Chair may veto policies.";
+const EXECUTION = "The Supreme Chancellor must execute a player. "
+const EXECUTION_VETO = EXECUTION + "The Vice Chair may from now on veto policies.";
 
 const fiveSix = [null, null, POLICY_PEEK, EXECUTION, EXECUTION_VETO]
 const sevenEight = [null, INVESTIGATE, SPECIAL_ELECTION, EXECUTION, EXECUTION_VETO]
@@ -51,4 +53,10 @@ const eventImageMap = {
   LEGISTLATION_SEPARATISTS: palpatineSenate
 }
 
-export {textConstants, separatistPowers, eventImageMap};
+const materialUiOverrides = {
+  backgroundDarkGray: {backgroundColor: "#535353"},
+  colorWhite: {color: "white"},
+  darkGray: "#535353"
+}
+
+export {textConstants, separatistPowers, eventImageMap, materialUiOverrides};

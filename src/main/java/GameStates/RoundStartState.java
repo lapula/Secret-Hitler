@@ -34,13 +34,13 @@ public class RoundStartState implements GameState {
         Player supremeChancellor;
         if (gameVariables.getSpecialElectionPhase() == 1) {
             gameVariables.setSpecialElectionPhase(2);
-            nextSupremeChancellor = gameVariables.getSpecialElectionSupremeChancellor();
+            nextSupremeChancellor = gameVariables.getSpecialElectionSupremeChancellor().get();
         } else if (gameVariables.getSpecialElectionPhase() == 2) {
-            supremeChancellor = gameVariables.getSupremeChancellorBeforeSpecialElection();
+            supremeChancellor = gameVariables.getSupremeChancellorBeforeSpecialElection().get();
             nextSupremeChancellor = playerManager.getNextPlayer(supremeChancellor);
             gameVariables.setSpecialElectionPhase(0);
         } else {
-            supremeChancellor = gameVariables.getSupremeChancellor();
+            supremeChancellor = gameVariables.getSupremeChancellor().get();
             nextSupremeChancellor = playerManager.getNextPlayer(supremeChancellor);
         }
         gameVariables.setSupremeChancellor(nextSupremeChancellor);

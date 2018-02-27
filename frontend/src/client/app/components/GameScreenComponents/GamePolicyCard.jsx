@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 
+import {textConstants} from '../constants.jsx'
 import styles from './gamescreen-style.css';
 
 class GamePolicyCard extends React.Component {
@@ -15,7 +16,12 @@ class GamePolicyCard extends React.Component {
         </div>
       );
     } else {
-      if (this.props.isSeparatist && this.props.separatistPower != null) {
+      if (this.props.isLast) {
+        const text = this.props.isSeparatist ? textConstants.separatistsLastSlot : textConstants.loyalistsLastSlot;
+        return (
+          <div className={styles.policyCardPowersText}>{text}</div>
+        );
+      } else if (this.props.isSeparatist && this.props.separatistPower != null) {
         return (
           <div className={styles.policyCardPowersText}>{this.props.separatistPower}</div>
         );

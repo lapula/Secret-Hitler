@@ -110,3 +110,7 @@
   line-height: 48px;
   font-style: italic;
 }
+
+.dialogStyle {
+  padding-top: 0px !important;
+}

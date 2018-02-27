@@ -44,6 +44,7 @@ public class PlayerManager {
         players.add(player);
         playersIncludingExecuted.add(player);
         Collections.sort(players);
+        Collections.sort(playersIncludingExecuted);
         return player;
     }
 
@@ -52,11 +53,15 @@ public class PlayerManager {
     }
     
     public Player getNextPlayer(Player player) {
-        int oldIndex = players.indexOf(player);
-        if (oldIndex == players.size() - 1) {
-            oldIndex = -1;
+        int nextIndex = playersIncludingExecuted.indexOf(player) + 1;
+        nextIndex = (nextIndex == playersIncludingExecuted.size()) ? 0 : nextIndex;
+
+        Player nextPlayer = playersIncludingExecuted.get(nextIndex);
+        if (players.contains(nextPlayer)) {
+            return playersIncludingExecuted.get(nextIndex);
+        } else {
+            return getNextPlayer(nextPlayer);
         }
-        return players.get(oldIndex + 1);
     }
     
     public List<Player> getPlayers() {
@@ -72,7 +77,6 @@ public class PlayerManager {
         for (int i = 0; i < players.size(); i++) {
             names.add(players.get(i).getName());
         }
-        Collections.sort(names);
         return names;
     }
     

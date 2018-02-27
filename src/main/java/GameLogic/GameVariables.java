@@ -5,9 +5,7 @@
  */
 package GameLogic;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -16,31 +14,34 @@ import java.util.Map;
 public class GameVariables {
     
     private Map<String, String> electionResults;
-    private Player supremeChancellor;
-    private Player viceChair;
-    private String previousViceChairName;
-    private String previousSupremeChancellorName;
+    private Optional<Player> supremeChancellor;
+    private Optional<Player> viceChair;
+    private Optional<Player> previousViceChair;
+    private Optional<Player> previousSupremeChancellor;
     private int gamePlayers;
     private int senateVotesThisRound;
     private int loyalistPoliciesPassed;
     private int separatistPoliciesPassed;
     private boolean lastPolicyPassedSeparatist;
     private int specialElectionPhase;
-    private Player specialElectionSupremeChancellor;
-    private Player supremeChancellorBeforeSpecialElection;
+    private Optional<Player> specialElectionSupremeChancellor;
+    private Optional<Player> supremeChancellorBeforeSpecialElection;
     
     
     private List<Policy> vetoedPolicies;
     
     public GameVariables() {
-        this.electionResults = new HashMap<>();
+        this.electionResults = new TreeMap<>();
         this.senateVotesThisRound = 0;
         this.loyalistPoliciesPassed = 0;
         this.separatistPoliciesPassed = 0;
         this.specialElectionPhase = 0;
         this.lastPolicyPassedSeparatist = false;
-        this.previousSupremeChancellorName = "";
-        this.previousViceChairName = "";
+        this.supremeChancellor = Optional.empty();
+        this.viceChair = Optional.empty();
+        this.previousViceChair = Optional.empty();
+        this.previousSupremeChancellor = Optional.empty();
+
     }
 
     public Map<String, String> getElectionResults() {
@@ -55,20 +56,20 @@ public class GameVariables {
         this.electionResults = electionResults;
     }
 
-    public Player getSupremeChancellor() {
+    public Optional<Player> getSupremeChancellor() {
         return supremeChancellor;
     }
 
     public void setSupremeChancellor(Player supremeChancellor) {
-        this.supremeChancellor = supremeChancellor;
+        this.supremeChancellor = Optional.ofNullable(supremeChancellor);
     }
 
-    public Player getViceChair() {
+    public Optional<Player> getViceChair() {
         return viceChair;
     }
 
     public void setViceChair(Player viceChair) {
-        this.viceChair = viceChair;
+        this.viceChair = Optional.ofNullable(viceChair);
     }
 
     public int getGamePlayers() {
@@ -113,20 +114,20 @@ public class GameVariables {
         this.vetoedPolicies = vetoedPolicies;
     }
 
-    public Player getSpecialElectionSupremeChancellor() {
+    public Optional<Player> getSpecialElectionSupremeChancellor() {
         return specialElectionSupremeChancellor;
     }
 
     public void setSpecialElectionSupremeChancellor(Player specialElectionSupremeChancellor) {
-        this.specialElectionSupremeChancellor = specialElectionSupremeChancellor;
+        this.specialElectionSupremeChancellor = Optional.ofNullable(specialElectionSupremeChancellor);
     }
 
-    public Player getSupremeChancellorBeforeSpecialElection() {
+    public Optional<Player> getSupremeChancellorBeforeSpecialElection() {
         return supremeChancellorBeforeSpecialElection;
     }
 
     public void setSupremeChancellorBeforeSpecialElection(Player supremeChancellorBeforeSpecialElection) {
-        this.supremeChancellorBeforeSpecialElection = supremeChancellorBeforeSpecialElection;
+        this.supremeChancellorBeforeSpecialElection = Optional.ofNullable(supremeChancellorBeforeSpecialElection);
     }
 
     public int getSpecialElectionPhase() {
@@ -137,37 +138,23 @@ public class GameVariables {
         this.specialElectionPhase = specialElectionPhase;
     }
 
-    public void setPreviousViceChairName(String previousViceChairName) {
-        this.previousViceChairName = previousViceChairName;
+    public void setPreviousViceChair(Player previousViceChair) {
+        this.previousViceChair = Optional.ofNullable(previousViceChair);
     }
 
-    public void setPreviousSupremeChancellorName(String previousSupremeChancellorName) {
-        this.previousSupremeChancellorName = previousSupremeChancellorName;
+    public void setPreviousSupremeChancellor(Player previousSupremeChancellor) {
+        this.previousSupremeChancellor = Optional.ofNullable(previousSupremeChancellor);
     }
 
     public boolean isLastPolicyPassedSeparatist() {
         return lastPolicyPassedSeparatist;
     }
 
-    public String getPreviousViceChairName() {
-        return previousViceChairName;
+    public Optional<Player> getPreviousViceChair() {
+        return previousViceChair;
     }
 
-    public String getPreviousSupremeChancellorName() {
-        return previousSupremeChancellorName;
-    }
-
-    public String getSupremeChancellorName() {
-        if (supremeChancellor != null) {
-            return supremeChancellor.getName();
-        }
-        return "";
-    }
-
-    public String getViceChairName() {
-        if (viceChair != null) {
-            return viceChair.getName();
-        }
-        return "";
+    public Optional<Player> getPreviousSupremeChancellor() {
+        return previousSupremeChancellor;
     }
 }

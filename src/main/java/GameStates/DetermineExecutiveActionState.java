@@ -25,6 +25,8 @@ public class DetermineExecutiveActionState implements GameState {
         int separatistPolicies = game.getVariables().getSeparatistPolicyCount();
         boolean hasPower = game.getVariables().isLastPolicyPassedSeparatist();
 
+        // TODO (predicate?)
+
         if (separatistPolicies == 0 || !hasPower) {
             game.changeState(State.ROUND_START);
         } else if (separatistPolicies >= 4) {

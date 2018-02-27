@@ -26,9 +26,10 @@ public class PolicyPeekState implements GameState {
         this.game = game;
     }
 
+    // TODO send confirm first to delay process
     @Override
     public void doAction() {
-        Player supremeChancellor = game.getVariables().getSupremeChancellor();
+        Player supremeChancellor = game.getVariables().getSupremeChancellor().get();
         String topThree = game.getPolicyDeck().nextThreeToString();
         game.getGamePlayerMessageActions().alertPlayer(supremeChancellor, HEADER, SUB_HEADER + topThree);
         game.getGameScreenMessageActions().sendGameEvent(

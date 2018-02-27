@@ -32,16 +32,16 @@ public class NominateViceChair implements GameState {
     @Override
     public void doAction() {
         
-        Player supremeChancellor = game.getVariables().getSupremeChancellor();
-        String previousViceChairName = game.getVariables().getPreviousViceChairName();
-        String previousSupremeChancellorName = game.getVariables().getPreviousSupremeChancellorName();
-
+        Player supremeChancellor = game.getVariables().getSupremeChancellor().get();
+        String previousViceChairName = game.getVariables().getPreviousViceChair().map(Player::getName).orElse("");
+        String previousSupremeChancellorName = game.getVariables().getPreviousSupremeChancellor().map(Player::getName).orElse("");
+        System.out.println("######");
         Map<String, String> choices = game.getPlayerManager().getPlayers().stream()
-                .filter(player -> !player.getName().equals(supremeChancellor.getName())
-                        && !player.getName().equals(previousViceChairName)
-                        && !player.getName().equals(previousSupremeChancellorName))
+                .filter(player -> !player.getName().equals(supremeChancellor.getName()))
+                .filter(player -> !player.getName().equals(previousViceChairName))
+                .filter(player -> !player.getName().equals(previousSupremeChancellorName) || game.getPlayerManager().getPlayers().size() > 5)
                 .collect(Collectors.toMap(Player::getName, Player::getName));
-
+        System.out.println(choices.size());
         game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), Arrays.asList(supremeChancellor), choices, HEADER, SUB_HEADER, game.getGameStateType().toString());
     }
 

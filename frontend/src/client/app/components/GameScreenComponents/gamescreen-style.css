@@ -1,3 +1,14 @@
+/*
+darkGray = "#535353";
+mediumGray = "#787878";
+red = "#9f2a1c";rgb(159, 42, 28)
+green = "#887221";rgb(136, 114, 33);
+blue = "#006cb2";
+lightBlue = "#b7ddf1";
+orange = "#b7ddf1";
+beige = "#e8d17f";
+*/
+
 .container {
   display: flex;
   height: 100%;
@@ -18,18 +29,20 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  border-right: 5px white solid;
+  border-right: 3px white solid;
   overflow-y: scroll;
 }
 
 .playerColumnYes {
   padding: 5px;
-  border: 3px solid green;
+  border: 3px solid rgb(136, 114, 33);
+  background-color: rgba(159, 42, 28, 0.1);
 }
 
 .playerColumnNo {
   padding: 5px;
-  border: 3px solid red;
+  border: 3px solid rgb(159, 42, 28);
+  background-color: rgba(159, 42, 28, 0.1);
 }
 
 .playerColumnNeutral {
@@ -77,8 +90,9 @@
   margin: 10px;
   display: flex;
   justify-content: space-evenly;
-  border: 5px solid gray;
+  border: 3px double rgba(0, 108, 178, 0.8);
   padding: 10px;
+  background: rgba(0, 108, 178, 0.15);
 }
 
 .policyCardSlot {
@@ -94,7 +108,7 @@
   height: 100%;
   margin-left: 10px;
   margin-right: 10px;
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .policyCardImage {
@@ -110,8 +124,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .gameInfoWrapper {
@@ -173,7 +187,7 @@
 .gameEventDisplay {
   width: 100%;
   margin: 20px;
-  border: 3px solid white;
+  border: 3px solid #787878;
 }
 
 .gameEventBackground {

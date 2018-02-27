@@ -49,7 +49,12 @@ class RegisterPlayer extends React.Component {
                     ref="gameName"
                     onKeyPress={this.handleKeyPress}
               /><br />
-            <RaisedButton label="Enter game!" primary={true} className={styles.button} onTouchTap={this.handleSubmit} />
+            <RaisedButton
+              label="Enter game!"
+              primary={true}
+              className={styles.button}
+              onTouchTap={this.handleSubmit}
+            />
           </Paper>
           </div>
         </div>

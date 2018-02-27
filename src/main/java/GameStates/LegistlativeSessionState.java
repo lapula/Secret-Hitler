@@ -60,11 +60,11 @@ public class LegistlativeSessionState implements GameState {
 
         if (policies.size() == 3) {
             IntStream.range(0, policies.size()).forEach(index -> policyIdMapper.put(POLICY + index, policies.get(index).toString()));
-            legistlator = game.getVariables().getSupremeChancellor();
+            legistlator = game.getVariables().getSupremeChancellor().get();
             header = LEGISTLATE_HEADER_SUPREME_CHANCELLOR;
             subheader = LEGISTLATE_SUB_HEADER_SUPREME_CHANCELLOR;
         } else {
-            legistlator = game.getVariables().getViceChair();
+            legistlator = game.getVariables().getViceChair().get();
             header = LEGISTLATE_HEADER_VICE_CHAIR;
             subheader = LEGISTLATE_SUB_HEADER_VICE_CHAIR;
             

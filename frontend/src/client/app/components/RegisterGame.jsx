@@ -3,7 +3,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 
-import {textConstants} from './constants.jsx'
+import {textConstants, materialUiOverrides} from './constants.jsx'
 import styles from './general-style.css';
 import GameScreen from './GameScreenComponents/GameScreen.jsx';
 
@@ -64,7 +64,12 @@ class RegisterGame extends React.Component {
                 ref="gameName"
               />
             {this.renderPlayersNumber()}
-            <RaisedButton label={textConstants.createGame} primary={true} className={styles.formButton} onTouchTap={this.handleSubmit} />
+            <RaisedButton
+              label={textConstants.createGame}
+              primary={true}
+              className={styles.formButton}
+              onTouchTap={this.handleSubmit}
+            />
         </Paper>
       </div>
     </div>

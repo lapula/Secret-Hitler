@@ -11,7 +11,6 @@ import GameLogic.Player;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 /**
  *
@@ -67,9 +66,10 @@ public class VoteOnGovernmentState implements GameState {
             boolean governmentFormed = yesVotes > noVotes;
 
             if (governmentFormed) {
-                game.getVariables().setPreviousViceChairName(game.getVariables().getViceChair().getName());
-                game.getVariables().setPreviousSupremeChancellorName(game.getVariables().getSupremeChancellor().getName());
-                game.getGamePlayerMessageActions().setSpecialRole(game.getVariables().getViceChair(), INFORM_VICE_CHAIR);
+                game.getVariables().setPreviousViceChair(game.getVariables().getViceChair().get());
+
+                game.getVariables().setPreviousSupremeChancellor(game.getVariables().getSupremeChancellor().get());
+                game.getGamePlayerMessageActions().setSpecialRole(game.getVariables().getViceChair().get(), INFORM_VICE_CHAIR);
                 game.changeState(State.LEGISTLATIVE_SESSION);
             } else if (game.getVariables().getSenateVotesThisRound() == 3) {
                 assignRandomPolicyStartNewRound();
@@ -93,7 +93,7 @@ public class VoteOnGovernmentState implements GameState {
 
     private void startNewNomination() {
         game.getVariables().setViceChair(null);
-        Player supremeChancellor = game.getVariables().getSupremeChancellor();
+        Player supremeChancellor = game.getVariables().getSupremeChancellor().get();
         Player nextSupremeChancellor = game.getPlayerManager().getNextPlayer(supremeChancellor);
         game.getVariables().setSupremeChancellor(nextSupremeChancellor);
         game.getGamePlayerMessageActions().clearSpecialRoles(game.getPlayerManager().getPlayers(), nextSupremeChancellor);

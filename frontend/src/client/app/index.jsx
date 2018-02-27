@@ -12,15 +12,6 @@ import Main from '../app/components/Main.jsx';
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
-
-const muiTheme = getMuiTheme({
-  palette: {
-    primary1Color: "#424242",
-    primary2Color: "#616161",
-    primary3Color: "#757575",
-  },
-});
-
 class App extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -30,8 +21,6 @@ class App extends React.Component {
 
   render() {
     return (
-      /* muiTheme={getMuiTheme(darkBaseTheme)} */
-      /*muiTheme={muiTheme}*/
       <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
           <Main />
       </MuiThemeProvider>

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import AppBar from 'material-ui/AppBar';
 
-import {textConstants} from './constants.jsx'
+import {textConstants, materialUiOverrides} from './constants.jsx'
 import styles from './general-style.css';
 import RegisterPlayer from './RegisterPlayer.jsx';
 import RegisterGame from './RegisterGame.jsx';
@@ -36,11 +36,23 @@ class Main extends React.Component {
     } else {
       return(
         <div className={styles.buttonContainer}>
-           <RaisedButton label={textConstants.joinGame} primary={true} className={styles.menuButton}
+           <RaisedButton
+             label={textConstants.joinGame}
+             primary={false}
+             className={styles.menuButton}
+             backgroundColor={materialUiOverrides.darkGray}
              onTouchTap={this.showPlayerScreen} /><br />
-           <RaisedButton label={textConstants.createGame} primary={true} className={styles.menuButton}
+           <RaisedButton
+             label={textConstants.createGame}
+             primary={false}
+             className={styles.menuButton}
+             backgroundColor={materialUiOverrides.darkGray}
              onTouchTap={this.showGameCreationScreen} /><br />
-           <RaisedButton label={textConstants.openGameScreen} primary={true} className={styles.menuButton}
+           <RaisedButton
+             label={textConstants.openGameScreen}
+             primary={false}
+             className={styles.menuButton}
+             backgroundColor={materialUiOverrides.darkGray}
              onTouchTap={this.showGameScreen} /><br />
          </div>
       )
@@ -50,8 +62,11 @@ class Main extends React.Component {
   render() {
     return (
       <div className={styles.container}>
-        <AppBar title={textConstants.appTitle}
-            iconElementLeft={<div></div>}
+        <AppBar
+          title={textConstants.appTitle}
+          style={materialUiOverrides.backgroundDarkGray}
+          titleStyle={materialUiOverrides.colorWhite}
+          iconElementLeft={<div></div>}
          />
         {this.renderNavigationView()}
       </div>

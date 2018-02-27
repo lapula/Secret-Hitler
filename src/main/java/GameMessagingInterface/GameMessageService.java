@@ -69,10 +69,10 @@ public class GameMessageService {
                 game.getPlayerManager().reconnectPlayer(playerName, user);
                 this.getGamePlayerMessageActions().initPlayer(player, player.getRole());
 
-                if (game.getVariables().getViceChairName().equals(playerName)) {
+                if (game.getVariables().getViceChair().map(Player::getName).orElse("").equals(playerName)) {
                     this.getGamePlayerMessageActions().setSpecialRole(player, INFORM_VICE_CHAIR);
                 }
-                if (game.getVariables().getSupremeChancellorName().equals(playerName)) {
+                if (game.getVariables().getSupremeChancellor().map(Player::getName).orElse("").equals(playerName)) {
                     this.getGamePlayerMessageActions().setSpecialRole(player, INFORM_SUPREME_CHANCELLOR);
                 }
 

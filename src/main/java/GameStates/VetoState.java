@@ -18,7 +18,6 @@ import java.util.stream.IntStream;
  * @author pulli
  */
 
-//TODO fix this
 public class VetoState implements GameState {
 
     private static final String VETO_PROPOSED_HEADER = "Veto proposed to the Supreme Chancellor";
@@ -61,14 +60,14 @@ public class VetoState implements GameState {
         String subheader;
         Map<String, String> choices;
         if (proposingVeto) {
-            legistlator = game.getVariables().getSupremeChancellor();
+            legistlator = game.getVariables().getSupremeChancellor().get();
             header = VETO_PROPOSED_HEADER;
             subheader = VETO_PROPOSED_SUB_HEADER;
             choices = new HashMap<>();
             choices.put(YES, YES);
             choices.put(NO, NO);
         } else {
-            legistlator = game.getVariables().getViceChair();
+            legistlator = game.getVariables().getViceChair().get();
             header = VETO_DENIED_HEADER;
             subheader = VETO_DENIED_SUB_HEADER;
 
