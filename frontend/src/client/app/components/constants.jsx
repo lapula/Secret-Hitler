@@ -56,7 +56,8 @@ const eventImageMap = {
 const materialUiOverrides = {
   backgroundDarkGray: {backgroundColor: "#535353"},
   colorWhite: {color: "white"},
-  darkGray: "#535353"
+  darkGray: "#535353",
+  senateGold: "#bf8873"
 }
 
 export {textConstants, separatistPowers, eventImageMap, materialUiOverrides};

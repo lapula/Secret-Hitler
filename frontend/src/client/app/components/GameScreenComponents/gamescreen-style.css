@@ -5,8 +5,9 @@ red = "#9f2a1c";rgb(159, 42, 28)
 green = "#887221";rgb(136, 114, 33);
 blue = "#006cb2";
 lightBlue = "#b7ddf1";
-orange = "#b7ddf1";
+orange = "#f26b28";
 beige = "#e8d17f";
+senateGold="rgb(191, 136, 115)";
 */
 
 .container {
@@ -29,7 +30,7 @@ beige = "#e8d17f";
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  border-right: 3px white solid;
+  border-right: 3px #bf8873 solid;
   overflow-y: scroll;
 }
 
@@ -90,13 +91,13 @@ beige = "#e8d17f";
   margin: 10px;
   display: flex;
   justify-content: space-evenly;
-  border: 3px double rgba(0, 108, 178, 0.8);
+  border: 3px double rgb(191, 136, 115);
   padding: 10px;
-  background: rgba(0, 108, 178, 0.15);
+  background-color: rgba(191, 136, 115, 0.10);
 }
 
 .policyCardSlot {
-  border-right: 2px solid white;
+  border-right: 2px solid #bf8873;
   width: 100%;
 }
 
@@ -187,7 +188,7 @@ beige = "#e8d17f";
 .gameEventDisplay {
   width: 100%;
   margin: 20px;
-  border: 3px solid #787878;
+  border: 1px ridge white;
 }
 
 .gameEventBackground {

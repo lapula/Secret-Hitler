@@ -72,9 +72,10 @@
 
 .specialRole {
   width: 100%;
-  background-color: #ff4081;
+  background-color: #f26b28;
   color: white;
-  font-size: 18px
+  font-size: 18px;
+  padding: 5px;
 }
 
 .roleDialog {
