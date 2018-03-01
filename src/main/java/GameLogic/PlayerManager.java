@@ -127,11 +127,11 @@ public class PlayerManager {
         case 7 :
             loyalists = 4;break;
         case 8 :
-            loyalists = 4;break;
+            loyalists = 5;break;
         case 9 :
-            loyalists = 4;break;
+            loyalists = 5;break;
         case 10 :
-            loyalists = 4;break;
+            loyalists = 6;break;
         default :
             loyalists = 1;
      }

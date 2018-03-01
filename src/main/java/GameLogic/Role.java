@@ -15,11 +15,10 @@ public enum Role {
     LOYALIST("Loyalist");
 
     private String stringValue;
-
     Role(String stringValue) {
         this.stringValue = stringValue;
     }
-    
+
     public String toString() {
         return this.stringValue;
     }

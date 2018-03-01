@@ -14,7 +14,6 @@ public enum Policy {
     SEPARATIST_POLICY("Separatist policy");
     
     private String stringValue;
-    
     Policy(String stringValue) {
         this.stringValue = stringValue;
     }
