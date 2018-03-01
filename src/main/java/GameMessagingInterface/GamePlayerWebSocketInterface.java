@@ -26,7 +26,8 @@ public class GamePlayerWebSocketInterface {
 
     @OnWebSocketConnect
     public void onConnect(Session user) throws Exception {
-        user.setIdleTimeout(TIMEOUT_MS);
+        //user.setIdleTimeout(TIMEOUT_MS);
+        user.setIdleTimeout(1000l * 5l);
         System.out.println("Player connected to server");
     }
 
@@ -35,6 +36,12 @@ public class GamePlayerWebSocketInterface {
         Main.games.values().forEach(game -> {
             if (game.getPlayerManager().getPlayerBySession(user) != null) {
                 game.getPlayerManager().getPlayerBySession(user).ifPresent(p -> p.setSession(null));
+                //TODO
+                System.out.println("WTF");
+                System.out.println(game);
+                System.out.println(game.getPlayerManager().getPlayerBySession(user));
+                System.out.println(game.getPlayerManager().getPlayerBySession(user).get().getName());
+                System.out.println(game.getPlayerManager().getPlayerBySession(user).get().getSession());
                 System.out.println("Nulled player connection!");
             }
         });

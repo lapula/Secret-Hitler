@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -30,12 +32,15 @@ public class GameMessageService {
     private GamePlayerMessageActions gamePlayerMessageActions;
     private GameScreenMessageActions gameScreenMessageActions;
     private Map<String, JSONObject> pendingAckMessages;
+    private ExecutorService executor;
+
 
     public GameMessageService(Game game) {
         this.game = game;
         this.gamePlayerMessageActions = new GamePlayerMessageActions(this);
         this.gameScreenMessageActions = new GameScreenMessageActions(this);
         this.pendingAckMessages = new HashMap<>();
+        this.executor = Executors.newSingleThreadExecutor();
     }
 
     // MESSAGE RECEIVING GAMESCREEN
@@ -81,7 +86,10 @@ public class GameMessageService {
 
                 if (getPlayerPendingMessages(playerName) != null) {
                     LOGGER.info("RECONNECTED: " + player.getName() + " SENDING: " + getPlayerPendingMessages(playerName));
-                    sendPlayerMessageRequiredResponse(player, getPlayerPendingMessages(playerName), attempts);
+                    JSONObject msg = getPlayerPendingMessages(playerName);
+                    ackMessage(player.getName());
+                    sendPlayerMessageRequiredResponse(player, msg, attempts);
+
                 }
             }
         } else {
@@ -93,8 +101,10 @@ public class GameMessageService {
     private boolean checkConnectionValidity(String playerName) {
         Optional<Player> p = this.game.getPlayerManager().getPlayerByName(playerName);
         if (p.isPresent()) {
+
             if (p.get().getSession().isPresent()) {
                 //TODO fix this
+                LOGGER.info("Session present? " + p.get().getSession().isPresent());
                 return true;
                 //return false;
             }
@@ -111,46 +121,53 @@ public class GameMessageService {
     // MESSAGE SENDING GAMESCREEN
 
     public void sendGameScreenMessage(Session listener, JSONObject gameScreenMessage, Integer attempts) {
-        if (attempts <= 0) {return;}
-        try {
-            listener.getRemote().sendString(gameScreenMessage.toString());
-        } catch (Exception ex) {
-            System.out.println("GameScreenMessage sending failed");
-            delayedRetryMessageSending(() -> sendGameScreenMessage(listener, gameScreenMessage, attempts - 1));
-        }
+        //this.executor.submit(() -> {
+            if (attempts <= 0) {return;}
+            try {
+                listener.getRemote().sendString(gameScreenMessage.toString());
+            } catch (Exception ex) {
+                System.out.println("GameScreenMessage sending failed");
+                delayedRetryMessageSending(() -> sendGameScreenMessage(listener, gameScreenMessage, attempts - 1));
+            }
+        //});
     }
 
     // MESSAGE SENDING PLAYER
 
     protected void sendPlayerMessageRequiredResponse(Player target, JSONObject gameMessage, Integer attempts) {
-        if (attempts <= 0) {return;}
-        try {
-            System.out.println(target);
-            LOGGER.info("TARGET: " + target.getName() + " SENT: " + gameMessage);
+        //this.executor.submit(() -> {
+            final Thread currentThread = Thread.currentThread();
+            currentThread.setName(target.getName());
+            if (attempts <= 0) {return;}
+            try {
+                LOGGER.info("TARGET: " + target.getName() + " SENT: " + gameMessage);
 
-            target.getSession().get().getRemote().sendString(gameMessage.toString());
-            addPlayerPendingMessage(target.getName(), gameMessage);
-        } catch (Exception ex) {
-            //delayedRetryMessageSending(target, gameMessage);
-            System.out.println("playerMessageRR sending failed");
-            ex.printStackTrace();
-            delayedRetryMessageSending(() -> sendPlayerMessageRequiredResponse(target, gameMessage, attempts - 1));
-        }
+                target.getSession().get().getRemote().sendString(gameMessage.toString());
+                addPlayerPendingMessage(target.getName(), gameMessage);
+            } catch (Exception ex) {
+                //delayedRetryMessageSending(target, gameMessage);
+                System.out.println("playerMessageRR sending failed");
+                ex.printStackTrace();
+                delayedRetryMessageSending(() -> sendPlayerMessageRequiredResponse(target, gameMessage, attempts - 1));
+            }
+        //});
     }
 
     public void sendPlayerMessage(Player target, JSONObject gameMessage, Integer attempts) {
-        if (attempts <= 0) {return;}
-        try {
-            target.getSession().get().getRemote().sendString(gameMessage.toString());
-        } catch (Exception ex) {
-            System.out.println("playerMessage sending failed");
-            //delayedRetryMessageSending(target, gameMessage);
-            delayedRetryMessageSending(() -> sendPlayerMessage(target, gameMessage, attempts - 1));
-        }
+        //this.executor.submit(() -> {
+            if (attempts <= 0) {return;}
+            try {
+                target.getSession().get().getRemote().sendString(gameMessage.toString());
+            } catch (Exception ex) {
+                System.out.println("playerMessage sending failed");
+                //delayedRetryMessageSending(target, gameMessage);
+                delayedRetryMessageSending(() -> sendPlayerMessage(target, gameMessage, attempts - 1));
+            }
+        //});
     }
 
     private void addPlayerPendingMessage(String playerName, JSONObject gameMessage) {
-        if (!gameMessage.equals(pendingAckMessages.get(playerName))) {
+        if (!gameMessage.equals(pendingAckMessages.get(playerName)) && pendingAckMessages.get(playerName) != null) {
             LOGGER.severe("MESSAGE LOST EARLIER");
             System.out.println(pendingAckMessages.get(playerName));
             System.out.println(gameMessage);
@@ -181,7 +198,7 @@ public class GameMessageService {
         return gameScreenMessageActions;
     }
 
-    private JSONObject getPlayerPendingMessages(String playerName) {
+    protected JSONObject getPlayerPendingMessages(String playerName) {
         return this.pendingAckMessages.get(playerName);
     }
 
@@ -195,6 +212,10 @@ public class GameMessageService {
 
     public void setGameScreenMessageActions(GameScreenMessageActions gameScreenMessageActions) {
         this.gameScreenMessageActions = gameScreenMessageActions;
+    }
+
+    public Map<String, JSONObject> getPendingAckMessages() {
+        return pendingAckMessages;
     }
 
 }

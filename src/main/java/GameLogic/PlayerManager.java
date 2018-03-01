@@ -77,7 +77,7 @@ public class PlayerManager {
     }
     
     public Optional<Player> getPlayerBySession(Session session) {
-        return players.stream().filter(p -> p.getSession().equals(session)).findFirst();
+        return players.stream().filter(p -> session.equals(p.getSession().orElse(null))).findFirst();
     }
     
     public Player getRandomPlayer() {

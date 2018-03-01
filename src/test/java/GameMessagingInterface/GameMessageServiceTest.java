@@ -5,6 +5,7 @@ import GameLogic.PolicyDeck;
 import Helpers.GameInitializationHelper;
 import org.easymock.EasyMock;
 import org.eclipse.jetty.websocket.api.Session;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,10 +37,28 @@ class GameMessageServiceTest {
         Map<String, String> message = new HashMap<>();
         message.put("type", REGISTER_PLAYER);
         message.put("gameName", "test");
-        message.put("playerName", "Obi-Wan Kenobi");
+        message.put("playerName", "Obi-Wan");
 
         game.getGameMessageService().receivePlayerMessage(user, message);
         assertEquals(1, game.getPlayerManager().getPlayers().size());
+    }
+
+    @Test
+    public void reconnectExistingPlayer() {
+        Session user = EasyMock.mock(Session.class);
+        GamePlayerMessageActions gamePlayerMessageActions = EasyMock.mock(GamePlayerMessageActions.class);
+        game.getGameMessageService().setGamePlayerMessageActions(gamePlayerMessageActions);
+        Map<String, String> message = new HashMap<>();
+        message.put("type", REGISTER_PLAYER);
+        message.put("gameName", "test");
+        message.put("playerName", "Obi-Wan");
+        game.getGameMessageService().receivePlayerMessage(user, message);
+        game.getPlayerManager().getPlayers().get(0).setSession(null);
+
+        game.getGameMessageService().receivePlayerMessage(user, message);
+
+        assertEquals(1, game.getPlayerManager().getPlayers().size());
+        assertTrue(game.getPlayerManager().getPlayers().get(0).getSession().isPresent());
     }
 
 }
