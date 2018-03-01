@@ -33,8 +33,8 @@ public class GamePlayerWebSocketInterface {
     @OnWebSocketClose
     public void onClose(Session user, int statusCode, String reason) {
         Main.games.values().forEach(game -> {
-            if (game.getPlayerManager().getPlayerSession(user) != null) {
-                game.getPlayerManager().getPlayerSession(user).setSession(null);
+            if (game.getPlayerManager().getPlayerBySession(user) != null) {
+                game.getPlayerManager().getPlayerBySession(user).ifPresent(p -> p.setSession(null));
                 System.out.println("Nulled player connection!");
             }
         });

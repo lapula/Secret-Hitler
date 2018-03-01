@@ -26,12 +26,23 @@ public class GameEndState implements GameState {
     
     @Override
     public void doAction() {
-        game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), new ArrayList<Player>(), new HashMap<String, String>(), HEADER, "", game.getGameStateType().toString());
+        // Do nothing
     }
 
     @Override
     public void receiveData(String player, String data) {
         // Do nothing
     }
-    
+
+    @Override
+    public int sendData() {
+        game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), new ArrayList<Player>(), new HashMap<String, String>(), HEADER, "", game.getGameStateType().toString());
+        return 0;
+    }
+
+    @Override
+    public void sendEndMessages() {
+        // Do nothing
+    }
+
 }

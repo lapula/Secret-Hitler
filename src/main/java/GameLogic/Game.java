@@ -8,18 +8,18 @@ package GameLogic;
 import GameMessagingInterface.GameMessageService;
 import GameMessagingInterface.GamePlayerMessageActions;
 import GameMessagingInterface.GameScreenMessageActions;
-import GameMessagingInterface.GameScreenWebSocketInterface;
-import GameStates.State;
 import GameStates.GameState;
+import GameStates.State;
 import GameStates.StateFactory;
+import org.eclipse.jetty.websocket.api.Session;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import org.eclipse.jetty.websocket.api.Session;
-import org.json.JSONObject;
 
 
 public class Game {
@@ -32,9 +32,14 @@ public class Game {
     private GameVariables gameVariables;
     private PolicyDeck policyDeck;
     private List<Session> gameListeners;
-    private boolean gameStarted;
 
-    public Game(Integer numberOfPlayers) {
+    @NotNull
+    private String gameName;
+    private boolean gameStarted;
+    private int lastSentMessageTargetCount;
+    private int currentReceivedMessages;
+
+    public Game(String gameName, int numberOfPlayers) {
         
         this.gameListeners = new LinkedList<>();
         this.stateFactory = new StateFactory();
@@ -42,29 +47,45 @@ public class Game {
         this.policyDeck = new PolicyDeck();
         this.gameMessageService = new GameMessageService(this);
         this.gameStarted = false;
+        this.lastSentMessageTargetCount = this.gameVariables.getGamePlayers();
+        this.currentReceivedMessages = 0;
         this.gameVariables.setGamePlayers(numberOfPlayers);
         this.playerManager = new PlayerManager(this);
-        this.changeState(State.GAME_START);
+        this.gameName = gameName;
+        this.gameState = this.stateFactory.getGameState(this, State.GAME_START);
+        this.gameStateType = State.GAME_START;
+        this.stateStatusUpdate(null);
     }
     
-    public void changeState(State state) {
-        this.gameStateType = state;
-        if (checkGameEndConditions()) {
-            this.gameState = this.stateFactory.getGameState(this, State.GAME_END);
-        } else {
-            this.gameState =  this.stateFactory.getGameState(this, state);
-        }
-        this.gameState.doAction();
-        this.getGameMessageService().getGameScreenMessageActions().sendStatusUpdate(this.gameListeners, this.toJSON());
+    public void stateStatusUpdate(State nextState) {
+        this.gameStateType = nextState;
+   }
 
+   public void stateStatusAction() {
+       if (gameStateType != null) {
+           this.gameState.sendEndMessages();
+           if (checkGameEndConditions()) {
+               this.gameState = this.stateFactory.getGameState(this, State.GAME_END);
+           } else {
+               this.gameState =  this.stateFactory.getGameState(this, gameStateType);
+           }
+       }
+       this.gameState.doAction();
+       this.currentReceivedMessages = 0;
+       this.getGameMessageService().getGameScreenMessageActions().sendStatusUpdate(this.gameListeners, this.toJSON());
+       this.lastSentMessageTargetCount = this.gameState.sendData();
    }
     
     public void receiveData(String player, String data) {
+        this.currentReceivedMessages++;
         this.gameState.receiveData(player, data);
+        if (this.lastSentMessageTargetCount <= this.currentReceivedMessages) {
+            stateStatusAction();
+        }
         this.getGameMessageService().getGameScreenMessageActions().sendStatusUpdate(this.gameListeners, this.toJSON());
     }
 
-    private boolean checkGameEndConditions() {
+    public boolean checkGameEndConditions() {
         if (!gameStarted) {
             return false;
         }
@@ -72,8 +93,8 @@ public class Game {
             return true;
         }
         if (this.gameVariables.getViceChair().map(Player::getRole).orElse(Role.LOYALIST).equals(Role.SHEEV_PALPATINE)
-                && this.gameVariables.getSeparatistPolicyCount() >= 4
-                && this.gameState.equals(State.LEGISTLATIVE_SESSION)) {
+                && this.gameVariables.getSeparatistPolicyCount() > 3
+                && this.gameStateType.equals(State.LEGISTLATIVE_SESSION)) {
             return true;
         }
         if (this.gameVariables.getLoyalistPolicyCount() >= 5) {
@@ -82,10 +103,8 @@ public class Game {
         List<Player> palpatineInGame = this.playerManager.getPlayers().stream()
                 .filter(player -> player.getRole().equals(Role.SHEEV_PALPATINE))
                 .collect(Collectors.toList());
-        if (palpatineInGame.size() == 0) {
-            return true;
-        }
-        return false;
+
+        return palpatineInGame.size() == 0;
     }
     
     public PlayerManager getPlayerManager() {
@@ -103,7 +122,7 @@ public class Game {
     public void addGameListener(Session session) {
         this.gameListeners.add(session);
     }
-    
+
     public List<Session> getGameListeners() {
         return this.gameListeners;
     }
@@ -116,8 +135,8 @@ public class Game {
         this.gameStarted = true;
     }
 
-    public State getGameStateType() {
-        return gameStateType;
+    public Optional<State> getGameStateType() {
+        return Optional.ofNullable(gameStateType);
     }
 
     public GamePlayerMessageActions getGamePlayerMessageActions() {
@@ -132,9 +151,11 @@ public class Game {
         return gameMessageService;
     }
 
-    public JSONObject toJSON() {
+    public String getGameName() {
+        return gameName;
+    }
 
-        System.out.println(gameVariables.getSupremeChancellor());
+    public JSONObject toJSON() {
 
         JSONObject electionResults = new JSONObject(gameVariables.getElectionResults());
         JSONObject json = new JSONObject();
@@ -145,8 +166,8 @@ public class Game {
         json.put("loyalistPoliciesPassed", gameVariables.getLoyalistPolicyCount());
         json.put("separatistPoliciesPassed", gameVariables.getSeparatistPolicyCount());
         json.put("players", playerManager.getPlayerNames());
-        json.put("cardsInDeck", this.getPolicyDeck().getDeckCardsCount());
-        json.put("state", this.getGameStateType().toString());
+        json.put("cardsInDeck", this.getPolicyDeck().getDeck().size());
+        json.put("state", this.getGameStateType().map(State::toString).orElse(""));
 
         if (this.getPlayerManager().getPlayers().size() != this.getVariables().getElectionResults().size()) {
             json.put("electionResults", "");

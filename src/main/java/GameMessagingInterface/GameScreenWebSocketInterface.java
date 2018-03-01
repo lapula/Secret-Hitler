@@ -57,8 +57,8 @@ public class GameScreenWebSocketInterface {
     }
 
     private void createGame(Session user, Map<String, String> message) {
-        Game game = new Game(Integer.parseInt(message.get("gamePlayers")));
-        Main.games.put(message.get("gameName"), game);
+        Game game = new Game(message.get("gameName"), Integer.parseInt(message.get("gamePlayers")));
+        Main.games.put(game.getGameName(), game);
         game.getGameListeners().add(user);
         game.getGameMessageService().getGameScreenMessageActions().sendStatusUpdate(game.getGameListeners(), game.toJSON());
     }

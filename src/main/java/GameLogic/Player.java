@@ -6,24 +6,32 @@
 package GameLogic;
 
 import org.eclipse.jetty.websocket.api.Session;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 /**
  *
  * @author pulli
  */
 public class Player implements Comparable<Player> {
-    
-    private String name;
-    private String gameName;
-    private Session session;
-    private Role role;
-    
-    public Player() {}
 
-    public Player(String name, String gameName, Session session) {
+    @NotNull
+    private String name;
+
+    @NotNull
+    private String gameName;
+
+    private Session session;
+
+    @NotNull
+    private Role role;
+
+    public Player(String name, String gameName, Session session, Role role) {
         this.name = name;
         this.gameName = gameName;
         this.session = session;
+        this.role = role;
     }
 
     public String getGameName() {
@@ -50,8 +58,8 @@ public class Player implements Comparable<Player> {
         this.name = name;
     }
 
-    public Session getSession() {
-        return session;
+    public Optional<Session> getSession() {
+        return Optional.ofNullable(session);
     }
 
     public void setSession(Session session) {
@@ -59,7 +67,6 @@ public class Player implements Comparable<Player> {
     }
 
     public int compareTo(Player comparePlayer) {
-
         return this.getName().compareTo(comparePlayer.getName());
     }
 

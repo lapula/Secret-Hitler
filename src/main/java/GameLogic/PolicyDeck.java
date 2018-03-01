@@ -8,6 +8,7 @@ package GameLogic;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  *
@@ -15,53 +16,63 @@ import java.util.List;
  */
 public class PolicyDeck {
     private List<Policy> policyDeck;
-    
+
+    private static final int LOYALIST_CARDS_INITIAL = 6;
+    private static final int SEPARATIST_CARDS_INITIAL = 11;
+
     public PolicyDeck() {
-        this.policyDeck = initPolicyDeck();
+        this.policyDeck = initPolicyDeck(new ArrayList<>());
+    }
+
+    public Policy drawNext() {
+
+        if (policyDeck.size() == 0) {
+            policyDeck = initPolicyDeck(new ArrayList<>());
+        }
+        Policy next = policyDeck.remove(policyDeck.size() - 1);
+        return next;
     }
     
     public List<Policy> drawNextThree() {
-        System.out.println(policyDeck.toString());
+
         if (policyDeck.size() < 3) {
-            policyDeck = initPolicyDeck();
+            List<Policy> bottomCards = new ArrayList<>();
+            bottomCards.addAll(policyDeck);
+            policyDeck = initPolicyDeck(bottomCards);
         }
         List<Policy> topThree = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            topThree.add(policyDeck.remove(policyDeck.size() - 1));
-        }
+        IntStream.range(0, 3).forEach(i -> topThree.add(policyDeck.remove(policyDeck.size() - 1)));
+
         return topThree;
     }
     
     public String nextThreeToString() {
         if (policyDeck.size() < 3) {
-            policyDeck = initPolicyDeck();
+            List<Policy> bottomCards = new ArrayList<>();
+            bottomCards.addAll(policyDeck);
+            policyDeck = initPolicyDeck(bottomCards);
         }
-        String topThree = "";
-        for (int i = 0; i < 3; i++) {
-            topThree += policyDeck.get(policyDeck.size() - 1 - i);
-            if (i < 2) {
-                topThree += ", ";
-            }
-        }
-        return topThree;
+        List<String> topThree = new ArrayList<>();
+        IntStream.range(policyDeck.size() - 3, policyDeck.size()).forEach(i -> topThree.add(policyDeck.get(i).toString()));
+
+        return String.join(", ", topThree);
     }
     
-    private List<Policy> initPolicyDeck() {
-        
+    private List<Policy> initPolicyDeck(List<Policy> bottomCards) {
+
+        int bottomLoyalistCards = ((int) bottomCards.stream().filter(p -> p.equals(Policy.LOYALIST_POLICY)).count());
+        int bottomSeparatistCards = ((int) bottomCards.stream().filter(p -> p.equals(Policy.SEPARATIST_POLICY)).count());
+
         List<Policy> deck = new ArrayList<>();
-        
-        for (int i = 0; i < 6; i++) {
-            deck.add(Policy.LOYALIST_POLICY);
-        }
-        for (int i = 0; i < 11; i++) {
-            deck.add(Policy.SEPARATIST_POLICY);
-        }
+        IntStream.range(0, LOYALIST_CARDS_INITIAL - bottomLoyalistCards).forEach(i -> deck.add(Policy.LOYALIST_POLICY));
+        IntStream.range(0, SEPARATIST_CARDS_INITIAL - bottomSeparatistCards).forEach(i -> deck.add(Policy.SEPARATIST_POLICY));
         Collections.shuffle(deck);
-        
+        deck.addAll(bottomCards);
+
         return deck;
     }
 
-    public Integer getDeckCardsCount() {
-        return policyDeck.size();
+    public List<Policy> getDeck() {
+        return policyDeck;
     }
 }

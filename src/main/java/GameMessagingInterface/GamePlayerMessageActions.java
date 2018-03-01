@@ -36,7 +36,7 @@ public class GamePlayerMessageActions {
     }
 
 
-    public void sendQueryAndInfoMessages(List<Player> players, List<Player> targets, Map<String, String> choices, String header, String subheader, String gameState) {
+    public int sendQueryAndInfoMessages(List<Player> players, List<Player> targets, Map<String, String> choices, String header, String subheader, String gameState) {
 
         JSONObject jsonChoices = new JSONObject(choices);
         JSONObject jsonTargetMessage = new JSONObject();
@@ -45,10 +45,6 @@ public class GamePlayerMessageActions {
         jsonTargetMessage.put("header", header);
         jsonTargetMessage.put("subheader", subheader);
         jsonTargetMessage.put("choices", jsonChoices);
-
-
-
-        targets.forEach(target -> System.out.println(target.getName()));
 
 
         targets.forEach(target -> {
@@ -64,10 +60,11 @@ public class GamePlayerMessageActions {
 
         players.forEach(player -> {
             if (!targets.contains(player)) {
-                System.out.println("Sent info to player: " + player.getName());
                 gameMessageService.sendPlayerMessage(player, jsonOthersMessage, MESSAGE_SEND_ATTEMPTS);
             }
         });
+
+        return targets.size();
     }
 
     public void setSpecialRole(Player target, String role) {

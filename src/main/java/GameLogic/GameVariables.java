@@ -14,18 +14,18 @@ import java.util.*;
 public class GameVariables {
     
     private Map<String, String> electionResults;
-    private Optional<Player> supremeChancellor;
-    private Optional<Player> viceChair;
-    private Optional<Player> previousViceChair;
-    private Optional<Player> previousSupremeChancellor;
+    private Player supremeChancellor;
+    private Player viceChair;
+    private Player previousViceChair;
+    private Player previousSupremeChancellor;
     private int gamePlayers;
     private int senateVotesThisRound;
     private int loyalistPoliciesPassed;
     private int separatistPoliciesPassed;
     private boolean lastPolicyPassedSeparatist;
     private int specialElectionPhase;
-    private Optional<Player> specialElectionSupremeChancellor;
-    private Optional<Player> supremeChancellorBeforeSpecialElection;
+    private Player specialElectionSupremeChancellor;
+    private Player supremeChancellorBeforeSpecialElection;
     
     
     private List<Policy> vetoedPolicies;
@@ -37,10 +37,6 @@ public class GameVariables {
         this.separatistPoliciesPassed = 0;
         this.specialElectionPhase = 0;
         this.lastPolicyPassedSeparatist = false;
-        this.supremeChancellor = Optional.empty();
-        this.viceChair = Optional.empty();
-        this.previousViceChair = Optional.empty();
-        this.previousSupremeChancellor = Optional.empty();
 
     }
 
@@ -52,24 +48,24 @@ public class GameVariables {
         this.electionResults.put(player, vote);
     }
 
-    public void setElectionResults(Map<String, String> electionResults) {
-        this.electionResults = electionResults;
+    public void cleanElectionResults() {
+        this.electionResults = new TreeMap<>();
     }
 
     public Optional<Player> getSupremeChancellor() {
-        return supremeChancellor;
+        return Optional.ofNullable(supremeChancellor);
     }
 
     public void setSupremeChancellor(Player supremeChancellor) {
-        this.supremeChancellor = Optional.ofNullable(supremeChancellor);
+        this.supremeChancellor = supremeChancellor;
     }
 
     public Optional<Player> getViceChair() {
-        return viceChair;
+        return Optional.ofNullable(viceChair);
     }
 
     public void setViceChair(Player viceChair) {
-        this.viceChair = Optional.ofNullable(viceChair);
+        this.viceChair = viceChair;
     }
 
     public int getGamePlayers() {
@@ -115,19 +111,19 @@ public class GameVariables {
     }
 
     public Optional<Player> getSpecialElectionSupremeChancellor() {
-        return specialElectionSupremeChancellor;
+        return Optional.ofNullable(specialElectionSupremeChancellor);
     }
 
     public void setSpecialElectionSupremeChancellor(Player specialElectionSupremeChancellor) {
-        this.specialElectionSupremeChancellor = Optional.ofNullable(specialElectionSupremeChancellor);
+        this.specialElectionSupremeChancellor = specialElectionSupremeChancellor;
     }
 
     public Optional<Player> getSupremeChancellorBeforeSpecialElection() {
-        return supremeChancellorBeforeSpecialElection;
+        return Optional.ofNullable(supremeChancellorBeforeSpecialElection);
     }
 
     public void setSupremeChancellorBeforeSpecialElection(Player supremeChancellorBeforeSpecialElection) {
-        this.supremeChancellorBeforeSpecialElection = Optional.ofNullable(supremeChancellorBeforeSpecialElection);
+        this.supremeChancellorBeforeSpecialElection = supremeChancellorBeforeSpecialElection;
     }
 
     public int getSpecialElectionPhase() {
@@ -139,11 +135,11 @@ public class GameVariables {
     }
 
     public void setPreviousViceChair(Player previousViceChair) {
-        this.previousViceChair = Optional.ofNullable(previousViceChair);
+        this.previousViceChair = previousViceChair;
     }
 
     public void setPreviousSupremeChancellor(Player previousSupremeChancellor) {
-        this.previousSupremeChancellor = Optional.ofNullable(previousSupremeChancellor);
+        this.previousSupremeChancellor = previousSupremeChancellor;
     }
 
     public boolean isLastPolicyPassedSeparatist() {
@@ -151,10 +147,10 @@ public class GameVariables {
     }
 
     public Optional<Player> getPreviousViceChair() {
-        return previousViceChair;
+        return Optional.ofNullable(previousViceChair);
     }
 
     public Optional<Player> getPreviousSupremeChancellor() {
-        return previousSupremeChancellor;
+        return Optional.ofNullable(previousSupremeChancellor);
     }
 }

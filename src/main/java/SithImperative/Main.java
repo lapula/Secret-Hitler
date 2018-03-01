@@ -18,8 +18,8 @@ public class Main {
     public static void main(String[] args) {
 
         //For debugging
-        Game initialGame = new Game(2);
-        games.put("gg", initialGame);
+        Game initialGame = new Game("gg", 2);
+        games.put(initialGame.getGameName(), initialGame);
 
         // Init spark and websockets
         port(getHerokuAssignedPort());

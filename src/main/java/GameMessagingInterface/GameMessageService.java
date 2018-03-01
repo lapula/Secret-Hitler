@@ -2,6 +2,7 @@ package GameMessagingInterface;
 
 import GameLogic.Game;
 import GameLogic.Player;
+import GameLogic.Role;
 import SithImperative.Main;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
@@ -9,6 +10,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -26,7 +28,6 @@ public class GameMessageService {
 
     private Game game;
     private GamePlayerMessageActions gamePlayerMessageActions;
-
     private GameScreenMessageActions gameScreenMessageActions;
     private Map<String, JSONObject> pendingAckMessages;
 
@@ -58,15 +59,17 @@ public class GameMessageService {
     private void registerPlayer(Map<String, String> message, Session user, Integer attempts) {
         String playerName = message.get("playerName");
         String gameName = message.get("gameName");
-        Player player = game.getPlayerManager().getPlayerByName(playerName);
+        Optional<Player> optionalPlayer = game.getPlayerManager().getPlayerByName(playerName);
 
         if (checkConnectionValidity(playerName)) {
-            if (player == null) {
-                Player newPlayer = game.getPlayerManager().addNewPlayer(gameName, playerName, user);
+            if (!optionalPlayer.isPresent()) {
+                Player newPlayer = game.getPlayerManager().addNewPlayer(playerName, user);
                 this.getGamePlayerMessageActions().initPlayer(newPlayer, newPlayer.getRole());
                 game.receiveData(playerName, null);
             } else {
+                Player player = optionalPlayer.get();
                 game.getPlayerManager().reconnectPlayer(playerName, user);
+
                 this.getGamePlayerMessageActions().initPlayer(player, player.getRole());
 
                 if (game.getVariables().getViceChair().map(Player::getName).orElse("").equals(playerName)) {
@@ -88,9 +91,9 @@ public class GameMessageService {
     }
 
     private boolean checkConnectionValidity(String playerName) {
-        Player p = this.game.getPlayerManager().getPlayerByName(playerName);
-        if (p != null) {
-            if (p.getSession() != null) {
+        Optional<Player> p = this.game.getPlayerManager().getPlayerByName(playerName);
+        if (p.isPresent()) {
+            if (p.get().getSession().isPresent()) {
                 //TODO fix this
                 return true;
                 //return false;
@@ -125,7 +128,7 @@ public class GameMessageService {
             System.out.println(target);
             LOGGER.info("TARGET: " + target.getName() + " SENT: " + gameMessage);
 
-            target.getSession().getRemote().sendString(gameMessage.toString());
+            target.getSession().get().getRemote().sendString(gameMessage.toString());
             addPlayerPendingMessage(target.getName(), gameMessage);
         } catch (Exception ex) {
             //delayedRetryMessageSending(target, gameMessage);
@@ -138,28 +141,12 @@ public class GameMessageService {
     public void sendPlayerMessage(Player target, JSONObject gameMessage, Integer attempts) {
         if (attempts <= 0) {return;}
         try {
-            target.getSession().getRemote().sendString(gameMessage.toString());
+            target.getSession().get().getRemote().sendString(gameMessage.toString());
         } catch (Exception ex) {
             System.out.println("playerMessage sending failed");
             //delayedRetryMessageSending(target, gameMessage);
             delayedRetryMessageSending(() -> sendPlayerMessage(target, gameMessage, attempts - 1));
         }
-    }
-
-    public GamePlayerMessageActions getGamePlayerMessageActions() {
-        return gamePlayerMessageActions;
-    }
-
-    public GameScreenMessageActions getGameScreenMessageActions() {
-        return gameScreenMessageActions;
-    }
-
-    private JSONObject getPlayerPendingMessages(String playerName) {
-        return this.pendingAckMessages.get(playerName);
-    }
-
-    private void ackMessage(String playerName) {
-        this.pendingAckMessages.put(playerName, null);
     }
 
     private void addPlayerPendingMessage(String playerName, JSONObject gameMessage) {
@@ -183,4 +170,31 @@ public class GameMessageService {
             LOGGER.severe("WAIT FAILED, MESSAGE LOST");
         }
     }
+
+    // GETTERS + SETTERS
+
+    public GamePlayerMessageActions getGamePlayerMessageActions() {
+        return gamePlayerMessageActions;
+    }
+
+    public GameScreenMessageActions getGameScreenMessageActions() {
+        return gameScreenMessageActions;
+    }
+
+    private JSONObject getPlayerPendingMessages(String playerName) {
+        return this.pendingAckMessages.get(playerName);
+    }
+
+    private void ackMessage(String playerName) {
+        this.pendingAckMessages.put(playerName, null);
+    }
+
+    public void setGamePlayerMessageActions(GamePlayerMessageActions gamePlayerMessageActions) {
+        this.gamePlayerMessageActions = gamePlayerMessageActions;
+    }
+
+    public void setGameScreenMessageActions(GameScreenMessageActions gameScreenMessageActions) {
+        this.gameScreenMessageActions = gameScreenMessageActions;
+    }
+
 }

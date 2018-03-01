@@ -10,7 +10,6 @@ import GameLogic.Player;
 import GameLogic.Policy;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -24,13 +23,18 @@ public class VetoState implements GameState {
     private static final String VETO_PROPOSED_SUB_HEADER = "Supreme Chancellor, do you accept the veto?";
     private static final String VETO_DENIED_HEADER = "Veto denied, Vice Chair will enact a policy";
     private static final String VETO_DENIED_SUB_HEADER = "Vice Chair, discard one policy";
-    private static final String YES = "Yes";
-    private static final String NO = "No";
+    protected static final String YES = "Yes";
+    protected static final String NO = "No";
     private static final String POLICY = "POLICY";
 
     private static final String EVENT_VETO = "VETO";
     private static final String EVENT_VETO_HEADER = "Veto power used!";
     private static final String EVENT_VETO_SUBHEADER = "The Government has blocked a policy from being put into action!";
+
+    private static final String EVENT_NO_VETO = "NO_VETO";
+    private static final String EVENT_NO_VETO_HEADER = "Veto power left unused!";
+    private static final String EVENT_NO_VETO_SUBHEADER = "Surely the Vice Chair will now pass a loyalist policy.";
+
 
     private static final String EVENT_LEGISTLATION_SEPARATISTS = "LEGISTLATION_SEPARATISTS";
     private static final String EVENT_LEGISTLATION_HEADER_SEPARATISTS = "Separatist policy enacted!";
@@ -42,23 +46,28 @@ public class VetoState implements GameState {
 
     private Game game;
     private boolean proposingVeto;
-    private List<Policy> vetoedPolicies;
-    private Map<String, String> policyIdMapper;
+    protected List<Policy> vetoedPolicies;
+    protected Map<String, String> policyIdMapper;
+    private String header;
+    private String subheader;
+    private List<Player> target;
+    protected Map<String, String> choices;
+    private boolean vetoUnused;
+    protected Player legistlator;
+
 
     public VetoState(Game game) {
         this.game = game;
         this.proposingVeto = true;
         this.vetoedPolicies = game.getVariables().getVetoedPolicies();
         this.policyIdMapper = new HashMap<>();
+        vetoUnused = false;
     }
-    
+
+
+
     @Override
     public void doAction() {
-        
-        Player legistlator;
-        String header;
-        String subheader;
-        Map<String, String> choices;
         if (proposingVeto) {
             legistlator = game.getVariables().getSupremeChancellor().get();
             header = VETO_PROPOSED_HEADER;
@@ -74,23 +83,26 @@ public class VetoState implements GameState {
             IntStream.range(0, vetoedPolicies.size()).forEach(index -> policyIdMapper.put(POLICY + index, vetoedPolicies.get(index).toString()));
             choices = new HashMap<>(policyIdMapper);
         }
-        game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), Arrays.asList(legistlator), choices, header, subheader, game.getGameStateType().toString());
+        target = Arrays.asList(legistlator);
+    }
+
+    @Override
+    public int sendData() {
+        return game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), target,
+                choices, header, subheader, game.getGameStateType().toString());
+
     }
 
     @Override
     public void receiveData(String player, String data) {
-        
         if (proposingVeto) {
             if (data.equals(NO)) {
                 proposingVeto = false;
-                doAction();
+                vetoUnused = true;
+                game.stateStatusUpdate(null);
             } else {
-                //game.changeState(State.NOMINATE_VICE_CHAIR);
-                game.getVariables().addSeparatistPolicy();
-                game.getGameScreenMessageActions().sendGameEvent(
-                        game.getGameListeners(), EVENT_VETO, EVENT_VETO_HEADER, EVENT_VETO_SUBHEADER);
-
-                game.changeState(State.ROUND_START);
+                //TODO should not reset government votes this round
+                game.stateStatusUpdate(State.ROUND_START);
             }
         } else {
             Policy discard = policyIdMapper.get(data).equals(Policy.LOYALIST_POLICY.toString()) ? Policy.LOYALIST_POLICY : Policy.SEPARATIST_POLICY;
@@ -99,14 +111,29 @@ public class VetoState implements GameState {
 
             if (vetoedPolicies.get(0).equals(Policy.LOYALIST_POLICY)) {
                 game.getVariables().addLoyalistPolicy();
-                game.getGameScreenMessageActions().sendGameEvent(
-                        game.getGameListeners(), EVENT_LEGISTLATION_LOYALISTS, EVENT_LEGISTLATION_HEADER_LOYALISTS, EVENT_LEGISTLATION_SUBHEADER_LOYALISTS);
             } else {
                 game.getVariables().addSeparatistPolicy();
-                game.getGameScreenMessageActions().sendGameEvent(
-                        game.getGameListeners(), EVENT_LEGISTLATION_SEPARATISTS, EVENT_LEGISTLATION_HEADER_SEPARATISTS, EVENT_LEGISTLATION_SUBHEADER_SEPARATISTS);
             }
-            game.changeState(State.DETERMINE_EXECUTIVE_ACTION);
+            game.stateStatusUpdate(State.DETERMINE_EXECUTIVE_ACTION);
+        }
+    }
+
+    @Override
+    public void sendEndMessages() {
+        if (proposingVeto) {
+            game.getGameScreenMessageActions().sendGameEvent(
+                    game.getGameListeners(), EVENT_VETO, EVENT_VETO_HEADER, EVENT_VETO_SUBHEADER);
+        } else if (vetoUnused) {
+            game.getGameScreenMessageActions().sendGameEvent(
+                    game.getGameListeners(), EVENT_NO_VETO, EVENT_NO_VETO_HEADER, EVENT_NO_VETO_SUBHEADER);
+        } else {
+            if (vetoedPolicies.get(0).equals(Policy.LOYALIST_POLICY)) {
+                game.getGameScreenMessageActions().sendGameEvent(game.getGameListeners(), EVENT_LEGISTLATION_LOYALISTS,
+                        EVENT_LEGISTLATION_HEADER_LOYALISTS, EVENT_LEGISTLATION_SUBHEADER_LOYALISTS);
+            } else {
+                game.getGameScreenMessageActions().sendGameEvent(game.getGameListeners(), EVENT_LEGISTLATION_SEPARATISTS,
+                        EVENT_LEGISTLATION_HEADER_SEPARATISTS, EVENT_LEGISTLATION_SUBHEADER_SEPARATISTS);
+            }
         }
     }
 }

@@ -5,10 +5,10 @@
  */
 package GameLogic;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import org.eclipse.jetty.websocket.api.Session;
 
 /**
@@ -17,15 +17,9 @@ import org.eclipse.jetty.websocket.api.Session;
  */
 public class PlayerManager {
 
-
-    public void setPlayersIncludingExecuted(List<Player> playersIncludingExecuted) {
-        this.playersIncludingExecuted = playersIncludingExecuted;
-    }
-
     private List<Player> playersIncludingExecuted;
     private List<Player> players;
     private Game game;
-
     private int gamePlayers;
     private List<Role> roleList;
     
@@ -37,10 +31,8 @@ public class PlayerManager {
         this.roleList = initRoles(gamePlayers);
     }
 
-    //TODO game should have gameName
-    public Player addNewPlayer(String gameName, String playerName, Session user) {
-        Player player = new Player(playerName, gameName, user);
-        player.setRole(this.getRole());
+    public Player addNewPlayer(String playerName, Session user) {
+        Player player = new Player(playerName, game.getGameName(), user, this.assignRole());
         players.add(player);
         playersIncludingExecuted.add(player);
         Collections.sort(players);
@@ -49,7 +41,7 @@ public class PlayerManager {
     }
 
     public void reconnectPlayer(String playerName, Session user) {
-        this.getPlayerByName(playerName).setSession(user);
+        this.getPlayerByName(playerName).ifPresent(p -> p.setSession(user));
     }
     
     public Player getNextPlayer(Player player) {
@@ -71,42 +63,29 @@ public class PlayerManager {
     public List<Player> getPlayersIncludingExecuted() {
         return playersIncludingExecuted;
     }
+
+    public void setPlayersIncludingExecuted(List<Player> playersIncludingExecuted) {
+        this.playersIncludingExecuted = playersIncludingExecuted;
+    }
     
     public List<String> getPlayerNames() {
-        List<String> names = new ArrayList<>();
-        for (int i = 0; i < players.size(); i++) {
-            names.add(players.get(i).getName());
-        }
-        return names;
+        return players.stream().map(p -> p.getName()).collect(Collectors.toList());
+    }
+
+    public Optional<Player> getPlayerByName(String name) {
+        return players.stream().filter(p -> p.getName().equals(name)).findFirst();
     }
     
-    public Player getPlayerByName(String name) {
-        for (Player p : players) {
-            if (p.getName().equals(name)) {
-                return p;
-            }
-        }
-        return null;
-    }
-    
-    public Player getPlayerSession(Session session) {
-        for (Player p : players) {
-            if (p.getSession().equals(session)) {
-                return p;
-            }
-        }
-        return null;
+    public Optional<Player> getPlayerBySession(Session session) {
+        return players.stream().filter(p -> p.getSession().equals(session)).findFirst();
     }
     
     public Player getRandomPlayer() {
-        Random random = new Random();
-        int index = random.nextInt(gamePlayers - 1);
-        return players.get(index);
+        return players.get(new Random().nextInt(gamePlayers - 1));
     }
     
-    private Role getRole() {
-        Random random = new Random();
-        int index = random.nextInt(this.roleList.size());
+    private Role assignRole() {
+        int index = new Random().nextInt(this.roleList.size());
         Role role = this.roleList.get(index);
         this.roleList.remove(index);
         return role;
@@ -117,38 +96,23 @@ public class PlayerManager {
     }
     
     private List<Role> initRoles(int gamePlayers) {
+
         int loyalists;
-        
         switch(gamePlayers) {
-        case 5 :
-            loyalists = 3;break;
-        case 6 :
-            loyalists = 4;break;
-        case 7 :
-            loyalists = 4;break;
-        case 8 :
-            loyalists = 5;break;
-        case 9 :
-            loyalists = 5;break;
-        case 10 :
-            loyalists = 6;break;
-        default :
-            loyalists = 1;
-     }
+            case 5 : loyalists = 3; break;
+            case 6 : loyalists = 4; break;
+            case 7 : loyalists = 4; break;
+            case 8 : loyalists = 5; break;
+            case 9 : loyalists = 5; break;
+            case 10 : loyalists = 6; break;
+            default : loyalists = 1;
+        }
         
      int separatists = gamePlayers - loyalists - 1;
-     
      List<Role> roles = new ArrayList<>();
      roles.add(Role.SHEEV_PALPATINE);
-
-     for (int i = 0; i < separatists; i++) {
-         roles.add(Role.SEPARATIST);
-     }
-
-     for (int i = 0; i < loyalists; i++) {
-         roles.add(Role.LOYALIST);
-     }
-
+     IntStream.range(0, separatists).forEach(i -> roles.add(Role.SEPARATIST));
+     IntStream.range(0, loyalists).forEach(i -> roles.add(Role.LOYALIST));
      Collections.shuffle(roles);
 
      return roles;

@@ -13,50 +13,73 @@ import GameLogic.Game;
  */
 public class DetermineExecutiveActionState implements GameState {
 
-    Game game;
+    private static final String EVENT_SPECIAL = "EVENT_SPECIAL";
+    private static final String EVENT_SPECIAL_HEADER = "Emergency powers granted!";
+    private static final String EVENT_SPECIAL_SUBHEADER = "The Supreme Chancellor will nominate the next Supreme Chancellor.";
+
+
+    private Game game;
+    private int gamePlayers;
+    private int separatistPolicies;
+    private boolean hasPower;
+
     public DetermineExecutiveActionState(Game game) {
         this.game = game;
+        gamePlayers = game.getVariables().getGamePlayers();
+        separatistPolicies = game.getVariables().getSeparatistPolicyCount();
+        hasPower = game.getVariables().isLastPolicyPassedSeparatist();
     }
 
     @Override
     public void doAction() {
-        
-        int gamePlayers = game.getVariables().getGamePlayers();
-        int separatistPolicies = game.getVariables().getSeparatistPolicyCount();
-        boolean hasPower = game.getVariables().isLastPolicyPassedSeparatist();
-
-        // TODO (predicate?)
-
         if (separatistPolicies == 0 || !hasPower) {
-            game.changeState(State.ROUND_START);
+            game.stateStatusUpdate(State.ROUND_START);
         } else if (separatistPolicies >= 4) {
-            game.changeState(State.EXECUTION);
+            game.stateStatusUpdate(State.EXECUTION);
         } else if (separatistPolicies == 3) {
             if (gamePlayers > 6) { //>6
-                game.changeState(State.CALL_SPECIAL_ELECTION);
+                game.stateStatusUpdate(State.CALL_SPECIAL_ELECTION);
             } else {
-                game.changeState(State.POLICY_PEEK);
+                game.stateStatusUpdate(State.POLICY_PEEK);
             }
         } else if (separatistPolicies == 2) {
             if (gamePlayers > 6) { //>6
-                game.changeState(State.INVESTIGATE_LOYALTY);
+                game.stateStatusUpdate(State.INVESTIGATE_LOYALTY);
             } else {
-                game.changeState(State.ROUND_START);
+                game.stateStatusUpdate(State.ROUND_START);
             }
         } else if (separatistPolicies == 1) {
             if (gamePlayers > 8) {//>8
-                game.changeState(State.INVESTIGATE_LOYALTY);
+                game.stateStatusUpdate(State.INVESTIGATE_LOYALTY);
             } else {
-                game.changeState(State.ROUND_START);
+                game.stateStatusUpdate(State.ROUND_START);
             }
         } else {
-            game.changeState(State.ROUND_START);
+            game.stateStatusUpdate(State.ROUND_START);
         }
-        
+    }
+
+    @Override
+    public int sendData() {
+        // a bit hacky
+        game.stateStatusAction();
+        return 0;
     }
 
     @Override
     public void receiveData(String player, String data) {
-        return;
+        // do nothing
+    }
+
+
+    @Override
+    public void sendEndMessages() {
+        if (separatistPolicies == 3) {
+            if (gamePlayers > 6) { //>6
+                game.getGameScreenMessageActions().sendGameEvent(
+                        game.getGameListeners(), EVENT_SPECIAL, EVENT_SPECIAL_HEADER, EVENT_SPECIAL_SUBHEADER);
+
+            }
+        }
     }
 }

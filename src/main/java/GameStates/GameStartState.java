@@ -20,13 +20,20 @@ public class GameStartState implements GameState {
     private static final String IS_SUPREME_CHANCELLOR_TEXT = "You are the Supreme Chancellor!";
 
     private Game game;
+    private Player supremeChancellor;
+
     public GameStartState(Game game) {
         this.game = game;
     }
     
     @Override
     public void doAction() {
+        // do nothing
+    }
 
+    @Override
+    public int sendData() {
+        return 0;
     }
 
     @Override
@@ -35,13 +42,19 @@ public class GameStartState implements GameState {
         Integer playersExpected = playerManager.getGamePlayers();
 
         if (playerManager.getPlayers().size() == playersExpected) {
-            Player supremeChancellor = playerManager.getRandomPlayer();
+            supremeChancellor = playerManager.getRandomPlayer();
             game.getVariables().setSupremeChancellor(supremeChancellor);
-            game.getGamePlayerMessageActions().setSpecialRole(supremeChancellor, IS_SUPREME_CHANCELLOR_TEXT);
             playerManager.setPlayersIncludingExecuted(new ArrayList<>(playerManager.getPlayers()));
             game.setGameStarted();
-            game.changeState(State.NOMINATE_VICE_CHAIR);
+            game.stateStatusUpdate(State.NOMINATE_VICE_CHAIR);
         }
     }
-    
+
+
+
+    @Override
+    public void sendEndMessages() {
+        game.getGamePlayerMessageActions().setSpecialRole(supremeChancellor, IS_SUPREME_CHANCELLOR_TEXT);
+    }
+
 }
