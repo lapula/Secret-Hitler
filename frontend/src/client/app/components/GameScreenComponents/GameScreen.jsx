@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 
+import {textConstants} from '../constants.jsx'
 import styles from './gamescreen-style.css';
 import GamePlayerColumn from './GamePlayerColumn.jsx';
 import GamePolicies from './GamePolicies.jsx';
@@ -23,7 +24,7 @@ class GameScreen extends React.Component {
   }
 
   render() {
-    if (!this.state.statusUpdateData) {return null}
+    if (!this.state.statusUpdateData) {return <div className={styles.container}>{textConstants.gameStarting}</div>}
     return (
       <div className={styles.container}>
         <GamePlayerColumn
@@ -41,6 +42,7 @@ class GameScreen extends React.Component {
               cardsInDeck={this.state.statusUpdateData.cardsInDeck}
               governmentVotesThisRound={this.state.statusUpdateData.governmentVotesThisRound}
               state={this.state.statusUpdateData.state}
+              gameName={this.state.statusUpdateData.gameName}
             />
           </div>
           <GamePolicies

@@ -83,13 +83,13 @@ public class VetoState implements GameState {
             IntStream.range(0, vetoedPolicies.size()).forEach(index -> policyIdMapper.put(POLICY + index, vetoedPolicies.get(index).toString()));
             choices = new HashMap<>(policyIdMapper);
         }
-        target = Arrays.asList(legistlator);
+        target = Collections.singletonList(legistlator);
     }
 
     @Override
     public int sendData() {
         return game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), target,
-                choices, header, subheader, game.getGameStateType().toString());
+                choices, header, subheader, State.VETO.toString());
 
     }
 

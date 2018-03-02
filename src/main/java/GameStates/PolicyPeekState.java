@@ -9,6 +9,7 @@ import GameLogic.Game;
 import GameLogic.Player;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +47,7 @@ public class PolicyPeekState implements GameState {
     @Override
     public int sendData() {
         return game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(),
-                Arrays.asList(supremeChancellor), choices, HEADER, SUB_HEADER + topThree, game.getGameStateType().toString());
+                Collections.singletonList(supremeChancellor), choices, HEADER, SUB_HEADER + topThree, State.POLICY_PEEK.toString());
 
     }
 

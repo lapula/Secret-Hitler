@@ -17,6 +17,7 @@ const ALERT_PLAYER = "ALERT_PLAYER";
 const QUERY_RESPONSE = "QUERY_RESPONSE";
 const PING_INTERVAL = 10000;
 const RECONNECT_DELAY = 3000;
+const MAX_RECONNECT_ATTEMPTS = 400;
 
 class PlayerApp extends React.Component {
   constructor(props, context) {
@@ -37,7 +38,7 @@ class PlayerApp extends React.Component {
   }
 
   componentWillMount() {
-    this.initSocketConnection(this, this.props.playerName, this.props.gameName);
+    this.initSocketConnection(this, this.props.playerName, this.props.gameName, 0);
   }
 
   handleDialogClose() {
@@ -85,7 +86,7 @@ class PlayerApp extends React.Component {
 
   //####################### WebSocket ###########################
 
-  initSocketConnection(elem, playerName, gameName) {
+  initSocketConnection(elem, playerName, gameName, attemptCounter) {
     var component = elem;
     var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/players");
     component.setState({webSocket: webSocket});
@@ -143,10 +144,12 @@ class PlayerApp extends React.Component {
         hasWebsocketConnection: false
       });
 
-      setTimeout(function(){
-        console.log("Attempting to reopen websocket.")
-        component.initSocketConnection(elem, playerName, gameName);
-      }, RECONNECT_DELAY);
+      if (attemptCounter < MAX_RECONNECT_ATTEMPTS) {
+        setTimeout(function(){
+          console.log("Attempting to reopen websocket.")
+          component.initSocketConnection(elem, playerName, gameName, attemptCounter + 1);
+        }, RECONNECT_DELAY);
+      }
     };
 
     webSocket.onerror = function(err) {

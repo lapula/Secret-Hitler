@@ -68,7 +68,7 @@ public class LegistlativeSessionState implements GameState {
     @Override
     public int sendData() {
         return game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(),
-                Arrays.asList(legistlator), policyIdMapper, header, subheader, game.getGameStateType().toString());
+                Collections.singletonList(legistlator), policyIdMapper, header, subheader, State.LEGISTLATIVE_SESSION.toString());
     }
 
     @Override

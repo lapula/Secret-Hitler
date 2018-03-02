@@ -15,6 +15,8 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +40,7 @@ public class Game {
     private boolean gameStarted;
     private int lastSentMessageTargetCount;
     private int currentReceivedMessages;
+    private long timestamp;
 
     public Game(String gameName, int numberOfPlayers) {
         
@@ -54,6 +57,7 @@ public class Game {
         this.gameName = gameName;
         this.gameState = this.stateFactory.getGameState(this, State.GAME_START);
         this.gameStateType = State.GAME_START;
+        this.timestamp = new Date().getTime();
         this.stateStatusUpdate(null);
     }
     
@@ -155,6 +159,14 @@ public class Game {
         return gameName;
     }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
     public JSONObject toJSON() {
 
         JSONObject electionResults = new JSONObject(gameVariables.getElectionResults());
@@ -168,6 +180,7 @@ public class Game {
         json.put("players", playerManager.getPlayerNames());
         json.put("cardsInDeck", this.getPolicyDeck().getDeck().size());
         json.put("state", this.getGameStateType().map(State::toString).orElse(""));
+        json.put("gameName", this.getGameName());
 
         if (this.getPlayerManager().getPlayers().size() != this.getVariables().getElectionResults().size()) {
             json.put("electionResults", "");

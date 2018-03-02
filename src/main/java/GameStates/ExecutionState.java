@@ -45,7 +45,8 @@ public class ExecutionState implements GameState {
 
     @Override
     public int sendData() {
-        return game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), Collections.singletonList(supremeChancellor), choices, EXECUTION_HEADER, EXECUTION_SUB_HEADER, game.getGameStateType().toString());
+        return game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(),
+                Collections.singletonList(supremeChancellor), choices, EXECUTION_HEADER, EXECUTION_SUB_HEADER, State.EXECUTION.toString());
     }
 
     @Override

@@ -2,7 +2,9 @@
 package GameMessagingInterface;
 
 import GameLogic.Game;
+import GameLogic.Player;
 import SithImperative.Main;
+import org.apache.logging.log4j.LogManager;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -12,13 +14,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-
 @WebSocket
 public class GamePlayerWebSocketInterface {
+    private static org.apache.logging.log4j.Logger logger = LogManager.getLogger(GamePlayerWebSocketInterface.class);
 
     // Day in ms
     private static final Long TIMEOUT_MS = 1000l * 60l * 60l;
@@ -26,23 +29,21 @@ public class GamePlayerWebSocketInterface {
 
     @OnWebSocketConnect
     public void onConnect(Session user) throws Exception {
-        //user.setIdleTimeout(TIMEOUT_MS);
-        user.setIdleTimeout(1000l * 5l);
-        System.out.println("Player connected to server");
+        user.setIdleTimeout(TIMEOUT_MS);
+        //user.setIdleTimeout(1000l * 5l);
+        logger.debug("Player connected to server");
     }
 
     @OnWebSocketClose
     public void onClose(Session user, int statusCode, String reason) {
         Main.games.values().forEach(game -> {
             if (game.getPlayerManager().getPlayerBySession(user) != null) {
-                game.getPlayerManager().getPlayerBySession(user).ifPresent(p -> p.setSession(null));
-                //TODO
-                System.out.println("WTF");
-                System.out.println(game);
-                System.out.println(game.getPlayerManager().getPlayerBySession(user));
-                System.out.println(game.getPlayerManager().getPlayerBySession(user).get().getName());
-                System.out.println(game.getPlayerManager().getPlayerBySession(user).get().getSession());
-                System.out.println("Nulled player connection!");
+                Optional<Player> player = game.getPlayerManager().getPlayerBySession(user);
+                if (player.map(Player::getSession).isPresent()) {
+                    // Optional empty
+                    player.get().setSession(null);
+                    logger.info("Nulled connection, player: " + player.map(Player::getName).orElse(""));
+                }
             }
         });
     }
@@ -57,11 +58,12 @@ public class GamePlayerWebSocketInterface {
         Game game = Main.games.get(messageMap.get("gameName"));
 
         if (game == null) {
-            System.out.println("PLAYER TRIED TO CONNECT BUT GAME NOT FOUND");
+            logger.warn("PLAYER TRIED TO CONNECT BUT GAME NOT FOUND");
             user.close();
         } else if (messageMap.get("type").equals(PING)) {
             ping(user);
         } else {
+            logger.info("Message received from player with type: " + messageMap.get("type"));
             game.getGameMessageService().receivePlayerMessage(user, messageMap);
         }
     }

@@ -2,25 +2,21 @@ package GameMessagingInterface;
 
 import GameLogic.Game;
 import GameLogic.Player;
-import GameLogic.Role;
-import SithImperative.Main;
+import GameStates.GameState;
+import org.apache.logging.log4j.LogManager;
+import org.eclipse.jetty.util.ConcurrentHashSet;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class GameMessageService {
+    private static org.apache.logging.log4j.Logger logger = LogManager.getLogger(GameMessageService.class);
 
-    private final static Logger LOGGER = Logger.getLogger(GameMessageService.class.getName());
-
-    private static final String LISTEN_GAME = "LISTEN_GAME";
     private static final String REGISTER_PLAYER = "REGISTER_PLAYER";
     private static final String QUERY_RESPONSE = "QUERY_RESPONSE";
     private static final String INFORM_VICE_CHAIR = "You are the Vice Chair!";
@@ -32,7 +28,7 @@ public class GameMessageService {
     private GamePlayerMessageActions gamePlayerMessageActions;
     private GameScreenMessageActions gameScreenMessageActions;
     private Map<String, JSONObject> pendingAckMessages;
-    private ExecutorService executor;
+    private ConcurrentHashSet<Thread> threads;
 
 
     public GameMessageService(Game game) {
@@ -40,16 +36,12 @@ public class GameMessageService {
         this.gamePlayerMessageActions = new GamePlayerMessageActions(this);
         this.gameScreenMessageActions = new GameScreenMessageActions(this);
         this.pendingAckMessages = new HashMap<>();
-        this.executor = Executors.newSingleThreadExecutor();
+        this.threads = new ConcurrentHashSet<>();
     }
 
     // MESSAGE RECEIVING GAMESCREEN
 
-    public void receiveGameScreenMessage(Session user, Map<String, String> message) {
-        if (message.get("type").equals(LISTEN_GAME)) {
-            this.game.addGameListener(user);
-        }
-    }
+    // Done in interface due to game not possibly existing yet
 
     // MESSAGE RECEIVING PLAYER
 
@@ -63,7 +55,6 @@ public class GameMessageService {
 
     private void registerPlayer(Map<String, String> message, Session user, Integer attempts) {
         String playerName = message.get("playerName");
-        String gameName = message.get("gameName");
         Optional<Player> optionalPlayer = game.getPlayerManager().getPlayerByName(playerName);
 
         if (checkConnectionValidity(playerName)) {
@@ -85,15 +76,15 @@ public class GameMessageService {
                 }
 
                 if (getPlayerPendingMessages(playerName) != null) {
-                    LOGGER.info("RECONNECTED: " + player.getName() + " SENDING: " + getPlayerPendingMessages(playerName));
+                    logger.info("RECONNECTED: " + player.getName() + " SENDING: " + getPlayerPendingMessages(playerName));
                     JSONObject msg = getPlayerPendingMessages(playerName);
-                    ackMessage(player.getName());
+                    clearPendingMessage(player.getName());
                     sendPlayerMessageRequiredResponse(player, msg, attempts);
 
                 }
             }
         } else {
-            System.out.println("PLAYER ALREADY CONNECTED");
+            logger.error("PLAYER ALREADY CONNECTED");
             user.close();
         }
     }
@@ -101,19 +92,16 @@ public class GameMessageService {
     private boolean checkConnectionValidity(String playerName) {
         Optional<Player> p = this.game.getPlayerManager().getPlayerByName(playerName);
         if (p.isPresent()) {
-
+            logger.info("Connection valid? " + !p.get().getSession().isPresent());
             if (p.get().getSession().isPresent()) {
-                //TODO fix this
-                LOGGER.info("Session present? " + p.get().getSession().isPresent());
-                return true;
-                //return false;
+                return false;
             }
         }
         return true;
     }
 
     private void queryResponse(Map<String, String> message, String playerName) {
-        ackMessage(playerName);
+        clearPendingMessage(playerName);
         String response = message.get("response");
         game.receiveData(playerName, response);
     }
@@ -121,71 +109,79 @@ public class GameMessageService {
     // MESSAGE SENDING GAMESCREEN
 
     public void sendGameScreenMessage(Session listener, JSONObject gameScreenMessage, Integer attempts) {
-        //this.executor.submit(() -> {
+        Runnable runnable = () -> {
             if (attempts <= 0) {return;}
             try {
                 listener.getRemote().sendString(gameScreenMessage.toString());
             } catch (Exception ex) {
-                System.out.println("GameScreenMessage sending failed");
+                logger.info("GameScreenMessage sending failed");
                 delayedRetryMessageSending(() -> sendGameScreenMessage(listener, gameScreenMessage, attempts - 1));
             }
-        //});
+        };
+        threadRunner(runnable, listener.toString());
     }
 
     // MESSAGE SENDING PLAYER
 
     protected void sendPlayerMessageRequiredResponse(Player target, JSONObject gameMessage, Integer attempts) {
-        //this.executor.submit(() -> {
+        Runnable runnable = () -> {
             final Thread currentThread = Thread.currentThread();
             currentThread.setName(target.getName());
             if (attempts <= 0) {return;}
             try {
-                LOGGER.info("TARGET: " + target.getName() + " SENT: " + gameMessage);
+                logger.info("THREAD: " + Thread.currentThread().getName() + " TARGET: " + target.getName() + " SENT: " + gameMessage);
 
                 target.getSession().get().getRemote().sendString(gameMessage.toString());
                 addPlayerPendingMessage(target.getName(), gameMessage);
             } catch (Exception ex) {
-                //delayedRetryMessageSending(target, gameMessage);
-                System.out.println("playerMessageRR sending failed");
-                ex.printStackTrace();
                 delayedRetryMessageSending(() -> sendPlayerMessageRequiredResponse(target, gameMessage, attempts - 1));
             }
-        //});
+        };
+        this.threadRunner(runnable, target.getName());
     }
 
     public void sendPlayerMessage(Player target, JSONObject gameMessage, Integer attempts) {
-        //this.executor.submit(() -> {
+        Runnable runnable = () -> {
             if (attempts <= 0) {return;}
             try {
                 target.getSession().get().getRemote().sendString(gameMessage.toString());
             } catch (Exception ex) {
-                System.out.println("playerMessage sending failed");
-                //delayedRetryMessageSending(target, gameMessage);
                 delayedRetryMessageSending(() -> sendPlayerMessage(target, gameMessage, attempts - 1));
             }
-        //});
+        };
+        this.threadRunner(runnable, target.getName());
     }
 
     private void addPlayerPendingMessage(String playerName, JSONObject gameMessage) {
         if (!gameMessage.equals(pendingAckMessages.get(playerName)) && pendingAckMessages.get(playerName) != null) {
-            LOGGER.severe("MESSAGE LOST EARLIER");
-            System.out.println(pendingAckMessages.get(playerName));
-            System.out.println(gameMessage);
+            logger.error("MESSAGE LOST EARLIER");
         } else {
             this.pendingAckMessages.put(playerName, gameMessage);
-            LOGGER.info("ADD PENDING MESSAGE: " + playerName + " MESSAGE: " + gameMessage);
+            logger.info("ADD PENDING MESSAGE: " + playerName + " MESSAGE: " + gameMessage);
         }
     }
 
     private void delayedRetryMessageSending(Runnable sendMessage) {
 
-        LOGGER.warning("FAILED, trying again in 3s");
+        logger.info("THREAD: " + Thread.currentThread().getName() + " FAILED, trying again in 4s");
         try {
-            TimeUnit.SECONDS.sleep(5);
+            TimeUnit.SECONDS.sleep(4);
             sendMessage.run();
         } catch (InterruptedException e) {
-            LOGGER.severe("WAIT FAILED, MESSAGE LOST");
+            logger.error("WAIT FAILED, MESSAGE LOST");
         }
+    }
+
+    private void threadRunner(Runnable runnable, String runnableId) {
+        Optional<Thread> old = threads.stream().filter(t -> t.getName().equals(runnableId)).findFirst();
+        logger.info("Old Thread present? " + old.isPresent());
+        old.ifPresent(Thread::interrupt);
+
+        Thread thread = new Thread(runnable);
+        thread.setName(runnableId);
+
+        logger.info("Starting thread with name : " + runnableId);
+        thread.start();
     }
 
     // GETTERS + SETTERS
@@ -202,7 +198,7 @@ public class GameMessageService {
         return this.pendingAckMessages.get(playerName);
     }
 
-    private void ackMessage(String playerName) {
+    private void clearPendingMessage(String playerName) {
         this.pendingAckMessages.put(playerName, null);
     }
 

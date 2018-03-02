@@ -20,10 +20,11 @@ class RegisterGame extends React.Component {
   }
 
   handleSubmit() {
-    this.setState({
-      gamePlayers: this.refs.gamePlayers.input.value,
-      gameName: this.refs.gameName.input.value
-    });
+    if (this.props.createNewGame) {
+      this.setState({ gamePlayers: this.refs.gamePlayers.input.value });
+    } else {
+      this.setState({ gameName: this.refs.gameName.input.value });
+    }
   }
 
   handleKeyPress(component, event) {
@@ -36,21 +37,28 @@ class RegisterGame extends React.Component {
     return (this.props.createNewGame ? <h1>{textConstants.createGame}</h1> : <h1>{textConstants.openGameScreen}</h1>);
   }
 
-  renderPlayersNumber() {
+  renderField() {
     if (this.props.createNewGame) {
       return (
-          <TextField
-                floatingLabelText={textConstants.numberOfPlayers}
-                ref="gamePlayers"
-                onKeyPress={this.handleKeyPress}
-          />
+        <TextField
+          floatingLabelText={textConstants.numberOfPlayers}
+          ref="gamePlayers"
+          onKeyPress={this.handleKeyPress}
+        />
+      );
+    } else {
+      return (
+        <TextField
+          floatingLabelText={textConstants.gameName}
+          ref="gameName"
+          onKeyPress={this.handleKeyPress}
+        />
       );
     }
-    return "";
   }
 
   render() {
-    if (this.state.gamePlayers != "" && this.state.gameName != "") {
+    if (this.state.gamePlayers != "" || this.state.gameName != "") {
       return (<GameScreen createGame={this.props.createNewGame} gamePlayers={this.state.gamePlayers} gameName={this.state.gameName} />)
     }
 
@@ -59,11 +67,7 @@ class RegisterGame extends React.Component {
         <div>
           <Paper className={styles.paper} zDepth={2}>
             {this.renderHeader()}
-            <TextField
-                floatingLabelText={textConstants.gameName}
-                ref="gameName"
-              />
-            {this.renderPlayersNumber()}
+            {this.renderField()}
             <RaisedButton
               label={textConstants.createGame}
               primary={true}

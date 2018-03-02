@@ -11,7 +11,16 @@ class GameGeneralInfo extends React.Component {
   render() {
     return (
       <div className={styles.gameGeneralInfoWrapper}>
-        <div className={styles.generalInfoHeader}>{this.props.state}</div>
+          <div className={styles.generalInfoBodyWrapper}>
+            <div className={styles.generalInfoBodyItem}>
+              <div className={styles.generalInfoBodyItemHeader}>{textConstants.gameState}</div>
+              <div className={styles.generalInfoBodyItemValue}>{this.props.state}</div>
+            </div>
+            <div className={styles.generalInfoBodyItem}>
+              <div className={styles.generalInfoBodyItemHeader}>{textConstants.gameName}:</div>
+              <div className={styles.generalInfoBodyItemValue}>{this.props.gameName}</div>
+            </div>
+          </div>
         <div className={styles.generalInfoBodyWrapper}>
           <div className={styles.generalInfoBodyItem}>
             <div className={styles.generalInfoBodyItemHeader}>{textConstants.governmentVotesThisRound}</div>

@@ -41,7 +41,8 @@ public class CallSpecialElectionState implements GameState {
 
     @Override
     public int sendData() {
-        return game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), Arrays.asList(supremeChancellor), choices, SPECIAL_ELECTION, SPECIAL_ELECTION_DESCRIPTION, game.getGameStateType().toString());
+        return game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(),
+                Collections.singletonList(supremeChancellor), choices, SPECIAL_ELECTION, SPECIAL_ELECTION_DESCRIPTION, State.CALL_SPECIAL_ELECTION.toString());
     }
 
     @Override

@@ -63,7 +63,8 @@ public class VoteOnGovernmentState implements GameState {
 
     @Override
     public int sendData() {
-        return game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), game.getPlayerManager().getPlayers(), choices, VOTE_HEADER, VOTE_SUB_HEADER, game.getGameStateType().toString());
+        return game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(),
+                game.getPlayerManager().getPlayers(), choices, VOTE_HEADER, VOTE_SUB_HEADER, State.VOTE_ON_GOVERNMENT.toString());
     }
     
     @Override

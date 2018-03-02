@@ -8,7 +8,7 @@ const textConstants = {
   numberOfPlayers: "Number of players",
   gameName: "Game name",
   playerName: "Player name",
-
+  gameStarting: "Waiting for server...",
 
   /* Player app constants */
 
@@ -16,7 +16,6 @@ const textConstants = {
   confirmRole: "Understood!",
   confirmAlert: "I see.",
   connecting: "Connecting...",
-  gameStarting: "Game is starting...",
   roleNotAssigned: "Not assigned yet.",
 
   /* Game screen constants */
@@ -26,7 +25,8 @@ const textConstants = {
   supremeChancellor: "Supreme Chancellor",
   viceChair: "Vice Chair",
   separatistsLastSlot: "Separatists win if a policy card is placed here.",
-  loyalistsLastSlot: "Loyalists win if a policy card is placed here."
+  loyalistsLastSlot: "Loyalists win if a policy card is placed here.",
+  gameState: "Game state:"
 }
 
 const POLICY_PEEK = "The Supreme Chancellor receives knowledge of the next three policy cards.";

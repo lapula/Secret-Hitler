@@ -47,7 +47,8 @@ public class NominateViceChair implements GameState {
 
     @Override
     public int sendData() {
-        return game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), Arrays.asList(supremeChancellor), choices, HEADER, SUB_HEADER, game.getGameStateType().toString());
+        return game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(),
+                Collections.singletonList(supremeChancellor), choices, HEADER, SUB_HEADER, State.NOMINATE_VICE_CHAIR.toString());
 
     }
 
