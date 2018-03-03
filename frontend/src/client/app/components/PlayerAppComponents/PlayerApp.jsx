@@ -86,11 +86,12 @@ class PlayerApp extends React.Component {
 
   //####################### WebSocket ###########################
 
-  initSocketConnection(elem, playerName, gameName, attemptCounter) {
-    var component = elem;
-    var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/players");
+  initSocketConnection(component, playerName, gameName, attemptCounter) {
+    const protocol = (location.hostname == "localhost") ? "ws" : "wss";
+    let webSocket = new WebSocket(protocol + "://" + location.hostname + ":" + location.port + "/players");
     component.setState({webSocket: webSocket});
 
+    console.log(location.hostname);
     let pingInterval = setInterval(() => {
       webSocket.send(JSON.stringify({
         "type": PING,

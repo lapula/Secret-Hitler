@@ -16,7 +16,7 @@ class RegisterGame extends React.Component {
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this, event);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   handleSubmit() {
@@ -27,7 +27,7 @@ class RegisterGame extends React.Component {
     }
   }
 
-  handleKeyPress(component, event) {
+  handleKeyPress(event) {
     if(event.key == 'Enter'){
       this.handleSubmit();
     }

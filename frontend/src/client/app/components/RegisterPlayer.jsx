@@ -17,7 +17,7 @@ class RegisterPlayer extends React.Component {
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this, event);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   handleSubmit() {
@@ -27,8 +27,8 @@ class RegisterPlayer extends React.Component {
     });
   }
 
-  handleKeyPress(component, event) {
-    if(event.key == 'Enter'){
+  handleKeyPress(event) {
+    if (event.key == 'Enter') {
       this.handleSubmit();
     }
   }
@@ -39,7 +39,7 @@ class RegisterPlayer extends React.Component {
         <div className={styles.container}>
           <div>
             <Paper className={styles.paper} zDepth={2}>
-              <h1>Join game</h1>
+              <h1>{textConstants.joinGame}</h1>
               <TextField
                   floatingLabelText={textConstants.playerName}
                   ref="playerName"
@@ -50,7 +50,7 @@ class RegisterPlayer extends React.Component {
                     onKeyPress={this.handleKeyPress}
               /><br />
             <RaisedButton
-              label="Enter game!"
+              label={textConstants.enterGame}
               primary={true}
               className={styles.button}
               onTouchTap={this.handleSubmit}

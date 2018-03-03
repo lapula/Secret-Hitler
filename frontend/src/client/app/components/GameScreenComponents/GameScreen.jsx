@@ -56,22 +56,23 @@ class GameScreen extends React.Component {
   }
 
   componentWillMount() {
-    var component = this;
-    var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/games");
-    const type = component.props.createGame ? CREATE_GAME : LISTEN_GAME;
+    console.log(location.hostname);
+    const protocol = (location.hostname == "localhost") ? "ws" : "wss";
+    let webSocket = new WebSocket(protocol + "://" + location.hostname + ":" + location.port + "/games");
+    const type = this.props.createGame ? CREATE_GAME : LISTEN_GAME;
 
     webSocket.onopen = function() {
       var message =  {
         "type":type,
-        "gameName": component.props.gameName,
-        "gamePlayers": component.props.gamePlayers
+        "gameName": this.props.gameName,
+        "gamePlayers": this.props.gamePlayers
       }
       webSocket.send(JSON.stringify(message));
 
       setInterval(function(){
         webSocket.send(JSON.stringify({
           "type": PING,
-          "gameName": component.props.gameName
+          "gameName": this.props.gameName
         }));
       }, PING_INTERVAL);
     };
@@ -81,9 +82,9 @@ class GameScreen extends React.Component {
       console.log(message);
 
       if (message.type == STATUS_UPDATE) {
-        component.setState({statusUpdateData: message.data});
+        this.setState({statusUpdateData: message.data});
       } else if (message.type == GAME_EVENT) {
-        component.setState({gameEvent: message});
+        this.setState({gameEvent: message});
       }
     };
 

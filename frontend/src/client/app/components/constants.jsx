@@ -9,7 +9,7 @@ const textConstants = {
   gameName: "Game name",
   playerName: "Player name",
   gameStarting: "Waiting for server...",
-
+  enterGame: "Enter game!",
   /* Player app constants */
 
   yourRoleIs: "Your role is: ",
