@@ -41,21 +41,45 @@ class Main extends React.Component {
              primary={false}
              className={styles.menuButton}
              backgroundColor={materialUiOverrides.darkGray}
-             onTouchTap={this.showPlayerScreen} /><br />
+             onTouchTap={this.showPlayerScreen}
+           /><br />
            <RaisedButton
              label={textConstants.createGame}
              primary={false}
              className={styles.menuButton}
              backgroundColor={materialUiOverrides.darkGray}
-             onTouchTap={this.showGameCreationScreen} /><br />
+             onTouchTap={this.showGameCreationScreen}
+           /><br />
            <RaisedButton
              label={textConstants.openGameScreen}
              primary={false}
              className={styles.menuButton}
              backgroundColor={materialUiOverrides.darkGray}
-             onTouchTap={this.showGameScreen} /><br />
+             onTouchTap={this.showGameScreen}
+           /><br />
+           <RaisedButton
+             label={textConstants.about}
+             primary={false}
+             className={styles.menuButton}
+             href="https://github.com/lapula/Sith-Imperative"
+             backgroundColor={materialUiOverrides.darkGray}
+          /><br />
          </div>
       )
+    }
+  }
+// <span className={styles.footerItem}>{textConstants.github} <a className={styles.footerGithubLink} href="https://github.com/lapula/Sith-Imperative">https://github.com/lapula/Sith-Imperative</a></span>
+
+  renderFooter() {
+    if (this.state.renderComponent == null) {
+      return (
+        <div className={styles.appFooter}>
+          <span className={styles.footerItem}>
+            <a className={styles.footerItem} rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="CC SA–BY–NC 4.0" style={{borderWidth: 0}} src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a>
+            {textConstants.createdBy}
+          </span>
+        </div>
+      );
     }
   }
 
@@ -68,9 +92,10 @@ class Main extends React.Component {
           titleStyle={materialUiOverrides.colorWhite}
           iconElementLeft={<div></div>}
          />
-        {this.renderNavigationView()}
+         {this.renderNavigationView()}
+         {this.renderFooter()}
       </div>
-      )
+    );
   }
 }
 

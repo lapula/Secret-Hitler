@@ -8,6 +8,23 @@
   flex-grow: inherit;
 }
 
+.appFooter {
+  display: flex;
+  color: white;
+  width: 100%;
+  text-align: left;
+  justify-content: space-between;
+}
+
+.footerGithubLink {
+  color: rgb(191, 136, 115);
+}
+
+.footerItem {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
 .textWhite {
   color: white !important;
 }
@@ -27,6 +44,19 @@
 }
 
 .menuButton button div div span {
+  font-size: 1.5em !important;
+}
+
+.menuButton a {
+  height: 3em !important;
+  line-height: 3em !important;
+}
+
+.menuButton a div div {
+  height: 3em !important;
+}
+
+.menuButton a div div span {
   font-size: 1.5em !important;
 }
 

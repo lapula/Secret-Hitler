@@ -5,11 +5,9 @@ const paths = {
   SRC: path.resolve(__dirname, 'src'),
   JS: path.resolve(__dirname, 'src/client/app'),
 };
-
-
-var APP_DIR = path.resolve(__dirname, 'src/client/app');
-var JS_DIR = path.resolve(__dirname, '../src/main/resources/public/js');
-
+const prod = process.argv.indexOf('-p') !== -1;
+const APP_DIR = path.resolve(__dirname, 'src/client/app');
+const JS_DIR = path.resolve(__dirname, '../src/main/resources/public/js');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var config = {
@@ -35,17 +33,25 @@ var config = {
       { test: /\.(png|jpg)$/, loader: 'url-loader?limit=81920' },
       { test: /\.(eot|svg|ttf|woff|woff2)$/, loader: 'file?name=[name].[ext]'}
     ]
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
-    }),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin(),
-    new webpack.optimize.AggressiveMergingPlugin()
-  ],
+  }
 };
+
+config.plugins = config.plugins||[];
+if (prod) {
+  config.plugins.push(new webpack.DefinePlugin({
+      'process.env': {
+          'NODE_ENV': `"production"`
+      }
+  }));
+  config.plugins.push(new webpack.optimize.DedupePlugin());
+  config.plugins.push(new webpack.optimize.UglifyJsPlugin());
+  config.plugins.push(new webpack.optimize.AggressiveMergingPlugin());
+} else {
+  config.plugins.push(new webpack.DefinePlugin({
+      'process.env': {
+          'NODE_ENV': `""`
+      }
+  }));
+}
 
 module.exports = config;

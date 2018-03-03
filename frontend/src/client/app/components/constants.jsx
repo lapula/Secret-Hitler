@@ -10,6 +10,10 @@ const textConstants = {
   playerName: "Player name",
   gameStarting: "Waiting for server...",
   enterGame: "Enter game!",
+  createdBy: "Created by: Laur Pulliainen",
+  github: "Github:",
+  about: "About",
+
   /* Player app constants */
 
   yourRoleIs: "Your role is: ",
