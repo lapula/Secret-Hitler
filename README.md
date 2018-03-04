@@ -3,7 +3,7 @@
 Link to game page will be here.
 
 ## Description
-Sith Imperative is a party game for 5-10 players. The game requires a public screen and for each player a (preferably mobile) device to use. The game is a Star-Wars themed version of Secret Hitler by Goat, Wolf, & Cabbage http://secrethitler.com and is played by the same rules availeble on their website. 
+Sith Imperative is a party game for 5-10 players. The game requires a public screen and for each player a (preferably mobile) device to use. The game is a Star-Wars themed version of Secret Hitler by Goat, Wolf, & Cabbage http://secrethitler.com and is played by the same rules available on their website. 
 
 ## Technical details / Running the game locally
 
