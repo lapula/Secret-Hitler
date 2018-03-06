@@ -16,6 +16,17 @@ senateGold="rgb(191, 136, 115)";
   width: 100%;
 }
 
+.gameStarting {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-shadow: 1px 1px 5px black;
+  font-size: 6vh;
+  padding: 30px;
+}
+
 .gameScreenRightWrapper {
   display: flex;
   flex: 4;

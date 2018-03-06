@@ -12,18 +12,24 @@ class RegisterGame extends React.Component {
     super(props, context);
     this.state = {
       gamePlayers: "",
-      gameName: ""
+      gameName: "",
+      playersErrors: textConstants.playersError,
+      nameErrors: textConstants.gameNameError
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handlePlayersChange = this.handlePlayersChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
   }
 
   handleSubmit() {
-    if (this.props.createNewGame) {
-      this.setState({ gamePlayers: this.refs.gamePlayers.input.value });
-    } else {
-      this.setState({ gameName: this.refs.gameName.input.value });
+    if (this.state.playersErrors == null || this.state.nameErrors == null) {
+      if (this.props.createNewGame) {
+        this.setState({ gamePlayers: this.refs.gamePlayers.input.value });
+      } else {
+        this.setState({ gameName: this.refs.gameName.input.value });
+      }
     }
   }
 
@@ -37,6 +43,24 @@ class RegisterGame extends React.Component {
     return (this.props.createNewGame ? <h1>{textConstants.createGame}</h1> : <h1>{textConstants.openGameScreen}</h1>);
   }
 
+  handlePlayersChange(event) {
+    const players = parseInt(event.target.value);
+    if (players < 5 || players > 10 || Number.isNaN(players)) {
+      this.setState({playersErrors: textConstants.playersError})
+    } else {
+      this.setState({playersErrors: null})
+    }
+  };
+
+  handleNameChange(event) {
+    const gameName = event.target.value;
+    if (gameName.length != 6) {
+      this.setState({nameErrors: textConstants.gameNameError})
+    } else {
+      this.setState({nameErrors: null})
+    }
+  }
+
   renderField() {
     if (this.props.createNewGame) {
       return (
@@ -44,6 +68,8 @@ class RegisterGame extends React.Component {
           floatingLabelText={textConstants.numberOfPlayers}
           ref="gamePlayers"
           onKeyPress={this.handleKeyPress}
+          onChange={this.handlePlayersChange}
+          errorText={this.state.playersErrors}
         />
       );
     } else {
@@ -52,6 +78,8 @@ class RegisterGame extends React.Component {
           floatingLabelText={textConstants.gameName}
           ref="gameName"
           onKeyPress={this.handleKeyPress}
+          onChange={this.handleNameChange}
+          errorText={this.state.nameErrors}
         />
       );
     }

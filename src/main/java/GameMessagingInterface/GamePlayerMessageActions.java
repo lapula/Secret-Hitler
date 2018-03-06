@@ -3,6 +3,7 @@ package GameMessagingInterface;
 import GameLogic.Game;
 import GameLogic.Player;
 import GameLogic.Role;
+import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -18,6 +19,8 @@ public class GamePlayerMessageActions {
     private static final String PLAYER_INIT = "PLAYER_INIT";
     private static final String SET_SPECIAL_ROLE = "SET_SPECIAL_ROLE";
     private static final String ALERT_PLAYER = "ALERT_PLAYER";
+    private static final String ERROR = "ERROR";
+
     private static final Integer RESPONSE_MESSAGE_SEND_ATTEMPTS = 60;
     private static final Integer MESSAGE_SEND_ATTEMPTS = 20;
     private GameMessageService gameMessageService = null;
@@ -97,5 +100,22 @@ public class GamePlayerMessageActions {
         jsonMessage.put("text", text);
 
         gameMessageService.sendPlayerMessage(player, jsonMessage, MESSAGE_SEND_ATTEMPTS);
+    }
+
+    public void errorMessageForPseudoPlayer(String header, Session session) {
+
+        JSONObject jsonTargetMessage = new JSONObject();
+        jsonTargetMessage.put("type", ERROR);
+        jsonTargetMessage.put("gameState", "");
+        jsonTargetMessage.put("header", header);
+        jsonTargetMessage.put("subheader", "");
+        jsonTargetMessage.put("choices", "");
+
+        Player pseudoPlayer = new Player("", "", session, null);
+        try {
+            pseudoPlayer.getSession().get().getRemote().sendString(jsonTargetMessage.toString());
+        } catch (Exception e) {
+            
+        }
     }
 }

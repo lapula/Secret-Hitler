@@ -13,6 +13,9 @@ const textConstants = {
   createdBy: "Created by: Laur Pulliainen",
   github: "Github:",
   about: "About",
+  playerNameError: "Name must be between 1 and 12 characters",
+  gameNameError: "Name must be exactly 6 characters",
+  playersError: "Must be a number between 5 and 10",
 
   /* Player app constants */
 
@@ -31,7 +34,8 @@ const textConstants = {
   viceChair: "Vice Chair",
   separatistsLastSlot: "Separatists win if a policy card is placed here.",
   loyalistsLastSlot: "Loyalists win if a policy card is placed here.",
-  gameState: "Game state:"
+  gameState: "Game state:",
+  openingGameScreen: "Opening game screen (if this is taking long, the game might not exist or was failed to create)."
 }
 
 const POLICY_PEEK = "The Supreme Chancellor receives knowledge of the next three policy cards.";

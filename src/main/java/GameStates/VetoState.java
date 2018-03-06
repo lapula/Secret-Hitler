@@ -6,6 +6,7 @@
 package GameStates;
 
 import GameLogic.Game;
+import GameLogic.GameVariables;
 import GameLogic.Player;
 import GameLogic.Policy;
 
@@ -23,6 +24,7 @@ public class VetoState implements GameState {
     private static final String VETO_PROPOSED_SUB_HEADER = "Supreme Chancellor, do you accept the veto?";
     private static final String VETO_DENIED_HEADER = "Veto denied, Vice Chair will enact a policy";
     private static final String VETO_DENIED_SUB_HEADER = "Vice Chair, discard one policy";
+    private static final String INFORM_SUPREME_CHANCELLOR = "You are the Supreme Chancellor!";
     protected static final String YES = "Yes";
     protected static final String NO = "No";
     private static final String POLICY = "POLICY";
@@ -54,6 +56,7 @@ public class VetoState implements GameState {
     protected Map<String, String> choices;
     private boolean vetoUnused;
     protected Player legistlator;
+    Player nextSupremeChancellor;
 
 
     public VetoState(Game game) {
@@ -101,8 +104,13 @@ public class VetoState implements GameState {
                 vetoUnused = true;
                 game.stateStatusUpdate(null);
             } else {
-                //TODO should not reset government votes this round
-                game.stateStatusUpdate(State.ROUND_START);
+                GameVariables gameVariables = game.getVariables();
+                nextSupremeChancellor = game.getPlayerManager().getNextPlayer(gameVariables.getSupremeChancellor().get());
+                gameVariables.setSupremeChancellor(nextSupremeChancellor);
+                gameVariables.cleanElectionResults();
+                gameVariables.setViceChair(null);
+                gameVariables.setVetoedPolicies(null);
+                game.stateStatusUpdate(State.NOMINATE_VICE_CHAIR);
             }
         } else {
             Policy discard = policyIdMapper.get(data).equals(Policy.LOYALIST_POLICY.toString()) ? Policy.LOYALIST_POLICY : Policy.SEPARATIST_POLICY;
@@ -121,6 +129,8 @@ public class VetoState implements GameState {
     @Override
     public void sendEndMessages() {
         if (proposingVeto) {
+            game.getGamePlayerMessageActions().clearSpecialRoles(game.getPlayerManager().getPlayers(), nextSupremeChancellor);
+            game.getGamePlayerMessageActions().setSpecialRole(nextSupremeChancellor, INFORM_SUPREME_CHANCELLOR);
             game.getGameScreenMessageActions().sendGameEvent(
                     game.getGameListeners(), EVENT_VETO, EVENT_VETO_HEADER, EVENT_VETO_SUBHEADER);
         } else if (vetoUnused) {

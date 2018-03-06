@@ -59,33 +59,39 @@ public class GameScreenWebSocketInterface {
             //sendStatusUpdate(Main.games.get(gameName).getGameListeners(), game.toJSON());
         } else if (messageMap.get("type").equals(LISTEN_GAME)) {
             Game game = Main.games.get(messageMap.get("gameName"));
-            game.addGameListener(user);
-            logger.info("Added listener to game: " + game.getGameName());
-            game.getGameMessageService().getGameScreenMessageActions().sendStatusUpdate(game.getGameListeners(), game.toJSON());
+            if (game != null) {
+                game.addGameListener(user);
+                logger.info("Added listener to game: " + game.getGameName());
+                game.getGameMessageService().getGameScreenMessageActions().sendStatusUpdate(game.getGameListeners(), game.toJSON());
+            }
         }
     }
 
     private void createGame(Session user, Map<String, String> message) {
-        Map<String, Game> games = Main.games;
-        String gameName = RandomStringUtils.random(6, true, false).toUpperCase();
-        Game existingGame = games.get(gameName);
+        try {
+            Map<String, Game> games = Main.games;
+            String gameName = RandomStringUtils.random(6, true, false).toUpperCase();
+            Game existingGame = games.get(gameName);
 
-        if (existingGame != null) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date(existingGame.getTimestamp()));
-            cal.add(Calendar.HOUR_OF_DAY, 3);
-            cal.getTime();
-            if (cal.getTime().after(new Date())) {
-                // try with new name
-                logger.warn("Name collusion, trying with new random.");
-                createGame(user, message);
+            if (existingGame != null) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(new Date(existingGame.getTimestamp()));
+                cal.add(Calendar.HOUR_OF_DAY, 3);
+                cal.getTime();
+                if (cal.getTime().after(new Date())) {
+                    // try with new name
+                    logger.warn("Name collusion, trying with new random.");
+                    createGame(user, message);
+                }
             }
+            logger.info("Creating game with name: " + gameName);
+            Game game = new Game(gameName, Integer.parseInt(message.get("gamePlayers")));
+            Main.games.put(game.getGameName(), game);
+            game.getGameListeners().add(user);
+            game.getGameMessageService().getGameScreenMessageActions().sendStatusUpdate(game.getGameListeners(), game.toJSON());
+        } catch (Exception e) {
+            logger.error("Exception when creating new game: " + e.getMessage());
         }
-        logger.info("Creating game with name: " + gameName);
-        Game game = new Game(gameName, Integer.parseInt(message.get("gamePlayers")));
-        Main.games.put(game.getGameName(), game);
-        game.getGameListeners().add(user);
-        game.getGameMessageService().getGameScreenMessageActions().sendStatusUpdate(game.getGameListeners(), game.toJSON());
     }
     
 

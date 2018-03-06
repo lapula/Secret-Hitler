@@ -58,7 +58,9 @@ public class GamePlayerWebSocketInterface {
         Game game = Main.games.get(messageMap.get("gameName"));
 
         if (game == null) {
-            logger.warn("PLAYER TRIED TO CONNECT BUT GAME NOT FOUND");
+            logger.error("Player tried to connect but game not found.");
+            GamePlayerMessageActions psuedoGamePlayerMessageActions = new GamePlayerMessageActions(null);
+            psuedoGamePlayerMessageActions.errorMessageForPseudoPlayer("Game not found", user);
             user.close();
         } else if (messageMap.get("type").equals(PING)) {
             ping(user);

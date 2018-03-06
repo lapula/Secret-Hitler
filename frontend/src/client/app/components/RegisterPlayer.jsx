@@ -13,23 +13,47 @@ class RegisterPlayer extends React.Component {
     super(props, context);
     this.state = {
       playerName: null,
-      gameName: null
+      gameName: null,
+      playerErrors: textConstants.playerNameError,
+      gameErrors: textConstants.gameNameError
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handlePlayerChange = this.handlePlayerChange.bind(this);
+    this.handleGameChange = this.handleGameChange.bind(this);
   }
 
   handleSubmit() {
-    this.setState({
-      playerName: this.refs.playerName.input.value,
-      gameName: this.refs.gameName.input.value
-    });
+    if (this.state.playerErrors == null && this.state.gameErrors == null) {
+      this.setState({
+        playerName: this.refs.playerName.input.value,
+        gameName: this.refs.gameName.input.value
+      });
+    }
   }
 
   handleKeyPress(event) {
     if (event.key == 'Enter') {
       this.handleSubmit();
+    }
+  }
+
+  handlePlayerChange(event) {
+    const playerName = event.target.value;
+    if (playerName.length == 0 || playerName.length > 12) {
+      this.setState({playerErrors: textConstants.playerNameError})
+    } else {
+      this.setState({playerErrors: null})
+    }
+  };
+
+  handleGameChange(event) {
+    const gameName = event.target.value;
+    if (gameName.length != 6) {
+      this.setState({gameErrors: textConstants.gameNameError})
+    } else {
+      this.setState({gameErrors: null})
     }
   }
 
@@ -43,11 +67,15 @@ class RegisterPlayer extends React.Component {
               <TextField
                   floatingLabelText={textConstants.playerName}
                   ref="playerName"
+                  onChange={this.handlePlayerChange}
+                  errorText={this.state.playerErrors}
                 /><br />
               <TextField
-                    floatingLabelText={textConstants.gameName}
-                    ref="gameName"
-                    onKeyPress={this.handleKeyPress}
+                  floatingLabelText={textConstants.gameName}
+                  ref="gameName"
+                  onKeyPress={this.handleKeyPress}
+                  onChange={this.handleGameChange}
+                  errorText={this.state.gameErrors}
               /><br />
             <RaisedButton
               label={textConstants.enterGame}

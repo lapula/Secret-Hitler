@@ -42,7 +42,7 @@ class VetoStateTest {
     void testReceiveDataProposingYes() {
         vetoState.doAction();
         vetoState.receiveData(vetoState.legistlator.getName(), VetoState.YES);
-        assertEquals(State.ROUND_START, game.getGameStateType().orElse(null));
+        assertEquals(State.NOMINATE_VICE_CHAIR, game.getGameStateType().orElse(null));
     }
 
     @Test

@@ -45,7 +45,17 @@ class PolicyDeckTest {
         assertEquals(lastCards.get(2) + ", " + lastCards.get(1) + ", " + lastCards.get(0), topCardsString);
     }
 
-    @RepeatedTest(100)
+    @Test
+    public void getsTopThreeCardsWithTwoLeft() {
+        PolicyDeck d = new PolicyDeck();
+        assertTrue(d.getDeck().size() == 17);
+
+        IntStream.range(0, 5).forEach(i -> d.drawNextThree());
+        d.nextThreeToString();
+        assertEquals(17, d.getDeck().size());
+    }
+
+    @RepeatedTest(50)
     public void shufflesEmptyDeckCorrectly() {
         PolicyDeck d = new PolicyDeck();
         assertTrue(d.getDeck().size() == 17);
@@ -61,5 +71,6 @@ class PolicyDeckTest {
 
         assertTrue(bottomLoyalistCards <= nextThreeLoyalistCards);
         assertTrue(bottomSeparatistCards <= nextThreeSeparatistCards);
+        assertEquals(16, d.getDeck().size());
     }
 }

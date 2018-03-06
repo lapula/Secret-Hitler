@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
 
         //For debugging
-        Game initialGame = new Game("gg", 2);
+        Game initialGame = new Game("asdasd", 2);
         games.put(initialGame.getGameName(), initialGame);
 
         // Init spark and websockets

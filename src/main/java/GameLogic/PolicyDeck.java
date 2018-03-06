@@ -21,13 +21,13 @@ public class PolicyDeck {
     private static final int SEPARATIST_CARDS_INITIAL = 11;
 
     public PolicyDeck() {
-        this.policyDeck = initPolicyDeck(new ArrayList<>());
+        this.policyDeck = initPolicyDeck(new ArrayList<>(), false);
     }
 
     public Policy drawNext() {
 
         if (policyDeck.size() == 0) {
-            policyDeck = initPolicyDeck(new ArrayList<>());
+            policyDeck = initPolicyDeck(new ArrayList<>(), false);
         }
         Policy next = policyDeck.remove(policyDeck.size() - 1);
         return next;
@@ -38,7 +38,7 @@ public class PolicyDeck {
         if (policyDeck.size() < 3) {
             List<Policy> bottomCards = new ArrayList<>();
             bottomCards.addAll(policyDeck);
-            policyDeck = initPolicyDeck(bottomCards);
+            policyDeck = initPolicyDeck(bottomCards, false);
         }
         List<Policy> topThree = new ArrayList<>();
         IntStream.range(0, 3).forEach(i -> topThree.add(policyDeck.remove(policyDeck.size() - 1)));
@@ -50,7 +50,7 @@ public class PolicyDeck {
         if (policyDeck.size() < 3) {
             List<Policy> bottomCards = new ArrayList<>();
             bottomCards.addAll(policyDeck);
-            policyDeck = initPolicyDeck(bottomCards);
+            policyDeck = initPolicyDeck(bottomCards, true);
         }
         List<String> topThree = new ArrayList<>();
         IntStream.range(policyDeck.size() - 3, policyDeck.size()).forEach(i -> topThree.add(policyDeck.get(i).toString()));
@@ -58,10 +58,14 @@ public class PolicyDeck {
         return String.join(", ", topThree);
     }
     
-    private List<Policy> initPolicyDeck(List<Policy> bottomCards) {
+    private List<Policy> initPolicyDeck(List<Policy> bottomCards, boolean onlyPeek) {
+        int bottomLoyalistCards = 0;
+        int bottomSeparatistCards = 0;
 
-        int bottomLoyalistCards = ((int) bottomCards.stream().filter(p -> p.equals(Policy.LOYALIST_POLICY)).count());
-        int bottomSeparatistCards = ((int) bottomCards.stream().filter(p -> p.equals(Policy.SEPARATIST_POLICY)).count());
+        if (onlyPeek) {
+            bottomLoyalistCards = ((int) bottomCards.stream().filter(p -> p.equals(Policy.LOYALIST_POLICY)).count());
+            bottomSeparatistCards = ((int) bottomCards.stream().filter(p -> p.equals(Policy.SEPARATIST_POLICY)).count());
+        }
 
         List<Policy> deck = new ArrayList<>();
         IntStream.range(0, LOYALIST_CARDS_INITIAL - bottomLoyalistCards).forEach(i -> deck.add(Policy.LOYALIST_POLICY));

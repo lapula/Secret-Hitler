@@ -40,6 +40,7 @@ public class LegistlativeSessionState implements GameState {
     protected Player legistlator;
     private String header;
     private String subheader;
+    //TODO veto as separate proposal, IDEA: send yes / no proposal about veto, if yes do as currently, if no, set a variable as false and send normal policies
     
     public LegistlativeSessionState(Game game) {
         this.game = game;

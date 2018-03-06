@@ -24,7 +24,9 @@ class GameScreen extends React.Component {
   }
 
   render() {
-    if (!this.state.statusUpdateData) {return <div className={styles.container}>{textConstants.gameStarting}</div>}
+    if (!this.state.statusUpdateData) {
+      return <div className={styles.container}><div className={styles.gameStarting}>{textConstants.openingGameScreen}</div></div>
+    }
     return (
       <div className={styles.container}>
         <GamePlayerColumn

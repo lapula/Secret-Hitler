@@ -15,6 +15,8 @@ const PLAYER_QUERY = "PLAYER_QUERY";
 const SET_SPECIAL_ROLE = "SET_SPECIAL_ROLE";
 const ALERT_PLAYER = "ALERT_PLAYER";
 const QUERY_RESPONSE = "QUERY_RESPONSE";
+const ERROR = "ERROR";
+
 const PING_INTERVAL = 10000;
 const RECONNECT_DELAY = 3000;
 const MAX_RECONNECT_ATTEMPTS = 400;
@@ -30,7 +32,9 @@ class PlayerApp extends React.Component {
       specialRole: "",
       dialogOpen: false,
       dialogHeader: "",
-      dialogText: ""
+      dialogText: "",
+      errorFlag: false,
+      onlyHeaderText: textConstants.connecting,
     };
 
     this.handleDialogClose = this.handleDialogClose.bind(this);
@@ -49,10 +53,10 @@ class PlayerApp extends React.Component {
 
   renderHeader() {
     let header = <h1 className={styles.header}>{this.state.phase}</h1>;
-    if (!this.state.hasWebsocketConnection) {
+    if (!this.state.hasWebsocketConnection || this.state.errorFlag) {
       header = (
         <div className={styles.connectingContainer}>
-          <h1 className={styles.header}>{textConstants.connecting}</h1>
+          <h1 className={styles.header}>{this.state.onlyHeaderText}</h1>
         </div>
       );
     }
@@ -133,6 +137,11 @@ class PlayerApp extends React.Component {
           dialogHeader: data.header,
           dialogText: data.text
         });
+      } else if (data.type == ERROR) {
+        component.setState({
+          errorFlag: true,
+          onlyHeaderText: data.header
+        });
       }
     };
 
@@ -145,7 +154,7 @@ class PlayerApp extends React.Component {
         hasWebsocketConnection: false
       });
 
-      if (attemptCounter < MAX_RECONNECT_ATTEMPTS) {
+      if (attemptCounter < MAX_RECONNECT_ATTEMPTS && component.state.errorFlag == false) {
         setTimeout(function(){
           console.log("Attempting to reopen websocket.")
           component.initSocketConnection(component, playerName, gameName, attemptCounter + 1);

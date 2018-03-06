@@ -59,9 +59,14 @@ public class GameMessageService {
 
         if (checkConnectionValidity(playerName)) {
             if (!optionalPlayer.isPresent()) {
-                Player newPlayer = game.getPlayerManager().addNewPlayer(playerName, user);
-                this.getGamePlayerMessageActions().initPlayer(newPlayer, newPlayer.getRole());
-                game.receiveData(playerName, null);
+                if (game.getPlayerManager().getPlayers().size() < game.getVariables().getGamePlayers()) {
+                    Player newPlayer = game.getPlayerManager().addNewPlayer(playerName, user);
+                    this.getGamePlayerMessageActions().initPlayer(newPlayer, newPlayer.getRole());
+                    game.receiveData(playerName, null);
+                } else {
+                    logger.warn("Game already full");
+                    this.getGamePlayerMessageActions().errorMessageForPseudoPlayer("Game already full.", user);
+                }
             } else {
                 Player player = optionalPlayer.get();
                 game.getPlayerManager().reconnectPlayer(playerName, user);
@@ -84,7 +89,8 @@ public class GameMessageService {
                 }
             }
         } else {
-            logger.error("PLAYER ALREADY CONNECTED");
+            logger.error("Player tried to connect but another with same name already connected: " + playerName);
+            this.getGamePlayerMessageActions().errorMessageForPseudoPlayer("Player with same name already connected.", user);
             user.close();
         }
     }
