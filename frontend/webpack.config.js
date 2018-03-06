@@ -30,7 +30,7 @@ var config = {
           'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
         ]
       },
-      { test: /\.(png|jpg)$/, loader: 'url-loader?limit=81920' },
+      { test: /\.(png|jpg)$/, loader: 'url-loader' },
       { test: /\.(eot|svg|ttf|woff|woff2)$/, loader: 'file?name=[name].[ext]'}
     ]
   }

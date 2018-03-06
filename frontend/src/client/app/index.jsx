@@ -1,6 +1,6 @@
 import React from 'react';
 import {render} from 'react-dom';
-import $ from 'jquery';
+//import $ from 'jquery';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';

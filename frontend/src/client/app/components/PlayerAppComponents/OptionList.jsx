@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
-import {List, ListItem} from 'material-ui/List';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Subheader from 'material-ui/Subheader';
 import Paper from 'material-ui/Paper';
+import RaisedButton from 'material-ui/RaisedButton';
 
+import {textConstants} from '../constants.jsx'
 import styles from './playerapp-style.css'
+
+const LEGISTLATIVE_SESSION = "LEGISTLATIVE_SESSION";
 
 class OptionList extends React.Component {
 
@@ -14,28 +18,26 @@ class OptionList extends React.Component {
         subheader: null,
         previousChoice: null,
         gameState: null,
-        previousSubheader: null
+        previousSubheader: null,
+        selectedCombinedValue: null
       };
+      this.handleClick = this.handleClick.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    createListItem(key, text) {
-      let listClickEvent = this.handleClick.bind(this, key, text);
-      return (
-        <ListItem
-          className={styles.itemStyle}
-          primaryText={text}
-          key={key}
-          onClick={listClickEvent}
-        />
-      );
+    handleClick(e, value) {
+      this.setState({selectedCombinedValue: value});
     }
 
-    handleClick(responseKey, text, elem) {
-      this.props.sendQueryResponse(responseKey)
-      this.setState({
-        choices: null,
-        previousChoice: text
-      });
+    handleSubmit() {
+      if (this.state.selectedCombinedValue != null) {
+        this.props.sendQueryResponse(this.state.selectedCombinedValue.split(";")[0])
+        this.setState({
+          choices: null,
+          previousChoice: this.state.selectedCombinedValue.split(";")[1],
+          selectedCombinedValue: null
+        });
+      }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -62,18 +64,54 @@ class OptionList extends React.Component {
       return list;
     }
 
+    createListItem(key, text) {
+      const combinedValue = key + ";" + text;
+      let itemStyle = this.determineListItemStyle(combinedValue);
+
+      return (
+        <RadioButton
+          className={itemStyle}
+          label={text}
+          value={combinedValue}
+          key={key}
+        />
+      );
+    }
+
+    determineListItemStyle(combinedValue) {
+      let itemStyle = styles.radioNormal;
+
+      if (this.state.selectedCombinedValue != null) {
+        if (this.props.queryData.gameState == LEGISTLATIVE_SESSION) {
+          itemStyle = (this.state.selectedCombinedValue == combinedValue) ? styles.radioNotSelected : styles.radioSelected;
+        } else {
+          itemStyle = (this.state.selectedCombinedValue == combinedValue) ? styles.radioSelected : styles.radioNotSelected;
+        }
+      }
+      return itemStyle;
+    }
+
     render() {
       if (!this.props.visible) {
         return null;
       } else if (this.state.choices) {
         return(
           <div className={styles.listContainer}>
-            <List className={styles.list}>
               <Paper className={styles.listPaper} zDepth={4}>
                 <Subheader className={styles.subheader}>{this.state.subheader}</Subheader>
-                {this.getChoicesArray()}
+                <div className={styles.optionListRadioButtonsWrapper}>
+                  <RadioButtonGroup name="playerChoice" onChange={this.handleClick}>
+                    {this.getChoicesArray()}
+                  </RadioButtonGroup>
+                </div>
+                <RaisedButton
+                  label={textConstants.confirm}
+                  primary={true}
+                  className={styles.formButton}
+                  onTouchTap={this.handleSubmit}
+                />
               </Paper>
-            </List>
+
           </div>
         );
       } else if (this.state.previousChoice) {

@@ -33,8 +33,7 @@ class GamePlayerColumn extends React.Component {
       players.push(
         <div key={key} className={itemStyle}>
           {this.addPlayerToken(key)}
-          <div className={styles.playerColumnElectionItemName}>{key}</div>
-          <div className={styles.playerColumnElectionItemValue}>{value}</div>
+          <div className={styles.playerColumnElectionItemValue}><span className={styles.playerColumnElectionItemName}>{key}</span> - {value}</div>
         </div>
       );
     });

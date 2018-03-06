@@ -21,11 +21,12 @@ const textConstants = {
   confirmAlert: "I see.",
   connecting: "Connecting...",
   roleNotAssigned: "Not assigned yet.",
+  confirm: "Confirm",
 
   /* Game screen constants */
 
-  cardsInDeck: "Cards remaining in deck:",
-  governmentVotesThisRound: "Attempted government votes this round:",
+  cardsInDeck: "Cards in deck:",
+  governmentVotesThisRound: "Election tracker:",
   supremeChancellor: "Supreme Chancellor",
   viceChair: "Vice Chair",
   separatistsLastSlot: "Separatists win if a policy card is placed here.",
@@ -49,12 +50,20 @@ const separatistPowers = {
   nineTenPlayers: nineTen,
 }
 
-import senateGray from '../resources/Senate_gray.jpg';
-import palpatineSenate from '../resources/Palpatine_yoda.jpg';
+import oldRepublic from '../resources/old_republic_symbol.png';
+import republicSymbol from '../resources/republic_symbol.png';
+import separatistSymbol from '../resources/separatist_symbol.png';
+import mandaloreanSymbol from '../resources/mandalorian_skull.jpg';
+import jediOrderSymbol from '../resources/jedi_order_symbol.jpg';
+import sithEmpireSymbol from '../resources/sith_empire_symbol.jpg';
 
 const eventImageMap = {
-  generic: senateGray,
-  LEGISTLATION_SEPARATISTS: palpatineSenate
+  generic: oldRepublic,
+  separatistSymbol: separatistSymbol,
+  loyalistsSymbol: republicSymbol,
+  mandaloreanSymbol: mandaloreanSymbol,
+  jediOrderSymbol: jediOrderSymbol,
+  sithEmpireSymbol: sithEmpireSymbol
 }
 
 const materialUiOverrides = {

@@ -28,16 +28,16 @@ public class GameEndState implements GameState {
     protected static final String SEPARATISTS_WIN_CARDS = "Separatists win by passing all required policies! The separatist planets will secede from the republic!";
     protected static final String SEPARATISTS_WIN_PALPATINE = "Separatists win by electing Palpatine as Vice Chair! He is now in position to take over the senate.";
 
-    private static final String EVENT_END = "END";
-
     private Game game;
     private GameVariables gameVariables;
     protected String subheader;
+    private String endEvent;
 
     public GameEndState(Game game) {
         this.game = game;
         gameVariables = game.getVariables();
         subheader = "";
+        endEvent = "";
     }
     
     @Override
@@ -48,17 +48,21 @@ public class GameEndState implements GameState {
         
         if (this.gameVariables.getSeparatistPolicyCount() >= 6) {
             subheader = SEPARATISTS_WIN_CARDS;
+            endEvent = "END_SEPARATIST_WIN";
         }
         if (this.gameVariables.getViceChair().map(Player::getRole).orElse(Role.LOYALIST).equals(Role.SHEEV_PALPATINE)
                 && this.gameVariables.getSeparatistPolicyCount() > 3
                 && game.getGameStateType().orElse(State.GAME_START).equals(State.LEGISTLATIVE_SESSION)) {
             subheader = SEPARATISTS_WIN_PALPATINE;
+            endEvent = "END_SEPARATIST_WIN";
         }
         if (this.gameVariables.getLoyalistPolicyCount() >= 5) {
             subheader = LOYALIST_WIN_CARDS;
+            endEvent = "END_LOYALIST_WIN";
         }
         if (palpatineInGame.size() == 0) {
             subheader = LOYALIST_WIN_PALPATINE;
+            endEvent = "END_LOYALIST_WIN";
         }
         game.setTimestamp(new Date().getTime());
     }
@@ -67,7 +71,7 @@ public class GameEndState implements GameState {
     public int sendData() {
         game.getGamePlayerMessageActions().sendQueryAndInfoMessages(game.getPlayerManager().getPlayers(), new ArrayList<Player>(), new HashMap<String, String>(), HEADER, "", game.getGameStateType().toString());
         game.getGameScreenMessageActions().sendGameEvent(
-                game.getGameListeners(), EVENT_END, HEADER, subheader);
+                game.getGameListeners(), endEvent, HEADER, subheader);
         return 0;
     }
 

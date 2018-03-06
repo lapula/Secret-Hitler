@@ -52,9 +52,9 @@ class PlayerApp extends React.Component {
     if (!this.state.hasWebsocketConnection) {
       header = (
         <div className={styles.connectingContainer}>
-            <h1 className={styles.header}>{textConstants.connecting}</h1>
+          <h1 className={styles.header}>{textConstants.connecting}</h1>
         </div>
-      )
+      );
     }
     return header;
   }
@@ -66,7 +66,6 @@ class PlayerApp extends React.Component {
         {this.renderHeader()}
         <OptionList
           queryData={this.state.queryData}
-          webSocket={this.state.webSocket}
           visible={this.state.hasWebsocketConnection}
           sendQueryResponse={this.sendQueryResponse}
         />
@@ -86,7 +85,8 @@ class PlayerApp extends React.Component {
 
   //####################### WebSocket ###########################
 
-  initSocketConnection(component, playerName, gameName, attemptCounter) {
+  initSocketConnection(elem, playerName, gameName, attemptCounter) {
+    const component = elem;
     const protocol = (location.hostname == "localhost") ? "ws" : "wss";
     let webSocket = new WebSocket(protocol + "://" + location.hostname + ":" + location.port + "/players");
     component.setState({webSocket: webSocket});
@@ -148,7 +148,7 @@ class PlayerApp extends React.Component {
       if (attemptCounter < MAX_RECONNECT_ATTEMPTS) {
         setTimeout(function(){
           console.log("Attempting to reopen websocket.")
-          component.initSocketConnection(elem, playerName, gameName, attemptCounter + 1);
+          component.initSocketConnection(component, playerName, gameName, attemptCounter + 1);
         }, RECONNECT_DELAY);
       }
     };

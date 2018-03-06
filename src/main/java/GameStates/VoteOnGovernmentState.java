@@ -32,7 +32,8 @@ public class VoteOnGovernmentState implements GameState {
     private static final String EVENT_VOTE_FAIL_HEADER = "Vote failed!";
     private static final String EVENT_VOTE_FAIL_SUBHEADER = "The representatives were not able to form a government.";
 
-    private static final String EVENT_ATTEMPTS_USED = "ATTEMPTS_USED";
+    private static final String EVENT_ATTEMPTS_USED_SEPARATISTS = "ATTEMPTS_USED_SEPARATISTS";
+    private static final String EVENT_ATTEMPTS_USED_LOYALISTS = "ATTEMPTS_USED_LOYALISTS";
     private static final String EVENT_ATTEMPTS_USED_HEADER = "Democracy failed!";
     private static final String EVENT_ATTEMPTS_USED_SUBHEADER = "The vote has failed three times, the forces of fate will decide next policy.";
 
@@ -44,11 +45,13 @@ public class VoteOnGovernmentState implements GameState {
     private Map<String, String> choices;
     private boolean governmentFormed;
     protected Player nextSupremeChancellor;
-    
+    private String attemptsUsedEventText;
+
     public VoteOnGovernmentState(Game game) {
         this.game = game;
         choices = new HashMap<>();
         governmentFormed = false;
+        attemptsUsedEventText = "";
     }
 
 
@@ -97,7 +100,7 @@ public class VoteOnGovernmentState implements GameState {
 
         } else if (game.getVariables().getSenateVotesThisRound() == 3) {
             game.getGameScreenMessageActions().sendGameEvent(
-                    game.getGameListeners(), EVENT_ATTEMPTS_USED, EVENT_ATTEMPTS_USED_HEADER, EVENT_ATTEMPTS_USED_SUBHEADER);
+                    game.getGameListeners(), attemptsUsedEventText, EVENT_ATTEMPTS_USED_HEADER, EVENT_ATTEMPTS_USED_SUBHEADER);
         } else {
             game.getGamePlayerMessageActions().clearSpecialRoles(game.getPlayerManager().getPlayers(), nextSupremeChancellor);
             game.getGamePlayerMessageActions().setSpecialRole(nextSupremeChancellor, INFORM_SUPREME_CHANCELLOR);
@@ -117,8 +120,10 @@ public class VoteOnGovernmentState implements GameState {
         Policy policy = game.getPolicyDeck().drawNext();
         if (policy.equals(Policy.SEPARATIST_POLICY)) {
             game.getVariables().addSeparatistPolicy();
+            attemptsUsedEventText = EVENT_ATTEMPTS_USED_SEPARATISTS;
         } else {
             game.getVariables().addLoyalistPolicy();
+            attemptsUsedEventText = EVENT_ATTEMPTS_USED_LOYALISTS;
         }
         game.getVariables().setPreviousViceChair(null);
         game.getVariables().setPreviousSupremeChancellor(null);

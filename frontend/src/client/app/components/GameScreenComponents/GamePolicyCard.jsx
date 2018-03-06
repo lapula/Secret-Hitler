@@ -10,8 +10,9 @@ class GamePolicyCard extends React.Component {
 
   renderCard() {
     if (this.props.activeKeys.includes(this.props.cardKey)) {
+      const cardStyle = this.props.isSeparatist ? styles.policyCardSeparatist : styles.policyCardLoyalist
       return (
-        <div className={styles.policyCard}>
+        <div className={cardStyle}>
           <img src={this.props.cardImage} className={styles.policyCardImage}/>
         </div>
       );
