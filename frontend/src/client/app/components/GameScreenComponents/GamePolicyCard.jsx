@@ -30,9 +30,15 @@ class GamePolicyCard extends React.Component {
     }
   }
 
+  winCondition() {
+    if (this.props.isSeparatist && this.props.cardKey >= 3) {
+      return {backgroundColor: "rgba(0, 0, 0, 0.4)"};
+    }
+  }
+
   render() {
     return (
-      <div className={this.props.isLast ? styles.policyCardSlotLast : styles.policyCardSlot}>{this.renderCard()}</div>
+      <div style={this.winCondition()} className={this.props.isLast ? styles.policyCardSlotLast : styles.policyCardSlot}>{this.renderCard()}</div>
     );
   }
 }

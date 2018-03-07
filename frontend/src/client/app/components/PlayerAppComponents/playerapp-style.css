@@ -79,8 +79,17 @@
 
 }
 
+.radioNormalVeto > div > label {
+  color: #f26b28 !important;
+}
+
 .radioNotSelected > div > label {
   color: #787878 !important;
+  text-decoration: line-through;
+}
+
+.radioNotSelectedVeto > div > label {
+  color: #b1582c !important;
   text-decoration: line-through;
 }
 

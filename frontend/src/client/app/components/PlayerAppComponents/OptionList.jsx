@@ -8,6 +8,7 @@ import {textConstants} from '../constants.jsx'
 import styles from './playerapp-style.css'
 
 const LEGISTLATIVE_SESSION = "LEGISTLATIVE_SESSION";
+const VETO = "VETO";
 
 class OptionList extends React.Component {
 
@@ -58,15 +59,19 @@ class OptionList extends React.Component {
 
     getChoicesArray() {
       let list = [];
-      Object.entries(this.state.choices).map(([key, value]) => {
-        list.push(this.createListItem(key, value))
-      })
+      const hasVetoProposal = Object.keys(this.state.choices).includes(VETO);
+      const keysSorted = Object.keys(this.state.choices).sort();
+      console.log(keysSorted);
+      keysSorted.forEach((key) => {
+        list.push(this.createListItem(key, this.state.choices[key], hasVetoProposal))
+      });
+
       return list;
     }
 
-    createListItem(key, text) {
+    createListItem(key, text, hasVetoProposal) {
       const combinedValue = key + ";" + text;
-      let itemStyle = this.determineListItemStyle(combinedValue);
+      let itemStyle = this.determineListItemStyle(combinedValue, hasVetoProposal);
 
       return (
         <RadioButton
@@ -78,7 +83,7 @@ class OptionList extends React.Component {
       );
     }
 
-    determineListItemStyle(combinedValue) {
+    determineListItemStyle(combinedValue, hasVetoProposal) {
       let itemStyle = styles.radioNormal;
 
       if (this.state.selectedCombinedValue != null) {
@@ -86,6 +91,20 @@ class OptionList extends React.Component {
           itemStyle = (this.state.selectedCombinedValue == combinedValue) ? styles.radioNotSelected : styles.radioSelected;
         } else {
           itemStyle = (this.state.selectedCombinedValue == combinedValue) ? styles.radioSelected : styles.radioNotSelected;
+        }
+      }
+      // Special case if Veto proposal phase 1
+      if (combinedValue.split(";")[0] == VETO) {itemStyle = styles.radioNormalVeto}
+
+      if (hasVetoProposal && this.state.selectedCombinedValue != null) {
+        const itemKey = this.state.selectedCombinedValue.split(";")[0];
+        if (itemKey == VETO) {
+          itemStyle = (this.state.selectedCombinedValue == combinedValue) ? styles.radioSelected : styles.radioNotSelected;
+        } else {
+          itemStyle = (this.state.selectedCombinedValue == combinedValue) ? styles.radioNotSelected : styles.radioSelected;
+          if (combinedValue.split(";")[0] == VETO) {
+            itemStyle = styles.radioNotSelectedVeto;
+          }
         }
       }
       return itemStyle;
@@ -111,7 +130,6 @@ class OptionList extends React.Component {
                   onTouchTap={this.handleSubmit}
                 />
               </Paper>
-
           </div>
         );
       } else if (this.state.previousChoice) {

@@ -31,7 +31,7 @@ public class VetoState implements GameState {
 
     private static final String EVENT_VETO = "VETO";
     private static final String EVENT_VETO_HEADER = "Veto power used!";
-    private static final String EVENT_VETO_SUBHEADER = "The Government has blocked a policy from being put into action!";
+    private static final String EVENT_VETO_SUBHEADER = "The government has blocked a policy from being put into action!";
 
     private static final String EVENT_NO_VETO = "NO_VETO";
     private static final String EVENT_NO_VETO_HEADER = "Veto power left unused!";

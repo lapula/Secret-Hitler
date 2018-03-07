@@ -39,7 +39,7 @@ public class GameMessageService {
         this.threads = new ConcurrentHashSet<>();
     }
 
-    // MESSAGE RECEIVING GAMESCREEN
+    // MESSAGE RECEIVING GAME SCREEN
 
     // Done in interface due to game not possibly existing yet
 
@@ -59,39 +59,46 @@ public class GameMessageService {
 
         if (checkConnectionValidity(playerName)) {
             if (!optionalPlayer.isPresent()) {
-                if (game.getPlayerManager().getPlayers().size() < game.getVariables().getGamePlayers()) {
-                    Player newPlayer = game.getPlayerManager().addNewPlayer(playerName, user);
-                    this.getGamePlayerMessageActions().initPlayer(newPlayer, newPlayer.getRole());
-                    game.receiveData(playerName, null);
-                } else {
-                    logger.warn("Game already full");
-                    this.getGamePlayerMessageActions().errorMessageForPseudoPlayer("Game already full.", user);
-                }
+                createNewPlayer(playerName, user);
             } else {
-                Player player = optionalPlayer.get();
-                game.getPlayerManager().reconnectPlayer(playerName, user);
-
-                this.getGamePlayerMessageActions().initPlayer(player, player.getRole());
-
-                if (game.getVariables().getViceChair().map(Player::getName).orElse("").equals(playerName)) {
-                    this.getGamePlayerMessageActions().setSpecialRole(player, INFORM_VICE_CHAIR);
-                }
-                if (game.getVariables().getSupremeChancellor().map(Player::getName).orElse("").equals(playerName)) {
-                    this.getGamePlayerMessageActions().setSpecialRole(player, INFORM_SUPREME_CHANCELLOR);
-                }
-
-                if (getPlayerPendingMessages(playerName) != null) {
-                    logger.info("RECONNECTED: " + player.getName() + " SENDING: " + getPlayerPendingMessages(playerName));
-                    JSONObject msg = getPlayerPendingMessages(playerName);
-                    clearPendingMessage(player.getName());
-                    sendPlayerMessageRequiredResponse(player, msg, attempts);
-
-                }
+                reconnectExistingPlayer(optionalPlayer.get(), user, attempts);
             }
         } else {
             logger.error("Player tried to connect but another with same name already connected: " + playerName);
             this.getGamePlayerMessageActions().errorMessageForPseudoPlayer("Player with same name already connected.", user);
             user.close();
+        }
+    }
+
+    private void createNewPlayer(String playerName, Session user) {
+        if (game.getPlayerManager().getPlayers().size() < game.getVariables().getGamePlayers()) {
+            Player newPlayer = game.getPlayerManager().addNewPlayer(playerName, user);
+            this.getGamePlayerMessageActions().initPlayer(newPlayer, newPlayer.getRole());
+            game.receiveData(playerName, null);
+        } else {
+            logger.warn("Game already full");
+            this.getGamePlayerMessageActions().errorMessageForPseudoPlayer("Game already full.", user);
+        }
+    }
+
+    private void reconnectExistingPlayer(Player player, Session user, Integer attempts) {
+        String playerName = player.getName();
+        game.getPlayerManager().reconnectPlayer(playerName, user);
+
+        this.getGamePlayerMessageActions().initPlayer(player, player.getRole());
+
+        if (game.getVariables().getViceChair().map(Player::getName).orElse("").equals(playerName)) {
+            this.getGamePlayerMessageActions().setSpecialRole(player, INFORM_VICE_CHAIR);
+        }
+        if (game.getVariables().getSupremeChancellor().map(Player::getName).orElse("").equals(playerName)) {
+            this.getGamePlayerMessageActions().setSpecialRole(player, INFORM_SUPREME_CHANCELLOR);
+        }
+
+        if (getPlayerPendingMessages(playerName) != null) {
+            logger.info("RECONNECTED: " + player.getName() + " SENDING: " + getPlayerPendingMessages(playerName));
+            JSONObject msg = getPlayerPendingMessages(playerName);
+            clearPendingMessage(player.getName());
+            sendPlayerMessageRequiredResponse(player, msg, attempts);
         }
     }
 

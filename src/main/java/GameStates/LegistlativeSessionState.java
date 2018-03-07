@@ -40,8 +40,7 @@ public class LegistlativeSessionState implements GameState {
     protected Player legistlator;
     private String header;
     private String subheader;
-    //TODO veto as separate proposal, IDEA: send yes / no proposal about veto, if yes do as currently, if no, set a variable as false and send normal policies
-    
+
     public LegistlativeSessionState(Game game) {
         this.game = game;
         this.policies = game.getPolicyDeck().drawNextThree();
@@ -59,7 +58,7 @@ public class LegistlativeSessionState implements GameState {
             legistlator = game.getVariables().getViceChair().get();
             header = LEGISTLATE_HEADER_VICE_CHAIR;
             subheader = LEGISTLATE_SUB_HEADER_VICE_CHAIR;
-            
+
             if (game.getVariables().getSeparatistPolicyCount() == 5) {
                 policyIdMapper.put(VETO, VETO_PROPOSAL);
             }
