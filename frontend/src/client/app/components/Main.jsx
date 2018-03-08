@@ -37,6 +37,13 @@ class Main extends React.Component {
       return(
         <div className={styles.buttonContainer}>
            <RaisedButton
+             label={textConstants.rules}
+             primary={false}
+             className={styles.menuButton}
+             href="images/Sith-Imperative_rules.pdf"
+             backgroundColor={materialUiOverrides.darkGray}
+           /><br />
+           <RaisedButton
              label={textConstants.joinGame}
              primary={false}
              className={styles.menuButton}
@@ -68,7 +75,6 @@ class Main extends React.Component {
       )
     }
   }
-// <span className={styles.footerItem}>{textConstants.github} <a className={styles.footerGithubLink} href="https://github.com/lapula/Sith-Imperative">https://github.com/lapula/Sith-Imperative</a></span>
 
   renderFooter() {
     if (this.state.renderComponent == null) {
@@ -93,10 +99,11 @@ class Main extends React.Component {
           iconElementLeft={<div></div>}
          />
          {this.renderNavigationView()}
-         {this.renderFooter()}
+
       </div>
     );
   }
 }
+/*{this.renderFooter()}*/
 
 export default Main;

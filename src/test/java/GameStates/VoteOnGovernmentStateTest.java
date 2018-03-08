@@ -96,5 +96,6 @@ class VoteOnGovernmentStateTest {
         assertEquals(State.ROUND_START.toString(), game.getGameStateType().map(State::toString).orElse(""));
         assertFalse(game.getVariables().getPreviousSupremeChancellor().isPresent());
         assertFalse(game.getVariables().getPreviousViceChair().isPresent());
+        assertFalse(game.getVariables().hasExecutivePower());
     }
 }

@@ -22,7 +22,7 @@ public class GameVariables {
     private int senateVotesThisRound;
     private int loyalistPoliciesPassed;
     private int separatistPoliciesPassed;
-    private boolean lastPolicyPassedSeparatist;
+    private boolean hasExecutivePower;
     private int specialElectionPhase;
     private Player specialElectionSupremeChancellor;
     private Player supremeChancellorBeforeSpecialElection;
@@ -36,7 +36,7 @@ public class GameVariables {
         this.loyalistPoliciesPassed = 0;
         this.separatistPoliciesPassed = 0;
         this.specialElectionPhase = 0;
-        this.lastPolicyPassedSeparatist = false;
+        this.hasExecutivePower = false;
 
     }
 
@@ -86,7 +86,7 @@ public class GameVariables {
     
     public void addLoyalistPolicy() {
         this.loyalistPoliciesPassed++;
-        this.lastPolicyPassedSeparatist = false;
+        this.hasExecutivePower = false;
     }
     
     public int getLoyalistPolicyCount() {
@@ -99,7 +99,7 @@ public class GameVariables {
     
     public void addSeparatistPolicy() {
         this.separatistPoliciesPassed++;
-        this.lastPolicyPassedSeparatist = true;
+        this.hasExecutivePower = true;
     }
     
     public List<Policy> getVetoedPolicies() {
@@ -142,8 +142,12 @@ public class GameVariables {
         this.previousSupremeChancellor = previousSupremeChancellor;
     }
 
-    public boolean isLastPolicyPassedSeparatist() {
-        return lastPolicyPassedSeparatist;
+    public boolean hasExecutivePower() {
+        return hasExecutivePower;
+    }
+
+    public void setNoExecutivePower() {
+        hasExecutivePower = false;
     }
 
     public Optional<Player> getPreviousViceChair() {

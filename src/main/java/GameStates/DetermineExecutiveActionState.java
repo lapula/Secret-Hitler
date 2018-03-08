@@ -27,7 +27,7 @@ public class DetermineExecutiveActionState implements GameState {
         this.game = game;
         gamePlayers = game.getVariables().getGamePlayers();
         separatistPolicies = game.getVariables().getSeparatistPolicyCount();
-        hasPower = game.getVariables().isLastPolicyPassedSeparatist();
+        hasPower = game.getVariables().hasExecutivePower();
     }
 
     @Override

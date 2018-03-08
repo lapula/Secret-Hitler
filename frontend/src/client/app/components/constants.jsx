@@ -12,6 +12,7 @@ const textConstants = {
   enterGame: "Enter game!",
   createdBy: "Created by: Laur Pulliainen",
   github: "Github:",
+  rules: 'Rules',
   about: "About",
   playerNameError: "Name must be between 1 and 12 characters",
   gameNameError: "Name must be exactly 6 characters",

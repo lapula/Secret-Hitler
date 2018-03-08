@@ -127,6 +127,7 @@ public class VoteOnGovernmentState implements GameState {
         }
         game.getVariables().setPreviousViceChair(null);
         game.getVariables().setPreviousSupremeChancellor(null);
+        game.getVariables().setNoExecutivePower();
         game.stateStatusUpdate(State.ROUND_START);
     }
 
