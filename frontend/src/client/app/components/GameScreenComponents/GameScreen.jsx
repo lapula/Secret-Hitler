@@ -60,7 +60,8 @@ class GameScreen extends React.Component {
   componentWillMount() {
     console.log(location.hostname);
     const protocol = (location.hostname == "localhost") ? "ws" : "wss";
-    let webSocket = new WebSocket(protocol + "://" + location.hostname + ":" + location.port + "/games");
+    const hostname = (location.hostname == "localhost") ? "localhost" : "sith-imperative.herokuapp.com";
+    let webSocket = new WebSocket(protocol + "://" + hostname + ":" + location.port + "/games");
     let component = this;
 
     webSocket.onopen = function() {

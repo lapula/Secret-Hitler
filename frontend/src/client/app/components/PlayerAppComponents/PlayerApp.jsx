@@ -92,7 +92,8 @@ class PlayerApp extends React.Component {
   initSocketConnection(elem, playerName, gameName, attemptCounter) {
     const component = elem;
     const protocol = (location.hostname == "localhost") ? "ws" : "wss";
-    let webSocket = new WebSocket(protocol + "://" + location.hostname + ":" + location.port + "/players");
+    const hostname = (location.hostname == "localhost") ? "localhost" : "sith-imperative.herokuapp.com";
+    let webSocket = new WebSocket(protocol + "://" + hostname + ":" + location.port + "/players");
     component.setState({webSocket: webSocket});
 
     console.log(location.hostname);
