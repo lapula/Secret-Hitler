@@ -40,11 +40,13 @@ public class LegistlativeSessionState implements GameState {
     protected Player legistlator;
     private String header;
     private String subheader;
+    private boolean proposedVeto;
 
     public LegistlativeSessionState(Game game) {
         this.game = game;
         this.policies = game.getPolicyDeck().drawNextThree();
         this.policyIdMapper = new HashMap<>();
+        this.proposedVeto = false;
     }
 
     @Override
@@ -76,6 +78,7 @@ public class LegistlativeSessionState implements GameState {
 
         if (policyIdMapper.get(data).equals(VETO_PROPOSAL)) {
             game.getVariables().setVetoedPolicies(policies);
+            proposedVeto = true;
             game.stateStatusUpdate(State.VETO);
         } else  {
             Policy discard = policyIdMapper.get(data).equals(Policy.LOYALIST_POLICY.toString()) ? Policy.LOYALIST_POLICY : Policy.SEPARATIST_POLICY;
@@ -99,12 +102,14 @@ public class LegistlativeSessionState implements GameState {
 
     @Override
     public void sendEndMessages() {
-        if (policies.get(0).equals(Policy.LOYALIST_POLICY)) {
-            game.getGameScreenMessageActions().sendGameEvent(
-                    game.getGameListeners(), EVENT_LEGISTLATION_LOYALISTS, EVENT_LEGISTLATION_HEADER_LOYALISTS, EVENT_LEGISTLATION_SUBHEADER_LOYALISTS);
-        } else {
-            game.getGameScreenMessageActions().sendGameEvent(
-                    game.getGameListeners(), EVENT_LEGISTLATION_SEPARATISTS, EVENT_LEGISTLATION_HEADER_SEPARATISTS, EVENT_LEGISTLATION_SUBHEADER_SEPARATISTS);
+        if (!proposedVeto) {
+            if (policies.get(0).equals(Policy.LOYALIST_POLICY)) {
+                game.getGameScreenMessageActions().sendGameEvent(
+                        game.getGameListeners(), EVENT_LEGISTLATION_LOYALISTS, EVENT_LEGISTLATION_HEADER_LOYALISTS, EVENT_LEGISTLATION_SUBHEADER_LOYALISTS);
+            } else {
+                game.getGameScreenMessageActions().sendGameEvent(
+                        game.getGameListeners(), EVENT_LEGISTLATION_SEPARATISTS, EVENT_LEGISTLATION_HEADER_SEPARATISTS, EVENT_LEGISTLATION_SUBHEADER_SEPARATISTS);
+            }
         }
     }
 

@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 public class GameEndState implements GameState {
 
     private static final String HEADER = "Game ended!";
-    protected static final String LOYALIST_WIN_CARDS = "Loyalists win by passing all required policies! Democracy has prevailed in the republic!";
+    protected static final String LOYALIST_WIN_CARDS = "Loyalists win by passing all required policies! Democracy has prevailed in The Galactic Republic!";
     protected static final String LOYALIST_WIN_PALPATINE = "Loyalists win by successfully assassinating the Sith Lord Sheev Palpatine!";
-    protected static final String SEPARATISTS_WIN_CARDS = "Separatists win by passing all required policies! The separatist planets have secede from the republic!";
+    protected static final String SEPARATISTS_WIN_CARDS = "Separatists win by passing all required policies! The separatist planets have seceded from the republic!";
     protected static final String SEPARATISTS_WIN_PALPATINE = "Separatists win by electing Palpatine as Vice Chair! He is now in position to take over the senate.";
 
     private Game game;
