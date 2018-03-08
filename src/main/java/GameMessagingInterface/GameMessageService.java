@@ -3,6 +3,8 @@ package GameMessagingInterface;
 import GameLogic.Game;
 import GameLogic.Player;
 import GameStates.GameState;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.logging.log4j.LogManager;
 import org.eclipse.jetty.util.ConcurrentHashSet;
 import org.eclipse.jetty.websocket.api.Session;
@@ -131,7 +133,7 @@ public class GameMessageService {
                 delayedRetryMessageSending(() -> sendGameScreenMessage(listener, gameScreenMessage, attempts - 1));
             }
         };
-        threadRunner(runnable, listener.toString());
+        threadRunner(runnable, RandomStringUtils.randomAlphanumeric(24));
     }
 
     // MESSAGE SENDING PLAYER
