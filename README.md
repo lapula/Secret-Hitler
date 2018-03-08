@@ -1,9 +1,9 @@
 # Sith-Imperative
 
-Link to game page will be here.
+http://sith-imperative.com/
 
 ## Description
-Sith Imperative is a party game for 5-10 players. The game requires a public screen and for each player a (preferably mobile) device to use. The game is a Star-Wars themed version of Secret Hitler http://secrethitler.com and is played by the same rules available on their website. 
+Sith Imperative is a party game for 5-10 players. The game requires a public screen and for each player a (preferably mobile) device to use. The game is a Star-Wars themed version of Secret Hitler http://secrethitler.com. The rules and the game are available at http://sith-imperative.com/
 
 ## Technical details / Running the game locally
 
