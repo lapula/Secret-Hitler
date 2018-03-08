@@ -21,8 +21,8 @@ public class VoteOnGovernmentState implements GameState {
 
     private static final String YES_VOTE = "In favour!";
     private static final String NO_VOTE = "Against!";
-    protected static final String YES = "Aye";
-    protected static final String NO = "Nay";
+    protected static final String YES = "In favour";
+    protected static final String NO = "Against";
     private static final String INFORM_VICE_CHAIR = "You are the Vice Chair!";
     private static final String INFORM_SUPREME_CHANCELLOR = "You are the Supreme Chancellor!";
     private static final String VOTE_HEADER = "Vote!";
@@ -34,7 +34,7 @@ public class VoteOnGovernmentState implements GameState {
 
     private static final String EVENT_ATTEMPTS_USED_SEPARATISTS = "ATTEMPTS_USED_SEPARATISTS";
     private static final String EVENT_ATTEMPTS_USED_LOYALISTS = "ATTEMPTS_USED_LOYALISTS";
-    private static final String EVENT_ATTEMPTS_USED_HEADER = "Democracy failed!";
+    private static final String EVENT_ATTEMPTS_USED_HEADER = "Chaos in the senate!";
     private static final String EVENT_ATTEMPTS_USED_SUBHEADER = "The vote has failed three times, the forces of fate will decide next policy.";
 
     private static final String EVENT_LEGISTLATION_PROCESS = "LEGISTLATION_PROCESS";

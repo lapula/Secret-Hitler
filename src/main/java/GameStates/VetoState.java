@@ -22,8 +22,8 @@ public class VetoState implements GameState {
 
     private static final String VETO_PROPOSED_HEADER = "Veto proposed to the Supreme Chancellor";
     private static final String VETO_PROPOSED_SUB_HEADER = "Supreme Chancellor, do you accept the veto?";
-    private static final String VETO_DENIED_HEADER = "Veto denied, Vice Chair will enact a policy";
-    private static final String VETO_DENIED_SUB_HEADER = "Vice Chair, discard one policy";
+    private static final String VETO_DENIED_HEADER = "Veto denied, Vice Chair will enact a policy.";
+    private static final String VETO_DENIED_SUB_HEADER = "Vice Chair, DISCARD one policy.";
     private static final String INFORM_SUPREME_CHANCELLOR = "You are the Supreme Chancellor!";
     protected static final String YES = "Yes";
     protected static final String NO = "No";
@@ -35,12 +35,12 @@ public class VetoState implements GameState {
 
     private static final String EVENT_NO_VETO = "NO_VETO";
     private static final String EVENT_NO_VETO_HEADER = "Veto power left unused!";
-    private static final String EVENT_NO_VETO_SUBHEADER = "Surely the Vice Chair will now pass a loyalist policy.";
+    private static final String EVENT_NO_VETO_SUBHEADER = "Surely the Vice Chair will now pass a Loyalist policy.";
 
 
     private static final String EVENT_LEGISTLATION_SEPARATISTS = "LEGISTLATION_SEPARATISTS";
     private static final String EVENT_LEGISTLATION_HEADER_SEPARATISTS = "Separatist policy enacted!";
-    private static final String EVENT_LEGISTLATION_SUBHEADER_SEPARATISTS = "This is a dark day for The Republic.";
+    private static final String EVENT_LEGISTLATION_SUBHEADER_SEPARATISTS = "Roger roger.";
 
     private static final String EVENT_LEGISTLATION_LOYALISTS = "LEGISTLATION_LOYALISTS";
     private static final String EVENT_LEGISTLATION_HEADER_LOYALISTS = "Loyalist policy enacted!";

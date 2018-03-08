@@ -22,7 +22,7 @@ public class NominateViceChair implements GameState {
 
     private static final String EVENT_NOMINATION = "NOMINATION";
     private static final String EVENT_NOMINATION_HEADER = "%s has been nominated as the Vice Chair!";
-    private static final String EVENT_NOMINATION_SUBHEADER = "A surprise to be sure, but a welcome one. Representatives will now to determine legality of the government.";
+    private static final String EVENT_NOMINATION_SUBHEADER = "A surprise to be sure, but a welcome one. Representatives will now vote to determine legality of the government.";
 
     private Game game;
     private Player supremeChancellor;

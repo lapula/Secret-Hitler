@@ -23,7 +23,7 @@ public class ExecutionState implements GameState {
     private static final String EXECUTED_SUB_HEADER = "You may not speak or reveal your role!";
     private static final String EVENT_EXECUTION = "EXECUTION";
     private static final String EVENT_EXECUTION_HEADER = "Execute order 66.";
-    private static final String EVENT_EXECUTION_SUBHEADER = "The acting Supreme Chancellor has assassinated %s!";
+    private static final String EVENT_EXECUTION_SUBHEADER = "It will be done my lord. Target all cannons on %s!";
 
     private Game game;
     private String executionSubheader;

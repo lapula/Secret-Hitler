@@ -8,7 +8,7 @@ const textConstants = {
   numberOfPlayers: "Number of players",
   gameName: "Game name",
   playerName: "Player name",
-  gameStarting: "Waiting for server...",
+  gameStarting: "Connected, waiting for server...",
   enterGame: "Enter game!",
   createdBy: "Created by: Laur Pulliainen",
   github: "Github:",
@@ -33,17 +33,17 @@ const textConstants = {
   governmentVotesThisRound: "Election tracker:",
   supremeChancellor: "Supreme Chancellor",
   viceChair: "Vice Chair",
-  separatistsLastSlot: "Separatists win if a policy card is placed here.",
-  loyalistsLastSlot: "Loyalists win if a policy card is placed here.",
+  separatistsLastSlot: "Separatists win.",
+  loyalistsLastSlot: "Loyalists win.",
   gameState: "Game state:",
-  openingGameScreen: "Opening game screen (if this is taking long, the game might not exist or was failed to create)."
+  openingGameScreen: "Opening game screen..."
 }
 
-const POLICY_PEEK = "The Supreme Chancellor receives knowledge of the next three policy cards.";
-const INVESTIGATE = "The Supreme Chancellor investigates a player's role.";
-const SPECIAL_ELECTION = "The Supreme Chancellor nominates the next Supreme Chancellor.";
-const EXECUTION = "The Supreme Chancellor must execute a player. "
-const EXECUTION_VETO = EXECUTION + "The Vice Chair may from now on veto policies.";
+const POLICY_PEEK = "Policy peek: The Supreme Chancellor sees the next three policy cards.";
+const INVESTIGATE = "Investigation of loyalty: The Supreme Chancellor investigates a player's role.";
+const SPECIAL_ELECTION = "Special election: The Supreme Chancellor nominates the next Supreme Chancellor.";
+const EXECUTION = "Execution: The Supreme Chancellor executes a player. "
+const EXECUTION_VETO = EXECUTION + "Veto: The Vice Chair may now veto policies.";
 
 const fiveSix = [null, null, POLICY_PEEK, EXECUTION, EXECUTION_VETO]
 const sevenEight = [null, INVESTIGATE, SPECIAL_ELECTION, EXECUTION, EXECUTION_VETO]

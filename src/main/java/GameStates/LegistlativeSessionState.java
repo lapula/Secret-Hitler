@@ -19,16 +19,16 @@ import java.util.stream.IntStream;
 public class LegistlativeSessionState implements GameState {
 
     private static final String LEGISTLATE_HEADER_SUPREME_CHANCELLOR = "Legistlative session: Supreme Chancellor";
-    private static final String LEGISTLATE_SUB_HEADER_SUPREME_CHANCELLOR = "Supreme Chancellor, discard one policy";
+    private static final String LEGISTLATE_SUB_HEADER_SUPREME_CHANCELLOR = "Supreme Chancellor, please DISCARD one policy.";
     private static final String LEGISTLATE_HEADER_VICE_CHAIR = "Legistlative session: Vice Chair";
-    private static final String LEGISTLATE_SUB_HEADER_VICE_CHAIR = "Vice Chair, discard one policy";
+    private static final String LEGISTLATE_SUB_HEADER_VICE_CHAIR = "Vice Chair, please DISCARD one policy.";
     protected static final String VETO = "VETO";
     protected static final String VETO_PROPOSAL = "Veto proposal";
     private static final String POLICY = "POLICY";
 
     private static final String EVENT_LEGISTLATION_SEPARATISTS = "LEGISTLATION_SEPARATISTS";
     private static final String EVENT_LEGISTLATION_HEADER_SEPARATISTS = "Separatist policy enacted!";
-    private static final String EVENT_LEGISTLATION_SUBHEADER_SEPARATISTS = "This is a dark day for The Republic.";
+    private static final String EVENT_LEGISTLATION_SUBHEADER_SEPARATISTS = "This is a dark day for The Galactic Republic.";
 
     private static final String EVENT_LEGISTLATION_LOYALISTS = "LEGISTLATION_LOYALISTS";
     private static final String EVENT_LEGISTLATION_HEADER_LOYALISTS = "Loyalist policy enacted!";

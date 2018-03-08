@@ -24,7 +24,7 @@ public class InvestigateLoyaltyState implements GameState {
 
     private static final String EVENT_INVESTIGATION = "INVESTIGATION";
     private static final String EVENT_INVESTIGATION_HEADER = "I sense a disturbance in the force...";
-    private static final String EVENT_INVESTIGATION_SUBHEADER = "The acting Supreme Chancellor has received knowledge of player %s's role!";
+    private static final String EVENT_INVESTIGATION_SUBHEADER = "The acting Supreme Chancellor sensed player %s's role!";
 
     private Game game;
     private Player supremeChancellor;

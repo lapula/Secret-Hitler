@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import {textConstants} from '../constants.jsx'
 import styles from './gamescreen-style.css';
 
+const YES = "In favour";
+
 class GamePlayerColumn extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -29,7 +31,7 @@ class GamePlayerColumn extends React.Component {
   playerElectionList() {
     let players = [];
     Object.entries(this.props.electionResults).map(([key, value]) => {
-      const itemStyle = (value === "YES") ? styles.playerColumnYes : styles.playerColumnNo;
+      const itemStyle = (value === YES) ? styles.playerColumnYes : styles.playerColumnNo;
       players.push(
         <div key={key} className={itemStyle}>
           {this.addPlayerToken(key)}
