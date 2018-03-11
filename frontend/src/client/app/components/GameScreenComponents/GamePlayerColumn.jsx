@@ -30,7 +30,9 @@ class GamePlayerColumn extends React.Component {
 
   playerElectionList() {
     let players = [];
-    Object.entries(this.props.electionResults).map(([key, value]) => {
+    const keysSorted = Object.keys(this.props.electionResults).sort();
+    keysSorted.forEach((key) => {
+      const value = this.props.electionResults[key];
       const itemStyle = (value === YES) ? styles.playerColumnYes : styles.playerColumnNo;
       players.push(
         <div key={key} className={itemStyle}>
@@ -39,6 +41,7 @@ class GamePlayerColumn extends React.Component {
         </div>
       );
     });
+    console.log();
     return players;
   }
 

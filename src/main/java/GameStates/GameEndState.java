@@ -51,7 +51,7 @@ public class GameEndState implements GameState {
             endEvent = "END_SEPARATIST_WIN";
         }
         if (this.gameVariables.getViceChair().map(Player::getRole).orElse(Role.LOYALIST).equals(Role.SHEEV_PALPATINE)
-                && this.gameVariables.getSeparatistPolicyCount() > 3
+                && this.gameVariables.getSeparatistPolicyCount() >= 3
                 && game.getGameStateType().orElse(State.GAME_START).equals(State.LEGISTLATIVE_SESSION)) {
             subheader = SEPARATISTS_WIN_PALPATINE;
             endEvent = "END_SEPARATIST_WIN";

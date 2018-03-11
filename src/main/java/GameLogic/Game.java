@@ -47,7 +47,7 @@ public class Game {
         this.gameListeners = new LinkedList<>();
         this.stateFactory = new StateFactory();
         this.gameVariables = new GameVariables();
-        this.policyDeck = new PolicyDeck();
+        this.policyDeck = new PolicyDeck(this);
         this.gameMessageService = new GameMessageService(this);
         this.gameStarted = false;
         this.lastSentMessageTargetCount = this.gameVariables.getGamePlayers();
@@ -97,7 +97,7 @@ public class Game {
             return true;
         }
         if (this.gameVariables.getViceChair().map(Player::getRole).orElse(Role.LOYALIST).equals(Role.SHEEV_PALPATINE)
-                && this.gameVariables.getSeparatistPolicyCount() > 3
+                && this.gameVariables.getSeparatistPolicyCount() >= 3
                 && this.gameStateType.equals(State.LEGISTLATIVE_SESSION)) {
             return true;
         }

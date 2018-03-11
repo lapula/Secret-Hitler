@@ -282,10 +282,24 @@ senateGold="rgb(191, 136, 115)";
 
 .generalInfoCardsInDeckText {
   position: absolute;
-  color: #2a3242;
+  color: black;
   font-weight: bold;
   font-size: 1.75vw;
   text-shadow: 0px 0px 1px rgba(255, 255, 255, 1);
+}
+
+.generalInfoCardsInDeckLoyalist {
+  font-size: 1.75vw;
+  padding-right: 5px;
+  color: #3b3b3b;
+  text-shadow: 0px 0px 1px rgba(255, 255, 255, 0.5);
+}
+
+.generalInfoCardsInDeckSeparatist {
+  font-size: 1.75vw;
+  padding-left: 5px;
+  color: #313846;
+  text-shadow: 0px 0px 1px rgba(255, 255, 255, 0.5);
 }
 
 .gameEventWrapper {

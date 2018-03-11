@@ -1,5 +1,7 @@
 package GameLogic;
 
+import Helpers.GameInitializationHelper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
@@ -12,34 +14,54 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PolicyDeckTest {
 
+    private Game game;
+    private PolicyDeck deck;
+
+    @BeforeEach
+    public void beforeEach() {
+        game = GameInitializationHelper.getInitializedGame(6, 0, 1);
+        game.setGameStarted();
+        deck = game.getPolicyDeck();
+    }
+
     @Test
     public void deckCreatedCorrectly() {
-        PolicyDeck d = new PolicyDeck();
-        assertTrue(d.getDeck().size() == 17);
-        assertTrue(d.getDeck().stream().filter(p -> p.equals(Policy.LOYALIST_POLICY)).count() == 6);
-        assertTrue(d.getDeck().stream().filter(p -> p.equals(Policy.SEPARATIST_POLICY)).count() == 11);
+        assertTrue(deck.getDeck().size() == 17);
+        assertTrue(deck.getDeck().stream().filter(p -> p.equals(Policy.LOYALIST_POLICY)).count() == 6);
+        assertTrue(deck.getDeck().stream().filter(p -> p.equals(Policy.SEPARATIST_POLICY)).count() == 11);
+    }
+
+    @Test
+    public void deckCreatedCorrectlyWithExistingPolicies() {
+        game.getVariables().addSeparatistPolicy();
+        game.getVariables().addSeparatistPolicy();
+        game.getVariables().addSeparatistPolicy();
+        game.getVariables().addLoyalistPolicy();
+        deck = new PolicyDeck(game);
+
+        assertEquals(13, deck.getDeck().size());
+        assertTrue(deck.getDeck().stream().filter(p -> p.equals(Policy.LOYALIST_POLICY)).count() == 5);
+        assertTrue(deck.getDeck().stream().filter(p -> p.equals(Policy.SEPARATIST_POLICY)).count() == 8);
     }
 
     @Test
     public void getsTopCard() {
-        PolicyDeck d = new PolicyDeck();
-        int fullSize = d.getDeck().size();
-        d.drawNext();
-        assertEquals(fullSize - 1, d.getDeck().size());
+        int fullSize = deck.getDeck().size();
+        deck.drawNext();
+        assertEquals(fullSize - 1, deck.getDeck().size());
 
-        IntStream.range(0, fullSize).forEach(i -> d.drawNext());
-        assertEquals(fullSize - 1, d.getDeck().size());
+        IntStream.range(0, fullSize).forEach(i -> deck.drawNext());
+        assertEquals(fullSize - 1, deck.getDeck().size());
     }
 
     @RepeatedTest(50)
     public void getsTopThreeCards() {
-        PolicyDeck d = new PolicyDeck();
-        int size = d.getDeck().size();
+        int size = deck.getDeck().size();
 
-        String topCardsString = d.nextThreeToString();
-        assertEquals(size, d.getDeck().size());
-        List<Policy> lastCards = Arrays.asList(d.getDeck().get(size - 1), d.getDeck().get(size - 2), d.getDeck().get(size - 3));
-        List<Policy> topCards = d.drawNextThree();
+        String topCardsString = deck.nextThreeToString();
+        assertEquals(size, deck.getDeck().size());
+        List<Policy> lastCards = Arrays.asList(deck.getDeck().get(size - 1), deck.getDeck().get(size - 2), deck.getDeck().get(size - 3));
+        List<Policy> topCards = deck.drawNextThree();
 
         assertEquals(lastCards, topCards);
         assertEquals(lastCards.get(2) + ", " + lastCards.get(1) + ", " + lastCards.get(0), topCardsString);
@@ -47,30 +69,26 @@ class PolicyDeckTest {
 
     @Test
     public void getsTopThreeCardsWithTwoLeft() {
-        PolicyDeck d = new PolicyDeck();
-        assertTrue(d.getDeck().size() == 17);
+        assertTrue(deck.getDeck().size() == 17);
 
-        IntStream.range(0, 5).forEach(i -> d.drawNextThree());
-        d.nextThreeToString();
-        assertEquals(17, d.getDeck().size());
+        IntStream.range(0, 5).forEach(i -> deck.drawNextThree());
+        deck.nextThreeToString();
+        assertEquals(17, deck.getDeck().size());
     }
 
-    @RepeatedTest(50)
+    @Test
     public void shufflesEmptyDeckCorrectly() {
-        PolicyDeck d = new PolicyDeck();
-        assertTrue(d.getDeck().size() == 17);
+        assertTrue(deck.getDeck().size() == 17);
+        IntStream.range(0, 6).forEach(i -> deck.drawNextThree());
+        assertEquals(14, deck.getDeck().size());
 
-        IntStream.range(0, 5).forEach(i -> d.drawNextThree());
-        List<Policy> bottom = new ArrayList<>(d.getDeck());
-        List<Policy> nextThree = d.drawNextThree();
+        game.getVariables().addSeparatistPolicy();
+        game.getVariables().addSeparatistPolicy();
+        game.getVariables().addSeparatistPolicy();
+        game.getVariables().addLoyalistPolicy();
 
-        int bottomLoyalistCards = ((int) bottom.stream().filter(p -> p.equals(Policy.LOYALIST_POLICY)).count());
-        int bottomSeparatistCards = ((int) bottom.stream().filter(p -> p.equals(Policy.SEPARATIST_POLICY)).count());
-        int nextThreeLoyalistCards = ((int) nextThree.stream().filter(p -> p.equals(Policy.LOYALIST_POLICY)).count());
-        int nextThreeSeparatistCards = ((int) nextThree.stream().filter(p -> p.equals(Policy.SEPARATIST_POLICY)).count());
+        IntStream.range(0, 5).forEach(i -> deck.drawNextThree());
 
-        assertTrue(bottomLoyalistCards <= nextThreeLoyalistCards);
-        assertTrue(bottomSeparatistCards <= nextThreeSeparatistCards);
-        assertEquals(16, d.getDeck().size());
+        assertEquals(10, deck.getDeck().size());
     }
 }

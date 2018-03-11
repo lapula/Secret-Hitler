@@ -3,21 +3,14 @@ import React, {Component} from 'react';
 import {textConstants} from '../constants.jsx'
 import styles from './gamescreen-style.css';
 import ElectionTracker from './ElectionTracker.jsx';
+import CardsInDeck from './CardsInDeck.jsx';
 
 class GameGeneralInfo extends React.Component {
   constructor(props, context) {
     super(props, context);
   }
 
-  getGradientPercentage(reverse) {
-    if (reverse) {
-      return { width: (100 - Math.round((this.props.cardsInDeck / 17) * 100)) + "%"};
-    }
-    return {width: Math.round((this.props.cardsInDeck / 17) * 100) + "%"};
-  }
-
   render() {
-    this.getGradientPercentage();
     return (
       <div className={styles.gameGeneralInfoWrapper}>
         <div className={styles.generalInfoBodyWrapper}>
@@ -27,13 +20,11 @@ class GameGeneralInfo extends React.Component {
           </div>
           <div className={styles.generalInfoBodyItem}>
             <div className={styles.generalInfoBodyItemHeader}>{textConstants.cardsInDeck}</div>
-            <div className={styles.cardsInDeckContainer}>
-              <div className={styles.generalInfoCardsInDeckBarBorder}>
-                <div className={styles.generalInfoCardsInDeckText}>{this.props.cardsInDeck}</div>
-                <div style={this.getGradientPercentage(false)} className={styles.generalInfoCardsInDeckBarFill}></div>
-                <div style={this.getGradientPercentage(true)} className={styles.generalInfoCardsInDeckBarEmpty}></div>
-              </div>
-            </div>
+            <CardsInDeck
+              cardsInDeck={this.props.cardsInDeck}
+              loyalistPoliciesPassed={this.props.loyalistPoliciesPassed}
+              separatistPoliciesPassed={this.props.separatistPoliciesPassed}
+            />
           </div>
           <div className={styles.generalInfoBodyItem}>
             <div className={styles.generalInfoBodyItemHeader}>{textConstants.governmentVotesThisRound}</div>
@@ -43,7 +34,6 @@ class GameGeneralInfo extends React.Component {
       </div>
     );
   }
-
 }
 
 export default GameGeneralInfo;

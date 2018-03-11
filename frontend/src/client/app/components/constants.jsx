@@ -2,6 +2,7 @@ const textConstants = {
   /* General constants */
 
   appTitle: "The Sith Imperative",
+  frontPage: "Front page",
   joinGame: "Join game",
   createGame: "Create game",
   openGameScreen: "Open game screen",

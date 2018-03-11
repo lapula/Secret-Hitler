@@ -47,7 +47,7 @@ class GameEndStateTest {
 
     @Test
     void palpatineChancellorWin() {
-        IntStream.range(0, 4).forEach(i -> game.getVariables().addSeparatistPolicy());
+        IntStream.range(0, 3).forEach(i -> game.getVariables().addSeparatistPolicy());
         Player palpatine = game.getPlayerManager().getPlayers().stream().filter(p -> p.getRole().equals(Role.SHEEV_PALPATINE)).findFirst().get();
         game.getVariables().setViceChair(palpatine);
         game.stateStatusUpdate(State.LEGISTLATIVE_SESSION);

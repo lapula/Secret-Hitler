@@ -45,6 +45,8 @@ class GameScreen extends React.Component {
               governmentVotesThisRound={this.state.statusUpdateData.governmentVotesThisRound}
               state={this.state.statusUpdateData.state}
               gameName={this.state.statusUpdateData.gameName}
+              loyalistPoliciesPassed={this.state.statusUpdateData.loyalistPoliciesPassed}
+              separatistPoliciesPassed={this.state.statusUpdateData.separatistPoliciesPassed}
             />
           </div>
           <GamePolicies

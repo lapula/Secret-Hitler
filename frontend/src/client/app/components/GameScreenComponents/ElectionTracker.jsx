@@ -18,7 +18,6 @@ class ElectionTracker extends React.Component {
         result.push(<div key={i} className={styles.electionTrackerSlot}></div>)
       }
     });
-    console.log(result);
     return result;
   }
 

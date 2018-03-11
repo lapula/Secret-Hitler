@@ -61,11 +61,9 @@ class OptionList extends React.Component {
       let list = [];
       const hasVetoProposal = Object.keys(this.state.choices).includes(VETO);
       const keysSorted = Object.keys(this.state.choices).sort();
-      console.log(keysSorted);
       keysSorted.forEach((key) => {
         list.push(this.createListItem(key, this.state.choices[key], hasVetoProposal))
       });
-
       return list;
     }
 

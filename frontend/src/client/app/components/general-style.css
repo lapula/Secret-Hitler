@@ -29,6 +29,12 @@
   color: white !important;
 }
 
+.linkHome {
+  color: white;
+  text-decoration: none;
+  position: absolute;
+}
+
 .menuButton {
   margin: 12px;
   color: white;

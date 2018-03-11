@@ -40,7 +40,7 @@ class Main extends React.Component {
              label={textConstants.rules}
              primary={false}
              className={styles.menuButton}
-             href="images/Sith-Imperative_rules.pdf"
+             href="Sith-Imperative_rules.pdf"
              backgroundColor={materialUiOverrides.darkGray}
            /><br />
            <RaisedButton
@@ -89,6 +89,13 @@ class Main extends React.Component {
     }
   }
 
+  renderBackButton() {
+    if (this.state.renderComponent != null) {
+      return (<a className={styles.linkHome} href="">&#x2190; {textConstants.frontPage}</a>);
+    }
+    return (<div></div>);
+  }
+
   render() {
     return (
       <div className={styles.container}>
@@ -96,10 +103,9 @@ class Main extends React.Component {
           title={textConstants.appTitle}
           style={materialUiOverrides.backgroundDarkGray}
           titleStyle={materialUiOverrides.colorWhite}
-          iconElementLeft={<div></div>}
+          iconElementLeft={this.renderBackButton()}
          />
          {this.renderNavigationView()}
-
       </div>
     );
   }
